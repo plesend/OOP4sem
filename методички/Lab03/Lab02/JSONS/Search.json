@@ -1,0 +1,110 @@
+[
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "Рядом с метро",
+      "District": "fsdfds",
+      "Street": "ff",
+      "AddressNum": 32,
+      "Housing": 21,
+      "Apartment": 1
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 33400.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "Рядом с метро",
+      "District": "Московский",
+      "Street": "ул. Щорса",
+      "AddressNum": 1,
+      "Housing": 2,
+      "Apartment": 5
+    },
+    "area": 20.0,
+    "rooms": 2,
+    "year": 1950,
+    "material": "Кирпич",
+    "floor": 2,
+    "Price": 78600.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "За мкадом",
+      "District": "Октябрьский",
+      "Street": "ул. Фиолетовая",
+      "AddressNum": 1,
+      "Housing": 2,
+      "Apartment": 228
+    },
+    "area": 30.0,
+    "rooms": 1,
+    "year": 2013,
+    "material": "Алмазы",
+    "floor": 2,
+    "Price": 153350.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Лида",
+      "Location": "Центр города",
+      "District": "Центральный",
+      "Street": "ул. Баумана",
+      "AddressNum": 1,
+      "Housing": 1,
+      "Apartment": 1
+    },
+    "area": 128.0,
+    "rooms": 5,
+    "year": 1998,
+    "material": "Кирпич",
+    "floor": 1,
+    "Price": 298400.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Гродно",
+      "Location": "За мкадом",
+      "District": "пккп",
+      "Street": "кпкпк",
+      "AddressNum": 4,
+      "Housing": 3,
+      "Apartment": 3
+    },
+    "area": 332.0,
+    "rooms": 1,
+    "year": 2000,
+    "material": "Кирпич",
+    "floor": 1,
+    "Price": 669250.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Лида",
+      "Location": "В населенном п., нет метро",
+      "District": "о",
+      "Street": "ннн",
+      "AddressNum": 12,
+      "Housing": 34,
+      "Apartment": 887
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 0.0
+  }
+]

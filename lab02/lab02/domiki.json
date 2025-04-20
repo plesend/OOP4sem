@@ -1,0 +1,56 @@
+[
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "Рядом с метро",
+      "District": "fsdfds",
+      "Street": "ff",
+      "AddressNum": 32,
+      "Housing": 21,
+      "Apartment": 1
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 33400.0
+  },
+  {
+    "addressess": {
+      "Country": "Таджикистан",
+      "City": "Худжанд",
+      "Location": "Центр города",
+      "District": "уауца",
+      "Street": "ацуауц",
+      "AddressNum": 4,
+      "Housing": 4,
+      "Apartment": 3
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 534550.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Лида",
+      "Location": "В населенном п., нет метро",
+      "District": "авыа",
+      "Street": "ывав",
+      "AddressNum": 1,
+      "Housing": 2,
+      "Apartment": 3
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 696150.0
+  }
+]

@@ -1,0 +1,83 @@
+﻿<Window x:Class="lab4_5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab4_5"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="670" Width="1142">
+    <Grid ShowGridLines="false" x:Name="MainPage" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="278*"/>
+            <RowDefinition Height="255*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Корзина" Grid.Row="0" Grid.Column="0" Margin="20,20,20,20" Background="#A578BB" Foreground="white" BorderThickness="0" FontSize="16"/>
+        <Button Content="Главная" Grid.Row="0" Grid.Column="1" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,154,0" />
+        <Button Content="Акции" Grid.Row="0" Grid.Column="2" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,163,0" />
+        <Button Content="О нас" Grid.Row="0" Grid.Column="3" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="154,0,163,0" />
+        <Button Content="Личный кабинет" Grid.Row="0" Grid.Column="6" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" />
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left"  Height="30" Margin="116,0,0,0" Width="700">
+            <TextBox x:Name="SearchBox" 
+             Width="650"
+             Height="30"
+             Margin="0,0,10,0"
+             FontSize="14"
+             Padding="5"
+             VerticalContentAlignment="Center" BorderBrush="LightGray" />
+            <Button Content="🔍"
+            Width="40"
+            Height="30"
+            Background="#A578BB"
+            Foreground="White"
+            BorderThickness="0"
+            FontSize="16"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="7" Margin="163,12,0,0">
+            <WrapPanel x:Name="CatalogPanel" ItemWidth="150" ItemHeight="220" HorizontalAlignment="Center"/>
+        </ScrollViewer>
+
+        <Border x:Name="SortBorder" Grid.Row="2" Grid.RowSpan="2" Grid.Column="0" BorderBrush="LightGray" BorderThickness="0" Margin="0,12,0,0">
+            <StackPanel>
+                <TextBlock Text="Фильтры" FontWeight="Bold" FontSize="16" Foreground="#A578BB" Margin="0,5,0,10" HorizontalAlignment="Center"/>
+                <Line StrokeThickness="1" Stroke="#A578BB" X1="0" Y1="0" X2="120" Y2="0" HorizontalAlignment="Center" />
+                <TextBlock Text="Цена" Margin="10,10,0,5" Foreground="#A578BB"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10, 0,5" HorizontalAlignment="Center">
+                    <TextBox x:Name="FromTB" Width="60" Height="25" Margin="0,0,10,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                             PreviewTextInput="NumberOnly_PreviewTextInput"
+                             DataObject.Pasting="NumberOnly_Pasting"
+                             MaxLength="5"/>
+                    <TextBox x:Name="ToTB" Width="60" Height="25" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="NumberOnly_PreviewTextInput"
+                            DataObject.Pasting="NumberOnly_Pasting"
+                            MaxLength="5" />
+                </StackPanel>
+
+                <TextBlock Text="Бренд" Margin="10,10,0,5" Foreground="#A578BB" />
+                <ComboBox x:Name="Brand" Height="25" Width="120" Background="LightGray" Foreground="#A578BB" >
+                    <ComboBoxItem Content="Все" IsSelected="True"/>
+                    <ComboBoxItem Content="Essence"/>
+                    <ComboBoxItem Content="L'OREAL"/>
+                    <ComboBoxItem Content="Maybelline"/>
+                    <ComboBoxItem Content="NYX"/>
+                    <ComboBoxItem Content="Revolution"/>
+                </ComboBox>
+
+                <Button x:Name="Adjust" Content="Применить" Width="120" Margin="0,20,0,0" Background="#A578BB" Foreground="White" BorderThickness="0" Height="30" Click="Adjust_Click"/>
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>

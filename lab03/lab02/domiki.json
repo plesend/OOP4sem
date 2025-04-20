@@ -1,0 +1,236 @@
+[
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "Рядом с метро",
+      "District": "fsdfds",
+      "Street": "ff",
+      "AddressNum": 32,
+      "Housing": 21,
+      "Apartment": 1
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 33400.0
+  },
+  {
+    "addressess": {
+      "Country": "Узбекистан",
+      "City": "Самарканд",
+      "Location": "Центр города",
+      "District": "аппав",
+      "Street": "ааа",
+      "AddressNum": 43,
+      "Housing": 3,
+      "Apartment": 4
+    },
+    "area": 55.0,
+    "rooms": 3,
+    "year": 1966,
+    "material": "Блоки земли",
+    "floor": 3,
+    "Price": 110550.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "Рядом с метро",
+      "District": "Московский",
+      "Street": "ул. Щорса",
+      "AddressNum": 1,
+      "Housing": 2,
+      "Apartment": 5
+    },
+    "area": 20.0,
+    "rooms": 2,
+    "year": 1950,
+    "material": "Кирпич",
+    "floor": 2,
+    "Price": 78600.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Минск",
+      "Location": "За мкадом",
+      "District": "Октябрьский",
+      "Street": "ул. Фиолетовая",
+      "AddressNum": 1,
+      "Housing": 2,
+      "Apartment": 228
+    },
+    "area": 30.0,
+    "rooms": 1,
+    "year": 2013,
+    "material": "Алмазы",
+    "floor": 2,
+    "Price": 153350.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Лида",
+      "Location": "Центр города",
+      "District": "Центральный",
+      "Street": "ул. Баумана",
+      "AddressNum": 1,
+      "Housing": 1,
+      "Apartment": 1
+    },
+    "area": 128.0,
+    "rooms": 5,
+    "year": 1998,
+    "material": "Кирпич",
+    "floor": 1,
+    "Price": 298400.0
+  },
+  {
+    "addressess": {
+      "Country": "Узбекистан",
+      "City": "Ташкент",
+      "Location": "За мкадом",
+      "District": "Тигриная",
+      "Street": "Ай браток вообще кентяра",
+      "AddressNum": 42,
+      "Housing": 8,
+      "Apartment": 8
+    },
+    "area": 54.0,
+    "rooms": 3,
+    "year": 1965,
+    "material": "Блоки земли",
+    "floor": 6,
+    "Price": 114700.0
+  },
+  {
+    "addressess": {
+      "Country": "Казахстан",
+      "City": "Актобе",
+      "Location": "Рядом с метро",
+      "District": "Я поела",
+      "Street": "Вкусно очень",
+      "AddressNum": 44,
+      "Housing": 9,
+      "Apartment": 9
+    },
+    "area": 4.0,
+    "rooms": 2,
+    "year": 2000,
+    "material": "Дерево",
+    "floor": 6,
+    "Price": 24500.0
+  },
+  {
+    "addressess": {
+      "Country": "Казахстан",
+      "City": "Актобе",
+      "Location": "За мкадом",
+      "District": "лддщ",
+      "Street": "пкикекке",
+      "AddressNum": 4,
+      "Housing": 3,
+      "Apartment": 3
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 0.0
+  },
+  {
+    "addressess": {
+      "Country": "Таджикистан",
+      "City": "Худжанд",
+      "Location": "Рядом с метро",
+      "District": "4",
+      "Street": "кк",
+      "AddressNum": 2,
+      "Housing": 2,
+      "Apartment": 2
+    },
+    "area": 43.0,
+    "rooms": 3,
+    "year": 1960,
+    "material": "Кирпич",
+    "floor": 3,
+    "Price": 111150.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Гродно",
+      "Location": "За мкадом",
+      "District": "пккп",
+      "Street": "кпкпк",
+      "AddressNum": 4,
+      "Housing": 3,
+      "Apartment": 3
+    },
+    "area": 332.0,
+    "rooms": 1,
+    "year": 2000,
+    "material": "Кирпич",
+    "floor": 1,
+    "Price": 669250.0
+  },
+  {
+    "addressess": {
+      "Country": "Узбекистан",
+      "City": "Самарканд",
+      "Location": "Рядом с метро",
+      "District": "gdfgdfg",
+      "Street": "fsfsf",
+      "AddressNum": 4,
+      "Housing": 3,
+      "Apartment": 2
+    },
+    "area": 43.0,
+    "rooms": 2,
+    "year": 1965,
+    "material": "Кирпич",
+    "floor": 2,
+    "Price": 105600.0
+  },
+  {
+    "addressess": {
+      "Country": "Узбекистан",
+      "City": "Самарканд",
+      "Location": "За мкадом",
+      "District": "rerdsf",
+      "Street": "fff",
+      "AddressNum": 4,
+      "Housing": 3,
+      "Apartment": 3
+    },
+    "area": 54.0,
+    "rooms": 2,
+    "year": 1960,
+    "material": "Дерево",
+    "floor": 3,
+    "Price": 123750.0
+  },
+  {
+    "addressess": {
+      "Country": "Беларусь",
+      "City": "Лида",
+      "Location": "В населенном п., нет метро",
+      "District": "о",
+      "Street": "ннн",
+      "AddressNum": 12,
+      "Housing": 34,
+      "Apartment": 887
+    },
+    "area": 0.0,
+    "rooms": 0,
+    "year": 0,
+    "material": null,
+    "floor": 0,
+    "Price": 0.0
+  }
+]
