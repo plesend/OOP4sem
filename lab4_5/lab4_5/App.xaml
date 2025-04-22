@@ -4,6 +4,12 @@
              xmlns:local="clr-namespace:lab4_5"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/Resources/Resources.ru.xaml" />
+                <ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/Resources/Resources.eng.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
+   
 </Application>

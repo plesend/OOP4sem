@@ -5,7 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:lab4_5"
         mc:Ignorable="d"
-        Title="MainWindow" Height="670" Width="1142">
+        xmlns:svg="http://sharpvectors.codeplex.com/runtime/"
+        Title="MainWindow" Height="670" Width="1142"
+        Icon="D:\лабораторные работы\ооп\lab4_5\Resources\icon.jpg">
+    <Window.Resources>
+        
+    </Window.Resources>
+
+
     <Grid ShowGridLines="false" x:Name="MainPage" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="75*"/>
@@ -23,12 +30,14 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button Content="Корзина" Grid.Row="0" Grid.Column="0" Margin="20,20,20,20" Background="#A578BB" Foreground="white" BorderThickness="0" FontSize="16"/>
-        <Button Content="Главная" Grid.Row="0" Grid.Column="1" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,154,0" />
-        <Button Content="Акции" Grid.Row="0" Grid.Column="2" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,163,0" />
-        <Button Content="О нас" Grid.Row="0" Grid.Column="3" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="154,0,163,0" />
-        <Button Content="Личный кабинет" Grid.Row="0" Grid.Column="6" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" />
-
+        <Button Content="{DynamicResource ButtonText_Cart}" Grid.Row="0" Grid.Column="0" Margin="20,20,20,20" Background="#A578BB" Foreground="white" BorderThickness="0" FontSize="16"/>
+        <Button Content="{DynamicResource ButtonText_Home}" Grid.Row="0" Grid.Column="1" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,154,0" />
+        <Button Content="{DynamicResource ButtonText_Sales}" Grid.Row="0" Grid.Column="2" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,163,0" />
+        <Button Content="{DynamicResource ButtonText_AboutUs}" Grid.Row="0" Grid.Column="3" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="154,0,163,0" />
+        <Button Content="{DynamicResource ButtonText_Profile}" Grid.Row="0" Grid.Column="6" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" />
+        <Button Content="{DynamicResource ButtonText_Manage}" Grid.Row="0" Grid.Column="5" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16"/>
+        <Button Content="🌐" Click="ChangeLanguage_Click" Grid.Row="0" Grid.Column="1" Margin="10" Background="White" BorderThickness="0" Foreground="#A578BB"/>
+        
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left"  Height="30" Margin="116,0,0,0" Width="700">
             <TextBox x:Name="SearchBox" 
              Width="650"
@@ -36,14 +45,14 @@
              Margin="0,0,10,0"
              FontSize="14"
              Padding="5"
-             VerticalContentAlignment="Center" BorderBrush="LightGray" />
+             VerticalContentAlignment="Center" BorderBrush="LightGray" TextChanged="SearchBox_TextChanged" />
             <Button Content="🔍"
             Width="40"
             Height="30"
             Background="#A578BB"
             Foreground="White"
             BorderThickness="0"
-            FontSize="16"/>
+            FontSize="16" Click="Search_Click"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="7" Margin="163,12,0,0">
@@ -52,9 +61,9 @@
 
         <Border x:Name="SortBorder" Grid.Row="2" Grid.RowSpan="2" Grid.Column="0" BorderBrush="LightGray" BorderThickness="0" Margin="0,12,0,0">
             <StackPanel>
-                <TextBlock Text="Фильтры" FontWeight="Bold" FontSize="16" Foreground="#A578BB" Margin="0,5,0,10" HorizontalAlignment="Center"/>
+                <TextBlock Text="{DynamicResource FilterText}" FontWeight="Bold" FontSize="16" Foreground="#A578BB" Margin="0,5,0,10" HorizontalAlignment="Center"/>
                 <Line StrokeThickness="1" Stroke="#A578BB" X1="0" Y1="0" X2="120" Y2="0" HorizontalAlignment="Center" />
-                <TextBlock Text="Цена" Margin="10,10,0,5" Foreground="#A578BB"/>
+                <TextBlock Text="{DynamicResource PriceText}" Margin="10,10,0,5" Foreground="#A578BB"/>
                 <StackPanel Orientation="Horizontal" Margin="0,10, 0,5" HorizontalAlignment="Center">
                     <TextBox x:Name="FromTB" Width="60" Height="25" Margin="0,0,10,0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                              PreviewTextInput="NumberOnly_PreviewTextInput"
@@ -65,7 +74,7 @@
                             MaxLength="5" />
                 </StackPanel>
 
-                <TextBlock Text="Бренд" Margin="10,10,0,5" Foreground="#A578BB" />
+                <TextBlock Text="{DynamicResource BrandText}" Margin="10,10,0,5" Foreground="#A578BB" />
                 <ComboBox x:Name="Brand" Height="25" Width="120" Background="LightGray" Foreground="#A578BB" >
                     <ComboBoxItem Content="Все" IsSelected="True"/>
                     <ComboBoxItem Content="Essence"/>
@@ -75,7 +84,8 @@
                     <ComboBoxItem Content="Revolution"/>
                 </ComboBox>
 
-                <Button x:Name="Adjust" Content="Применить" Width="120" Margin="0,20,0,0" Background="#A578BB" Foreground="White" BorderThickness="0" Height="30" Click="Adjust_Click"/>
+                <Button x:Name="Adjust" Content="{DynamicResource Adjust}" Width="120" Margin="0,20,0,0" Background="#A578BB" Foreground="White" BorderThickness="0" Height="30" Click="Adjust_Click"/>
+                <Button x:Name="Clear" Content="{DynamicResource Clear}" Width="120" Margin="0,20,0,0" Background="#A578BB" Foreground="White" BorderThickness="0" Height="30" Click="Clear_Click"/>
             </StackPanel>
         </Border>
 
