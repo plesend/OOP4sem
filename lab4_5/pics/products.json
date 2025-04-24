@@ -1,107 +1,86 @@
 [
   {
     "Name": "Essence gelly-grip primer",
-    "Brand": "Essence",
     "Description": "Праймер",
-    "Price": 123,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/essence-primer-jelly-grip.jpg"
+    "Brand": "Essence",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/essence-primer-jelly-grip.jpg",
+    "Price": 123
   },
   {
     "Name": "L'OREAL PARIS panorama",
-    "Brand": "L'OREAL",
     "Description": "Тушь для ресниц",
-    "Price": 245,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/L'OREAL-PARIS-panorama.jpg"
+    "Brand": "L'OREAL",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/L'OREAL-PARIS-panorama.jpg",
+    "Price": 245
   },
   {
     "Name": "Maybelline Fit Me Matte",
-    "Brand": "Maybelline",
     "Description": "Праймер",
-    "Price": 189,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline-Fit-Me-Matte.jpg"
+    "Brand": "Maybelline",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline-Fit-Me-Matte.jpg",
+    "Price": 189
   },
   {
     "Name": "NYX HD Studio Photogenic",
-    "Brand": "NYX",
     "Description": "Консилер",
-    "Price": 210,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/NYX HD Studio Photogenic.jpg"
+    "Brand": "NYX",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/NYX HD Studio Photogenic.jpg",
+    "Price": 210
   },
   {
     "Name": "Revolution Banana Powder",
-    "Brand": "Revolution",
     "Description": "Пудра",
-    "Price": 275,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Revolution Banana Powder.jpg"
+    "Brand": "Revolution",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Revolution Banana Powder.jpg",
+    "Price": 275
   },
   {
     "Name": "L'OREAL PARIS Infallible 24H",
-    "Brand": "L'OREAL",
     "Description": "Тональный крем",
-    "Price": 390,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/L'OREAL PARIS Infallible 24H Fresh Wear Foundation.jpg"
+    "Brand": "L'OREAL",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/L'OREAL PARIS Infallible 24H Fresh Wear Foundation.jpg",
+    "Price": 390
   },
   {
     "Name": "Maybelline Lash Sensational Sky High",
-    "Brand": "Maybelline",
     "Description": "Тушь для ресниц",
-    "Price": 198,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline Lash Sensational Sky High.jpg"
+    "Brand": "Maybelline",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline Lash Sensational Sky High.jpg",
+    "Price": 198
   },
   {
     "Name": "Essence Stay All Day 16h Foundation",
-    "Brand": "Essence",
     "Description": "Тональный крем",
-    "Price": 165,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Stay All Day 16h Foundation.jpg"
+    "Brand": "Essence",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Stay All Day 16h Foundation.jpg",
+    "Price": 165
   },
   {
     "Name": "NYX Can't Stop Won't Stop Setting Powder",
-    "Brand": "NYX",
     "Description": "Фиксирующая пудра",
-    "Price": 223,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/NYX Can't Stop Won't Stop Setting Powder.jpg"
+    "Brand": "NYX",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/NYX Can't Stop Won't Stop Setting Powder.jpg",
+    "Price": 223
   },
   {
     "Name": "Revolution Conceal & Define Concealer",
-    "Brand": "Revolution",
     "Description": "Консилер",
-    "Price": 155,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Revolution Conceal & Define Concealer.jpg"
+    "Brand": "Revolution",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Revolution Conceal & Define Concealer.jpg",
+    "Price": 155
   },
   {
     "Name": "Maybelline SuperStay Matte Ink",
-    "Brand": "Maybelline",
     "Description": "Жидкая матовая помада",
-    "Price": 199,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline SuperStay Matte Ink.jpg"
+    "Brand": "Maybelline",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline SuperStay Matte Ink.jpg",
+    "Price": 199
   },
   {
     "Name": "Essence Lash Princess Mascara",
-    "Brand": "Essence",
     "Description": "Тушь для ресниц",
-    "Price": 145,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg"
-  },
-  {
-    "Name": "Essence Lash Princess Mascara",
     "Brand": "Essence",
-    "Description": "Тушь для ресниц",
-    "Price": 145,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg"
-  },
-  {
-    "Name": "Essence Lash Princess Mascara",
-    "Brand": "Essence",
-    "Description": "Тушь для ресниц",
-    "Price": 145,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg"
-  },
-  {
-    "Name": "Essence Lash Princess Mascara",
-    "Brand": "Essence",
-    "Description": "Тушь для ресниц",
-    "Price": 145,
-    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg"
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg",
+    "Price": 145
   }
 ]

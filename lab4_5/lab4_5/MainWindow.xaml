@@ -35,7 +35,7 @@
         <Button Content="{DynamicResource ButtonText_Sales}" Grid.Row="0" Grid.Column="2" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="163,0,163,0" />
         <Button Content="{DynamicResource ButtonText_AboutUs}" Grid.Row="0" Grid.Column="3" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Grid.ColumnSpan="3" Margin="154,0,163,0" />
         <Button Content="{DynamicResource ButtonText_Profile}" Grid.Row="0" Grid.Column="6" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" />
-        <Button Content="{DynamicResource ButtonText_Manage}" Grid.Row="0" Grid.Column="5" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16"/>
+        <Button x:Name="AddProduct" Content="{DynamicResource ButtonText_Manage}" Grid.Row="0" Grid.Column="5" Background="white" Foreground="#A578BB" BorderThickness="0" FontSize="16" Click="AddProduct_Click"/>
         <Button Content="🌐" Click="ChangeLanguage_Click" Grid.Row="0" Grid.Column="1" Margin="10" Background="White" BorderThickness="0" Foreground="#A578BB"/>
         
         <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left"  Height="30" Margin="116,0,0,0" Width="700">

@@ -24,20 +24,32 @@ namespace lab4_5
     /// </summary>
     public partial class MainWindow : Window
     {
-        List<Product> products = JsonConvert.DeserializeObject<List<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json"));
+        public List<Product> products = JsonConvert.DeserializeObject<List<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json"));
 
         List<Product> sortedProducts = new List<Product>();
 
         List<Product> foundProducts = new List<Product>();
+        User user {  get; set; }
 
-        public MainWindow()
+
+
+        public User currentUser;
+
+        public MainWindow(User user)
         {
             InitializeComponent();
-            //Cursor cursor = new Cursor("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\klipartz.com.cur");
-            //this.Cursor = cursor;
-            LoadProducts(products);
+            currentUser = user;
+
+            if (currentUser.Role != "Admin")
+            {
+                AddProduct.Visibility = Visibility.Collapsed;
+
+            }
+
+            LoadProducts(products, currentUser); 
         }
-        public void LoadProducts(List<Product> products)
+
+        public void LoadProducts(List<Product> products, User currentUser)
         {
             foreach (var product in products)
             {
@@ -98,6 +110,12 @@ namespace lab4_5
                     BorderThickness = new Thickness(0),
                     Tag = product
                 };
+
+                if (currentUser.Role != "Admin")
+                {
+                    buttonDel.Visibility = Visibility.Collapsed;
+                }
+
                 buttonDel.Click += DelProduct_Click;
 
                 stack.Children.Add(image);
@@ -142,7 +160,7 @@ namespace lab4_5
         {
             var sorted = SortProduct();
             CatalogPanel.Children.Clear();
-            LoadProducts(sortedProducts);
+            LoadProducts(sortedProducts, currentUser);
         }
         public List<Product> SortProduct()
         {
@@ -171,7 +189,7 @@ namespace lab4_5
                 Brand.SelectedIndex = 0;
             }
 
-            LoadProducts(products);
+            LoadProducts(products, currentUser);
         }
 
         //poisk pisek
@@ -199,14 +217,14 @@ namespace lab4_5
         {
             var results = SearchProduct();
             CatalogPanel.Children.Clear();
-            LoadProducts(results);
+            LoadProducts(results, currentUser);
         }
 
         public void SearchBox_TextChanged(object sender, RoutedEventArgs e)
         {
             var results = SearchProduct();
             CatalogPanel.Children.Clear();
-            LoadProducts(results);
+            LoadProducts(results, currentUser);
         }
 
         //lang
@@ -240,19 +258,46 @@ namespace lab4_5
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    products.Remove(productToRemove); 
-                    CatalogPanel.Children.Clear();
-                    LoadProducts(products);          
+                    string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
+
+                    try
+                    {
+                        List<Product> allProducts = new List<Product>();
+
+                        if (File.Exists(jsonPath))
+                        {
+                            string existingJson = File.ReadAllText(jsonPath);
+                            allProducts = JsonConvert.DeserializeObject<List<Product>>(existingJson) ?? new List<Product>();
+                        }
+
+                        var productToRemoveFromJson = allProducts.FirstOrDefault(p => p.Name == productToRemove.Name && p.Brand == productToRemove.Brand);
+                        if (productToRemoveFromJson != null)
+                        {
+                            allProducts.Remove(productToRemoveFromJson);
+                        }
+
+                        string updatedJson = JsonConvert.SerializeObject(allProducts, Formatting.Indented);
+                        File.WriteAllText(jsonPath, updatedJson);
+
+                        products = allProducts;
+                        CatalogPanel.Children.Clear();
+                        LoadProducts(products, currentUser);
+
+                        MessageBox.Show("Товар удален!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при удалении товара из JSON: {ex.Message}");
+                    }
                 }
             }
         }
 
         public void AddProduct_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-        public void AddProduct(Product product)
-        {
+            Window1 window1 = new Window1(this);
+            window1.Owner = this;
+            window1.ShowDialog();
 
         }
     }
