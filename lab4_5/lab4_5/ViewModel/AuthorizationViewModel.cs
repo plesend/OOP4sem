@@ -40,10 +40,18 @@ namespace lab4_5
                 return;
             }
 
-            User user = new User(Login, Password);
-            MainWindow main = new MainWindow(user);
-            main.Show();
-            (obj as Window)?.Close();
+            if ((Login == "qwerty" && Password == "1234") ||
+                (Login == "йцукен" && Password == "1234"))
+            {
+                User user = new User(Login, Password);
+                MainWindow main = new MainWindow(user);
+                main.Show();
+                (obj as Window)?.Close();
+            }
+            else
+            {
+                MessageBox.Show("Неверный логин или пароль. Доступ разрешен только для Админа и Клиента.");
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

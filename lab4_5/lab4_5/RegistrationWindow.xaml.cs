@@ -18,10 +18,10 @@ namespace lab4_5
     /// <summary>
     /// Логика взаимодействия для Window3.xaml
     /// </summary>
-    public partial class Window3 : Window
+    public partial class RegistrationWindow : Window
     {
         User user {  get; set; }
-        public Window3()
+        public RegistrationWindow()
         {
             InitializeComponent();
             DataContext = new RegistrationViewModel();

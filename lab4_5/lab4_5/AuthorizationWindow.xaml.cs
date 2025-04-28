@@ -17,9 +17,9 @@ namespace lab4_5
     /// <summary>
     /// Логика взаимодействия для Window2.xaml
     /// </summary>
-    public partial class Window2 : Window
+    public partial class AuthorizationWindow : Window
     {
-        public Window2()
+        public AuthorizationWindow()
         {
             InitializeComponent();
             DataContext = new AuthorizationViewModel();
