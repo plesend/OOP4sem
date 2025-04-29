@@ -50,11 +50,34 @@ namespace lab4_5
             IsMenuOpen = false;
         }
 
+
+
+        private int _currentThemeIndex = 0; // Индекс текущей темы
+        private readonly string[] _themes =
+        {
+            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml", // Тема по умолчанию
+            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DarkTheme.xaml",     // Темная тема
+            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\BrownTheme.xaml"   // Дополнительная тема
+        };
+
         private void ChangeTheme()
         {
-            MessageBox.Show("Смена темы");
+            string themePath = _themes[_currentThemeIndex];
+
+            var themeDict = new ResourceDictionary() 
+            { 
+                Source = new Uri(themePath, UriKind.Absolute) 
+            };
+
+            Application.Current.Resources.MergedDictionaries.Clear();
+
+            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+
+            _currentThemeIndex = (_currentThemeIndex + 1) % _themes.Length;
+
             IsMenuOpen = false;
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
