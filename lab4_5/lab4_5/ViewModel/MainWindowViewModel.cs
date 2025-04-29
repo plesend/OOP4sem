@@ -9,48 +9,26 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 namespace lab4_5
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private bool _isMenuOpen;
-        public bool IsMenuOpen
-        {
-            get => _isMenuOpen;
-            set
-            {
-                if (_isMenuOpen != value)
-                {
-                    _isMenuOpen = value;
-                    OnPropertyChanged();  
-                }
-            }
-        }
+        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
 
-        public ICommand ToggleMenuCommand { get; }
+        public User CurrentUser { get; set; }
         public ICommand OpenProfileCommand { get; }
         public ICommand ChangeThemeCommand { get; }
+        public ICommand DeleteProductCommand { get; }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(User user)
         {
-            ToggleMenuCommand = new RelayCommand(ToggleMenu);
-            OpenProfileCommand = new RelayCommand(OpenProfile);
+            CurrentUser = user;
+            LoadProducts();
+            OpenProfileCommand = new RelayCommand(OpenSettings);
             ChangeThemeCommand = new RelayCommand(ChangeTheme);
         }
-
-        private void ToggleMenu()
-        {
-            IsMenuOpen = !IsMenuOpen;
-        }
-
-        private void OpenProfile()
-        {
-            MessageBox.Show("Профиль открыт");
-            IsMenuOpen = false;
-        }
-
-
 
         private int _currentThemeIndex = 0;
         private readonly string[] _themes =
@@ -70,7 +48,7 @@ namespace lab4_5
             };
 
             var currentheme = Application.Current.Resources.MergedDictionaries
-      .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Themes"));
+                              .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Themes"));
 
             if (currentheme != null)
             {
@@ -81,13 +59,36 @@ namespace lab4_5
 
             _currentThemeIndex = (_currentThemeIndex + 1) % _themes.Length;
         }
+        private void DeleteProduct(object param)
+        {
+            if (param is Product product)
+            {
+                Products.Remove(product);
+                var allProducts = Products.ToList();
+                string updatedJson = JsonConvert.SerializeObject(allProducts, Formatting.Indented);
+                File.WriteAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json", updatedJson);
+            }
+        }
+        //public void OpenSettings()
+        //{
+        //    SettingsWindow settingsWindow = new SettingsWindow(currentUser, this);
 
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        private void LoadProducts()
+        {
+            var loaded = JsonConvert.DeserializeObject<List<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json"));
+            Products.Clear();
+            foreach (var product in loaded)
+                Products.Add(product);
+        }
+
     }
 }
 //    public class MainWindowViewModel : INotifyPropertyChanged

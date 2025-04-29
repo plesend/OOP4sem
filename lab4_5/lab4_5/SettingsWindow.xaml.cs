@@ -19,9 +19,11 @@ namespace lab4_5
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public SettingsWindow()
+        public User currentUser;
+        public SettingsWindow(User user, MainWindow mainWindow)
         {
             InitializeComponent();
+            currentUser = user;
         }
     }
 }

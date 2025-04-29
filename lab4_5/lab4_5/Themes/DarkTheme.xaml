@@ -40,6 +40,21 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <!--- И еще стиль для combobox -->
+    <Style x:Key="CmbStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="#1f1f1f"/>
+        <Setter Property="Foreground" Value="#c9c9c9"/>
+        <Setter Property="BorderBrush" Value="#c9c9c9"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="Background" Value="#1f1f1f"/>
+        <Setter Property="Foreground" Value="#c9c9c9"/>
+        <Setter Property="Padding" Value="4"/>
+
+    </Style>
 
     <!-- Стиль для текстовых полей -->
     <Style x:Key="BaseTextBoxStyle" TargetType="TextBox">

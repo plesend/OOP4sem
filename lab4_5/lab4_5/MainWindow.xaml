@@ -70,7 +70,7 @@
                     </StackPanel>
 
                     <TextBlock Style="{DynamicResource BaseTextBlockStyle}" Text="{DynamicResource BrandText}" Margin="10,10,0,5"/>
-                    <ComboBox Style="{DynamicResource BaseComboBoxStyle}" x:Name="Brand" Height="25" Width="120">
+                    <ComboBox Style="{DynamicResource CmbStyle}" x:Name="Brand" Height="25" Width="120">
                         <ComboBoxItem Content="Все" IsSelected="True"/>
                         <ComboBoxItem Content="Essence"/>
                         <ComboBoxItem Content="L'OREAL"/>
