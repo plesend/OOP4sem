@@ -52,7 +52,7 @@ namespace lab4_5
 
 
 
-        private int _currentThemeIndex = 0; // Индекс текущей темы
+        private int _currentThemeIndex = 0;
         private readonly string[] _themes =
         {
             "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml", // Тема по умолчанию
@@ -69,13 +69,17 @@ namespace lab4_5
                 Source = new Uri(themePath, UriKind.Absolute) 
             };
 
-            Application.Current.Resources.MergedDictionaries.Clear();
+            var currentheme = Application.Current.Resources.MergedDictionaries
+      .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Themes"));
+
+            if (currentheme != null)
+            {
+                Application.Current.Resources.MergedDictionaries.Remove(currentheme);
+            }
 
             Application.Current.Resources.MergedDictionaries.Add(themeDict);
 
             _currentThemeIndex = (_currentThemeIndex + 1) % _themes.Length;
-
-            IsMenuOpen = false;
         }
 
 
