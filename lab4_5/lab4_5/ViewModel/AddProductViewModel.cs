@@ -25,8 +25,6 @@ public class AddProductViewModel : INotifyPropertyChanged
     public RelayCommand AddProductCommand { get; }
     public RelayCommand BrowseImageCommand { get; }
 
-    public AddProductWindow CurrentWindow { get; set; } // чтобы закрывать окно из ViewModel
-
     public AddProductViewModel()
     {
         AddProductCommand = new RelayCommand(_ => AddProduct());
@@ -62,34 +60,6 @@ public class AddProductViewModel : INotifyPropertyChanged
 
         newProductReturned = newProduct;
         CloseAction?.Invoke();
-
-        //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
-
-        //try
-        //{
-        //    List<Product> allProducts = new List<Product>();
-
-        //    if (File.Exists(jsonPath))
-        //    {
-        //        string existingJson = File.ReadAllText(jsonPath);
-        //        allProducts = JsonConvert.DeserializeObject<List<Product>>(existingJson) ?? new List<Product>();
-        //    }
-
-        //    allProducts.Add(newProduct);
-
-        //    string updatedJson = JsonConvert.SerializeObject(allProducts, Formatting.Indented);
-        //    File.WriteAllText(jsonPath, updatedJson);
-
-        //    mainWindow.products = allProducts;
-        //    mainWindow.CatalogPanel.Children.Clear();
-        //    mainWindow.LoadProducts(mainWindow.products, mainWindow.currentUser);
-
-        //    CurrentWindow?.Close();
-        //}
-        //catch (Exception ex)
-        //{
-        //    MessageBox.Show($"Ошибка при работе с JSON: {ex.Message}");
-        //}
     }
 
     private void BrowseImage()

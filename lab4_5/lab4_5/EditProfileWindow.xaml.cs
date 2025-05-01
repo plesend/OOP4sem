@@ -15,18 +15,14 @@ using System.Windows.Shapes;
 namespace lab4_5
 {
     /// <summary>
-    /// Логика взаимодействия для Window4.xaml
+    /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class EditProfileWindow : Window
     {
-        public SettingsWindow(User user)
+        public EditProfileWindow(User user)
         {
-            try
-            {
-                InitializeComponent();
-                DataContext = new SettingsViewModel(user);
-            }
-            catch (Exception ex) {  MessageBox.Show(ex.Message); }
+            InitializeComponent();
+            DataContext = new SettingsViewModel(user);
         }
     }
 }

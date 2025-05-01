@@ -11,12 +11,8 @@
                 <ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/lab4_5/Themes/DefaultTheme.xaml"/>
                 <!--<ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/lab4_5/Themes/DarkTheme.xaml"/>-->
                 <!--<ResourceDictionary Source="D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes/BrownTheme.xaml"/>-->
-                <ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/Resources/Resources.ru.xaml" />
-                <ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/Resources/Resources.eng.xaml" />
+                <ResourceDictionary Source="D:/лабораторные работы/ооп/lab4_5/lab4_5/Resources/Resources.ru.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

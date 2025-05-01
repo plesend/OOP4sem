@@ -11,49 +11,118 @@ namespace lab4_5
 {
     class SettingsViewModel : INotifyPropertyChanged
     {
-        private User CurrentUser;
-        SettingsWindow SettingsWindow;
+
+        private User _currentUser;
+        public User CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged();
+            }
+        }
+        private string currentLanguage = "ru";
+        private int _currentThemeIndex = 0;
+
         public ICommand ChangeThemeCommand { get; }
+        public ICommand ChangeLanguageCommand { get; }
+        public ICommand OpenEditProfileCommand { get; }
 
         public SettingsViewModel(User user)
         {
-            ChangeThemeCommand = new RelayCommand(ChangeTheme);
-            CurrentUser = SettingsWindow.currentUser;
+            try
+            {
+                ChangeThemeCommand = new RelayCommand(ChangeTheme);
+                ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+                OpenEditProfileCommand = new RelayCommand(OpenEditProfile);
+                CurrentUser = user;
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+        }
+        private void OpenEditProfile()
+        {
+            try
+            {
+                var editProfileWindow = new EditProfileWindow(CurrentUser);
+                editProfileWindow.Owner = Application.Current.MainWindow;
+                editProfileWindow.Show();
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
         }
 
-        private int _currentThemeIndex = 0;
         private readonly string[] _themes =
         {
-            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml", // Тема по умолчанию
             "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DarkTheme.xaml",     // Темная тема
-            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\BrownTheme.xaml"   // Дополнительная тема
+            //"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\BrownTheme.xaml",   // Дополнительная тема
+            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml"
         };
         private void ChangeTheme()
         {
-            string themePath = _themes[_currentThemeIndex];
-
-            var themeDict = new ResourceDictionary()
+            try
             {
-                Source = new Uri(themePath, UriKind.Absolute)
-            };
+                string themePath = _themes[_currentThemeIndex];
 
-            var currentheme = Application.Current.Resources.MergedDictionaries
-                              .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Themes"));
+                var themeDict = new ResourceDictionary()
+                {
+                    Source = new Uri(themePath, UriKind.Absolute)
+                };
 
-            if (currentheme != null)
-            {
-                Application.Current.Resources.MergedDictionaries.Remove(currentheme);
+                var currentheme = Application.Current.Resources.MergedDictionaries
+                                  .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Themes"));
+
+                if (currentheme != null)
+                {
+                    Application.Current.Resources.MergedDictionaries.Remove(currentheme);
+                }
+
+                Application.Current.Resources.MergedDictionaries.Add(themeDict);
+
+                _currentThemeIndex = (_currentThemeIndex + 1) % _themes.Length;
             }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
 
-            Application.Current.Resources.MergedDictionaries.Add(themeDict);
+        }
 
-            _currentThemeIndex = (_currentThemeIndex + 1) % _themes.Length;
+        private void ChangeLanguage()
+        {
+            try
+            {
+                string newLang = currentLanguage == "ru" ? "eng" : "ru";
+                string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\Resources.{newLang}.xaml";
+
+                var newDict = new ResourceDictionary
+                {
+                    Source = new Uri(newDictPath, UriKind.Absolute)
+                };
+
+                var currentLang = Application.Current.Resources.MergedDictionaries
+          .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Resources"));
+
+                if (currentLang != null)
+                {
+                    Application.Current.Resources.MergedDictionaries.Remove(currentLang);
+                }
+
+                Application.Current.Resources.MergedDictionaries.Add(newDict);
+
+                currentLanguage = newLang;
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+            catch (Exception ex) { MessageBox.Show(ex.Message); }
+
         }
     }
 }

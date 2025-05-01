@@ -86,6 +86,18 @@
         <Setter Property="Margin" Value="5"/>
     </Style>
 
+    <Style x:Key="LittleButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="white"/>
+        <Setter Property="Foreground" Value="#A578BB"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
     <!-- Стиль для Separator -->
     <Style x:Key="BaseSeparatorStyle" TargetType="Separator">
         <Setter Property="Background" Value="#A578BB"/>

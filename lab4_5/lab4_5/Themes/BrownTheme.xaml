@@ -15,7 +15,17 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-
+    <Style x:Key="LittleButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#1f1f1f"/>
+        <Setter Property="Foreground" Value="#c9c9c9"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Margin" Value="1"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
     <!-- Стиль для обычных кнопок -->
     <Style x:Key="BaseButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="#ad9374"/>

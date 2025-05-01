@@ -18,7 +18,6 @@ namespace lab4_5
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<Product> _Products;
-
         public ObservableCollection<Product> Products { get => _Products;
             set { _Products = value; OnPropertyChanged(); } }
 
@@ -67,25 +66,23 @@ namespace lab4_5
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
             SearchCommand = new RelayCommand(Search);
 
-            Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json"));
+            Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json"));
             tmpProducts = Products;
         }
 
         private void OpenProfile()
-        {
-            MessageBox.Show("Профиль открыт");
+        { 
             var settingsWindow = new SettingsWindow(CurrentUser);
-            settingsWindow.Owner = Application.Current.MainWindow;
-            settingsWindow.Show();
+            settingsWindow.ShowDialog();
         }
 
 
         private int _currentThemeIndex = 0;
         private readonly string[] _themes =
         {
-            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml", // Тема по умолчанию
             "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DarkTheme.xaml",     // Темная тема
-            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\BrownTheme.xaml"   // Дополнительная тема
+            //"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\BrownTheme.xaml",
+            "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml", // Тема по умолчанию
         };
 
         private void ChangeTheme()
@@ -134,11 +131,16 @@ namespace lab4_5
         {
             AddProductWindow window1 = new AddProductWindow();
             window1.ShowDialog();
+
             var newProd = (window1.DataContext as AddProductViewModel).newProductReturned;
-            tmpProducts.Add(newProd);
-            string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
-            string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
-            File.WriteAllText(jsonPath, updatedJson);
+
+            if (newProd != null)
+            {
+                tmpProducts.Add(newProd);
+                string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
+                string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
+                File.WriteAllText(jsonPath, updatedJson);
+            }
         }
 
         private void Clear()
@@ -181,7 +183,7 @@ namespace lab4_5
         private void ChangeLanguage()
         {
             string newLang = currentLanguage == "ru" ? "eng" : "ru";
-            string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\Resources\\Resources.{newLang}.xaml";
+            string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\Resources.{newLang}.xaml";
 
 
 
@@ -211,7 +213,7 @@ namespace lab4_5
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
+                    string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\pics\\products.json";
 
                     try
                     {                  

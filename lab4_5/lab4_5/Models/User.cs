@@ -9,7 +9,8 @@ namespace lab4_5
    public class User
     {
         public string Role { get; set; }
-        public string Username { get; set; }
+        public string Login { get; set; }
+        public string Username { get; set; } = "User";
         public string Password { get; set; }
         public string Pfp { get; set; } = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\DefaultPfp.png";
         public User(string username, string password)

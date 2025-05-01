@@ -12,10 +12,16 @@
     <sys:String x:Key="BrandText">Brand</sys:String>
     <sys:String x:Key="Adjust">Adjust</sys:String>
     <sys:String x:Key="Clear">Clear filters</sys:String>
+    <sys:String x:Key="Cancel">Cancel</sys:String>
 
     <sys:String x:Key="MenuItem_Profile">My profile</sys:String>
     <sys:String x:Key="MenuItem_ChangeTheme">Change Theme</sys:String>
     <sys:String x:Key="MenuItem_ChangeLanguage">Рус</sys:String>
     <sys:String x:Key="EditProfile">Edit profile</sys:String>
 
+    <sys:String x:Key="Profile">Profile</sys:String>
+
+    <sys:String x:Key="Editting">Editting</sys:String>
+    <sys:String x:Key="EditName">Edit name</sys:String>
+    <sys:String x:Key="EditPassword">Edit password</sys:String>
 </ResourceDictionary>
