@@ -82,5 +82,19 @@
     "Brand": "Essence",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg",
     "Price": 145
+  },
+  {
+    "Name": "fsf",
+    "Description": "sdf",
+    "Brand": "sdfdf",
+    "ImagePath": "D:/рисунки/ava.jpg",
+    "Price": 4335
+  },
+  {
+    "Name": "fsdfds",
+    "Description": "fsdf",
+    "Brand": "fsdf",
+    "ImagePath": "D:/рисунки/хайтам stare.jpg",
+    "Price": 2332
   }
 ]

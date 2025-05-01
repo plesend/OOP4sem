@@ -10,25 +10,75 @@ using System.Globalization;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using System.Windows.Data;
+using System.Windows.Controls;
 
 namespace lab4_5
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<Product> Products { get; set; } = new ObservableCollection<Product>();
+        private ObservableCollection<Product> _Products;
 
-        public User CurrentUser { get; set; }
+        public ObservableCollection<Product> Products { get => _Products;
+            set { _Products = value; OnPropertyChanged(); } }
+
+        public ObservableCollection<Product> tmpProducts { get; set; }
+        public ObservableCollection<Product> tmpSearchProducts { get; set; }
+
+
+        public User CurrentUser;
+        public bool IsAdmin => CurrentUser?.Role == "Admin";
+        public Product productToRemove { get; set; }
+
+        private string _FromPrice;
+        private string _ToPrice;
+        public int _SelectedBrandIndex;
+        public string FromPrice { get => _FromPrice; set { _FromPrice = value; OnPropertyChanged(); } }
+        public string ToPrice { get => _ToPrice; set { _ToPrice = value; OnPropertyChanged(); } }
+        public string Brand { get; set; }
+        public int SelectedBrandIndex { get => _SelectedBrandIndex; set { _SelectedBrandIndex = value; OnPropertyChanged(); } }
+
+        private string searchBox;
+        public string SearchBox
+        {
+            get => searchBox;
+            set { searchBox = value; OnPropertyChanged(); SearchProduct(); }
+        }
+
         public ICommand OpenProfileCommand { get; }
         public ICommand ChangeThemeCommand { get; }
-        public ICommand DeleteProductCommand { get; }
+        public ICommand AddProductCommand { get; }
+        public ICommand AdjustCommand { get; }
+        public ICommand ClearCommand { get; }
+        public ICommand ChangeLanguageCommand {  get; }
+        public ICommand SearchCommand { get; }
+        public ICommand RemoveProductCommand => new RelayCommand<Product>(DelProduct);
 
+        public MainWindowViewModel() { }
         public MainWindowViewModel(User user)
         {
             CurrentUser = user;
-            LoadProducts();
-            OpenProfileCommand = new RelayCommand(OpenSettings);
+
+            OpenProfileCommand = new RelayCommand(OpenProfile);
             ChangeThemeCommand = new RelayCommand(ChangeTheme);
+            AddProductCommand = new RelayCommand(AddProduct);
+            AdjustCommand = new RelayCommand(Adjust);
+            ClearCommand = new RelayCommand(Clear);
+            ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+            SearchCommand = new RelayCommand(Search);
+
+            Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json"));
+            tmpProducts = Products;
         }
+
+        private void OpenProfile()
+        {
+            MessageBox.Show("Профиль открыт");
+            var settingsWindow = new SettingsWindow(CurrentUser);
+            settingsWindow.Owner = Application.Current.MainWindow;
+            settingsWindow.Show();
+        }
+
 
         private int _currentThemeIndex = 0;
         private readonly string[] _themes =
@@ -42,9 +92,9 @@ namespace lab4_5
         {
             string themePath = _themes[_currentThemeIndex];
 
-            var themeDict = new ResourceDictionary() 
-            { 
-                Source = new Uri(themePath, UriKind.Absolute) 
+            var themeDict = new ResourceDictionary()
+            {
+                Source = new Uri(themePath, UriKind.Absolute)
             };
 
             var currentheme = Application.Current.Resources.MergedDictionaries
@@ -59,21 +109,131 @@ namespace lab4_5
 
             _currentThemeIndex = (_currentThemeIndex + 1) % _themes.Length;
         }
-        private void DeleteProduct(object param)
+
+        private void Adjust()
         {
-            if (param is Product product)
+            SortProduct();
+        }
+        
+        public void SortProduct()
+        {
+            int priceFrom = int.TryParse(FromPrice, out int result) ? result : 0;
+            int priceTo = int.TryParse(ToPrice, out int result1) ? result1 : 9999;
+            string BrandSort = Brand;
+
+
+            var sorted = tmpProducts
+                .Where(p => (string.IsNullOrEmpty(BrandSort) || BrandSort == "Все" || p.Brand == BrandSort) &&
+                    p.Price >= priceFrom && p.Price <= priceTo)
+                .ToList();
+            Products = new ObservableCollection<Product>(sorted);
+            tmpSearchProducts = new ObservableCollection<Product>(sorted);
+        }
+
+        public void AddProduct()
+        {
+            AddProductWindow window1 = new AddProductWindow();
+            window1.ShowDialog();
+            var newProd = (window1.DataContext as AddProductViewModel).newProductReturned;
+            tmpProducts.Add(newProd);
+            string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
+            string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
+            File.WriteAllText(jsonPath, updatedJson);
+        }
+
+        private void Clear()
+        {
+            Products = tmpProducts;
+            FromPrice = string.Empty;
+            ToPrice = string.Empty;
+            SelectedBrandIndex = 0;
+        }
+
+        public void SearchProduct()
+        {
+            string searchCriteria = SearchBox;
+
+            if (tmpSearchProducts.Count > 0)
             {
-                Products.Remove(product);
-                var allProducts = Products.ToList();
-                string updatedJson = JsonConvert.SerializeObject(allProducts, Formatting.Indented);
-                File.WriteAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json", updatedJson);
+                var searchLower = searchCriteria.ToLower();
+                var filtered = tmpSearchProducts
+                //.Where(p => p.Name.ToLower().Contains(searchLower));
+                .Where(s => string.IsNullOrEmpty(searchCriteria) || s.Name.ToLower().Contains(searchCriteria?.ToLower() ?? ""));
+                Products = new ObservableCollection<Product>(filtered);
+            }
+
+            else
+            {
+                var searchLower = searchCriteria.ToLower();
+                var filtered = tmpProducts
+                //.Where(p => p.Name.ToLower().Contains(searchLower));
+                .Where(s => string.IsNullOrEmpty(searchCriteria) || s.Name.ToLower().Contains(searchCriteria?.ToLower() ?? ""));
+                Products = new ObservableCollection<Product>(filtered);
             }
         }
-        //public void OpenSettings()
-        //{
-        //    SettingsWindow settingsWindow = new SettingsWindow(currentUser, this);
 
-        //}
+        public void Search()
+        {
+            SearchProduct();
+        }
+
+        private string currentLanguage = "ru";
+        private void ChangeLanguage()
+        {
+            string newLang = currentLanguage == "ru" ? "eng" : "ru";
+            string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\Resources\\Resources.{newLang}.xaml";
+
+
+
+            var newDict = new ResourceDictionary
+            {
+                Source = new Uri(newDictPath, UriKind.Absolute)
+            };
+
+            var currentLang = Application.Current.Resources.MergedDictionaries
+      .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Resources"));
+
+            if (currentLang != null)
+            {
+                Application.Current.Resources.MergedDictionaries.Remove(currentLang);
+            }
+
+            Application.Current.Resources.MergedDictionaries.Add(newDict);
+
+            currentLanguage = newLang;
+        }
+
+        public void DelProduct(Product productToRemove)
+        {
+            if (productToRemove != null)
+            {
+                var result = MessageBox.Show("Вы точно хотите удалить этот товар?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
+
+                    try
+                    {                  
+                        var productToRemoveFromJson = tmpProducts.FirstOrDefault(p => p.Name == productToRemove.Name && p.Brand == productToRemove.Brand);
+                        if (productToRemoveFromJson != null)
+                        {
+                            tmpProducts.Remove(productToRemoveFromJson);
+                            Products.Remove(productToRemoveFromJson);
+                        }
+
+                        string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
+                        File.WriteAllText(jsonPath, updatedJson);
+
+                        MessageBox.Show("Товар удален!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при удалении товара из JSON: {ex.Message}");
+                    }
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
@@ -81,14 +241,20 @@ namespace lab4_5
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void LoadProducts()
+
+    }
+
+    public class BoolToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var loaded = JsonConvert.DeserializeObject<List<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json"));
-            Products.Clear();
-            foreach (var product in loaded)
-                Products.Add(product);
+            return value is bool b && b ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 //    public class MainWindowViewModel : INotifyPropertyChanged

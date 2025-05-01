@@ -15,4 +15,8 @@
 
     <sys:String x:Key="MenuItem_Profile">Мой профиль</sys:String>
     <sys:String x:Key="MenuItem_ChangeTheme">Сменить тему</sys:String>
+    <sys:String x:Key="MenuItem_ChangeLanguage">Eng</sys:String>
+    <sys:String x:Key="EditProfile">Редактировать профиль</sys:String>
+
+
 </ResourceDictionary>

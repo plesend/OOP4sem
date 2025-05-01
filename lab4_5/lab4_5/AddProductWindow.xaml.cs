@@ -25,12 +25,12 @@ namespace lab4_5
     /// </summary>
     public partial class AddProductWindow : Window
     {
-        public AddProductWindow(MainWindow mainWindow)
+        public AddProductWindow()
         {
             InitializeComponent();
 
-            var viewModel = new AddProductViewModel(mainWindow);
-            viewModel.CurrentWindow = this;
+            var viewModel = new AddProductViewModel();
+            viewModel.CloseAction = () => this.Close();
 
             this.DataContext = viewModel;
         }

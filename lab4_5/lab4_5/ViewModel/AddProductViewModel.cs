@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Windows;
 using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 
 public class AddProductViewModel : INotifyPropertyChanged
 {
@@ -18,16 +19,16 @@ public class AddProductViewModel : INotifyPropertyChanged
     public string Brand { get; set; }
     public string PriceText { get; set; }
     public string ImagePath { get; set; }
+    public Product newProductReturned { get; set; }
 
+    public Action CloseAction { get; set; }
     public RelayCommand AddProductCommand { get; }
     public RelayCommand BrowseImageCommand { get; }
 
     public AddProductWindow CurrentWindow { get; set; } // чтобы закрывать окно из ViewModel
 
-    public AddProductViewModel(MainWindow main)
+    public AddProductViewModel()
     {
-        mainWindow = main;
-
         AddProductCommand = new RelayCommand(_ => AddProduct());
         BrowseImageCommand = new RelayCommand(_ => BrowseImage());
     }
@@ -50,7 +51,7 @@ public class AddProductViewModel : INotifyPropertyChanged
             return;
         }
 
-        var newProduct = new Product
+        Product newProduct = new Product
         {
             Name = Name,
             Description = Type,
@@ -59,33 +60,36 @@ public class AddProductViewModel : INotifyPropertyChanged
             Price = price
         };
 
-        string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
+        newProductReturned = newProduct;
+        CloseAction?.Invoke();
 
-        try
-        {
-            List<Product> allProducts = new List<Product>();
+        //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\pics\\products.json";
 
-            if (File.Exists(jsonPath))
-            {
-                string existingJson = File.ReadAllText(jsonPath);
-                allProducts = JsonConvert.DeserializeObject<List<Product>>(existingJson) ?? new List<Product>();
-            }
+        //try
+        //{
+        //    List<Product> allProducts = new List<Product>();
 
-            allProducts.Add(newProduct);
+        //    if (File.Exists(jsonPath))
+        //    {
+        //        string existingJson = File.ReadAllText(jsonPath);
+        //        allProducts = JsonConvert.DeserializeObject<List<Product>>(existingJson) ?? new List<Product>();
+        //    }
 
-            string updatedJson = JsonConvert.SerializeObject(allProducts, Formatting.Indented);
-            File.WriteAllText(jsonPath, updatedJson);
+        //    allProducts.Add(newProduct);
 
-            mainWindow.products = allProducts;
-            mainWindow.CatalogPanel.Children.Clear();
-            mainWindow.LoadProducts(mainWindow.products, mainWindow.currentUser);
+        //    string updatedJson = JsonConvert.SerializeObject(allProducts, Formatting.Indented);
+        //    File.WriteAllText(jsonPath, updatedJson);
 
-            CurrentWindow?.Close();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Ошибка при работе с JSON: {ex.Message}");
-        }
+        //    mainWindow.products = allProducts;
+        //    mainWindow.CatalogPanel.Children.Clear();
+        //    mainWindow.LoadProducts(mainWindow.products, mainWindow.currentUser);
+
+        //    CurrentWindow?.Close();
+        //}
+        //catch (Exception ex)
+        //{
+        //    MessageBox.Show($"Ошибка при работе с JSON: {ex.Message}");
+        //}
     }
 
     private void BrowseImage()
