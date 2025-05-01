@@ -46,7 +46,6 @@ namespace lab4_5
             try
             {
                 var editProfileWindow = new EditProfileWindow(CurrentUser);
-                editProfileWindow.Owner = Application.Current.MainWindow;
                 editProfileWindow.Show();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }

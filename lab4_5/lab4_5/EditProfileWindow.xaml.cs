@@ -22,7 +22,18 @@ namespace lab4_5
         public EditProfileWindow(User user)
         {
             InitializeComponent();
-            DataContext = new SettingsViewModel(user);
+            var model = new EditProfileViewModel(user)
+            {
+                CloseAction = Close
+            };
+            DataContext = model;
+        }
+        private void PasswordBox_PassChanged(object sender, RoutedEventArgs e)
+        {
+            if (this.DataContext != null)
+            {
+                ((EditProfileViewModel)this.DataContext).newPassword = ((PasswordBox)sender).Password;
+            }
         }
     }
 }

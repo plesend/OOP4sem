@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:lab4_5"
         mc:Ignorable="d"
         Title="Профиль"
@@ -10,7 +11,6 @@
         MinWidth="350" MinHeight="600"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize">
-
 
     <Viewbox Stretch="Uniform" StretchDirection="Both">
         <Grid Margin="20">
@@ -24,11 +24,14 @@
 
                     <Separator Style="{DynamicResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
 
-                    <Ellipse Width="70" Height="70">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="{Binding CurrentUser.Pfp}" Stretch="UniformToFill"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
+                    <Image x:Name="ProfileImage" Source="{Binding Pfp}" Width="100" Height="100" Stretch="UniformToFill" Margin="0,0,0,20" ToolTip="Нажмите для изменения изображения">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding ChangeProfileImageCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Image>
+
                     <TextBlock Style="{DynamicResource BaseTextBlockStyle}" HorizontalAlignment="Center" Text="{Binding CurrentUser.Username}"/>
 
                     <TextBlock Style="{DynamicResource BaseTextBlockStyle}" Text="{DynamicResource EditName}" />
@@ -36,13 +39,12 @@
 
                     <TextBlock Style="{DynamicResource BaseTextBlockStyle}" Text="{DynamicResource EditPassword}" />
                     <TextBox Text="{Binding newPassword}" Style="{DynamicResource BaseTextBoxStyle}"/>
-                    
+
                     <Button Content="{DynamicResource Adjust}" Style="{DynamicResource SpecialButtonStyle}" Command="{Binding SaveCommand}"/>
+
                     <Button Content="{DynamicResource Cancel}" Style="{DynamicResource SpecialButtonStyle}" Command="{Binding CloseCommand}"/>
                 </StackPanel>
             </Border>
         </Grid>
     </Viewbox>
 </Window>
-
-
