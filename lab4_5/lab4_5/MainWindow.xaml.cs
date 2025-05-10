@@ -68,5 +68,15 @@ namespace lab4_5
         {
             return text.All(char.IsDigit);
         }
+
+        private void Banner_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EventButton_IconClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("IconClick (Direct) handled in MainWindow");
+        }
     }
 }

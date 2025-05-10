@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="lab4_5.Controls.EventButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="35" Width="119">
+    <Border x:Name="MainBorder"
+            CornerRadius="10"
+            Background="#A578BB"
+            Cursor="Hand"
+            Margin="5"
+            MouseDown="OnMouseDownHandler"
+            PreviewMouseDown="OnPreviewMouseDownHandler">
+        <Viewbox Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock/>
+        </Viewbox>
+    </Border>
+</UserControl>

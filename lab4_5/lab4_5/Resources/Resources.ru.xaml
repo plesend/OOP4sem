@@ -24,4 +24,7 @@
     <sys:String x:Key="Editting">Редактирование</sys:String>
     <sys:String x:Key="EditName">Изменить имя</sys:String>
     <sys:String x:Key="EditPassword">Изменить пароль</sys:String>
+
+    <sys:String x:Key="Buy">Купить</sys:String>
+    <sys:String x:Key="Delete">Удалить</sys:String>
 </ResourceDictionary>

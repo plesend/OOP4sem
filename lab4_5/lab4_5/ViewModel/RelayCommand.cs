@@ -48,6 +48,11 @@ namespace lab4_5
             else
                 _executeWithParam(parameter);
         }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
     }
 
     public class RelayCommand<T> : ICommand
@@ -78,5 +83,6 @@ namespace lab4_5
             remove => CommandManager.RequerySuggested -= value;
         }
     }
+
 
 }

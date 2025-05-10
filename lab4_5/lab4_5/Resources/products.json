@@ -4,6 +4,8 @@
     "Description": "Праймер",
     "Brand": "Essence",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/essence-primer-jelly-grip.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 123
   },
   {
@@ -11,6 +13,8 @@
     "Description": "Тушь для ресниц",
     "Brand": "L'OREAL",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/L'OREAL-PARIS-panorama.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 245
   },
   {
@@ -18,6 +22,8 @@
     "Description": "Праймер",
     "Brand": "Maybelline",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline-Fit-Me-Matte.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 189
   },
   {
@@ -25,6 +31,8 @@
     "Description": "Консилер",
     "Brand": "NYX",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/NYX HD Studio Photogenic.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 210
   },
   {
@@ -32,6 +40,8 @@
     "Description": "Пудра",
     "Brand": "Revolution",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Revolution Banana Powder.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 275
   },
   {
@@ -39,6 +49,8 @@
     "Description": "Тональный крем",
     "Brand": "L'OREAL",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/L'OREAL PARIS Infallible 24H Fresh Wear Foundation.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 390
   },
   {
@@ -46,6 +58,8 @@
     "Description": "Тушь для ресниц",
     "Brand": "Maybelline",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline Lash Sensational Sky High.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 198
   },
   {
@@ -53,6 +67,8 @@
     "Description": "Тональный крем",
     "Brand": "Essence",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Stay All Day 16h Foundation.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 165
   },
   {
@@ -60,6 +76,8 @@
     "Description": "Фиксирующая пудра",
     "Brand": "NYX",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/NYX Can't Stop Won't Stop Setting Powder.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 223
   },
   {
@@ -67,6 +85,8 @@
     "Description": "Консилер",
     "Brand": "Revolution",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Revolution Conceal & Define Concealer.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 155
   },
   {
@@ -74,6 +94,8 @@
     "Description": "Жидкая матовая помада",
     "Brand": "Maybelline",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Maybelline SuperStay Matte Ink.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 199
   },
   {
@@ -81,6 +103,35 @@
     "Description": "Тушь для ресниц",
     "Brand": "Essence",
     "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
     "Price": 145
+  },
+  {
+    "Name": "gsdgsdg",
+    "Description": "rfwf",
+    "Brand": "ftf",
+    "ImagePath": "D:/лабораторные работы/ооп/lab4_5/pics/Benefit Hoola.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
+    "Price": 4334
+  },
+  {
+    "Name": "gfrer",
+    "Description": "vd",
+    "Brand": "fff",
+    "ImagePath": "D:/рисунки/ava.jpg",
+    "Buy": "Купить",
+    "Delete": "Удалить",
+    "Price": 323
+  },
+  {
+    "Name": "ughuiiuiui",
+    "Description": "кокащкее",
+    "Brand": "ламборджини",
+    "ImagePath": "C:/Users/user/Desktop/легенда.png",
+    "Buy": "Купить",
+    "Delete": "Удалить",
+    "Price": -9999
   }
 ]
