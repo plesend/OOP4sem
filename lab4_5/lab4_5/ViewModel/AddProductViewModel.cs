@@ -43,20 +43,20 @@ public class AddProductViewModel : INotifyPropertyChanged
             return;
         }
 
-        if (!int.TryParse(PriceText, out int price))
+        if (!double.TryParse(PriceText, out double price))
         {
             MessageBox.Show("Цена должна быть числом.");
             return;
         }
 
-        Product newProduct = new Product
-        {
-            Name = Name,
-            Description = Type,
-            Brand = Brand,
-            ImagePath = ImagePath,
-            Price = price
-        };
+        Product newProduct = new Product(Name, Type, Brand, ImagePath, "Купить", "Удалить", price);
+        //({
+        //    Name = Name,
+        //    Description = Type,
+        //    Brand = Brand,
+        //    ImagePath = ImagePath,
+        //    Price = price
+        //});
 
         newProductReturned = newProduct;
         CloseAction?.Invoke();

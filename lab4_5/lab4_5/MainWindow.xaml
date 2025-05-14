@@ -78,7 +78,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Навигационные кнопки -->
-                <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="163,10,0,0">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.Column="1">
                     <Button Style="{DynamicResource BaseButtonStyle}" Width="60" Content="back" Margin="10" Command="{Binding UndoCommand}" />
                     <Button Style="{DynamicResource BaseButtonStyle}" Width="60" Content="frwd" Margin="10" Command="{Binding RedoCommand}"/>
                 </StackPanel>

@@ -16,6 +16,7 @@ namespace lab4_5
 {
     public class Product : INotifyPropertyChanged
     {
+        public int id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Brand { get; set; }
@@ -48,7 +49,28 @@ namespace lab4_5
                 }
             }
         }
-        public int Price { get; set; }
+        public double Price { get; set; }
+        public Product(int id, string name, string description, string brand, string imagePath, string buy, string delete, double price)
+        {
+            this.id = id;
+            Name = name;
+            Description = description;
+            Brand = brand;
+            ImagePath = imagePath;
+            Buy = buy;
+            Delete = delete;
+            Price = price;
+        }
+        public Product(string name, string description, string brand, string imagePath, string buy, string delete, double price)
+        {
+            Name = name;
+            Description = description;
+            Brand = brand;
+            ImagePath = imagePath;
+            Buy = buy;
+            Delete = delete;
+            Price = price;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -6,9 +6,33 @@ namespace lab4_5.Controls
 {
     public partial class EventButton : UserControl
     {
+
+
+        // Создаем команду на основе RoutedUICommand
+        public static readonly RoutedUICommand MyCustomCommand = new RoutedUICommand(
+            "My Custom Command",    // Название команды
+            "MyCustomCommand",      // Идентификатор команды
+            typeof(EventButton)     // Тип класса, где эта команда будет использоваться
+        );
+
         public EventButton()
         {
             InitializeComponent();
+            // Добавляем обработчик команд
+            CommandBindings.Add(new CommandBinding(MyCustomCommand, ExecuteMyCustomCommand, CanExecuteMyCustomCommand));
+        }
+
+        // Метод, который будет выполняться, когда команда активируется
+        private void ExecuteMyCustomCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("My Custom Command Executed!");
+        }
+
+        // Метод, который определяет, доступна ли команда для выполнения
+        private void CanExecuteMyCustomCommand(object sender, CanExecuteRoutedEventArgs e)
+        {
+            // В данном примере команда всегда доступна
+            e.CanExecute = true;
         }
 
         // 🔽 **Tunneling**: PreviewMouseDown
@@ -36,10 +60,11 @@ namespace lab4_5.Controls
         }
 
         // Событие срабатывает, когда пользователь отпускает кнопку.
-        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+        private void OnMouseLeftButtonUpHandler(object sender, MouseButtonEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(IconClickEvent));  // Direct-событие
-            base.OnMouseLeftButtonUp(e);
+            // Direct-событие
+            RaiseEvent(new RoutedEventArgs(IconClickEvent));
+            MessageBox.Show("IconClick (Direct) in EventButton");
         }
     }
 }

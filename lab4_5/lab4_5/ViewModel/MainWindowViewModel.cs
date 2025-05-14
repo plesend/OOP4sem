@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Windows.Data;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System.Data.SqlClient;
 
 namespace lab4_5
 {
@@ -27,6 +28,7 @@ namespace lab4_5
         public ObservableCollection<Product> tmpProducts { get; set; }
         public ObservableCollection<Product> tmpSearchProducts { get; set; }
 
+        public string ConnectionString = "Data source = WIN-0RRORC9T71J\\SQLEXPRESS; Initial Catalog = CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
 
         public User CurrentUser;
         public bool IsAdmin => CurrentUser?.Role == "Admin";
@@ -90,7 +92,8 @@ namespace lab4_5
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
             SearchCommand = new RelayCommand(Search);
 
-            Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json"));
+            //Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json"));
+            LoadProducts();
             tmpProducts = new ObservableCollection<Product>(Products);
             tmpSearchProducts = new ObservableCollection<Product>(Products);
 
@@ -157,7 +160,33 @@ namespace lab4_5
             }
         }
 
-
+        private void LoadProducts()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("select * from Goods", connection);
+                using (var reader = command.ExecuteReader())
+                {
+                    var _goods = new ObservableCollection<Product>();
+                    while(reader.Read())
+                    {
+                        _goods.Add(new Product
+                            (
+                                id: reader.GetInt32(reader.GetOrdinal("id")),
+                                name: reader["Name"].ToString(),
+                                description: reader["Description"].ToString(),
+                                brand: reader["Brand"].ToString(),
+                                imagePath: reader["ImagePath"].ToString(),
+                                buy: reader["Buy"].ToString(),
+                                delete: reader["DeleteCommand"].ToString(),
+                                price: reader.GetDouble(reader.GetOrdinal("Price"))
+                            ));
+                    }
+                    Products = _goods;
+                }
+            }
+        }
         public class ActionItem
         {
             public string ActionType { get; set; }
@@ -184,7 +213,7 @@ namespace lab4_5
             "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Themes\\DefaultTheme.xaml", // Тема по умолчанию
         };
 
-
+        
         private void ApplyLocalizationToProducts()
         {
             string localizedBuy = (string)Application.Current.Resources["Buy"];
@@ -250,9 +279,40 @@ namespace lab4_5
                 _undoStack.Push(new ActionItem("Add", newProd));
                 _redoStack.Clear();
 
-                string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
-                string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
-                File.WriteAllText(jsonPath, updatedJson);
+                //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
+                //string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
+                //File.WriteAllText(jsonPath, updatedJson);
+                using(var connection = new SqlConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            var command = new SqlCommand("insert into Goods (Name, Description, Brand, ImagePath, Buy, DeleteCommand, Price) values (@Name, @Description, @Brand, @ImagePath, @Buy, @DeleteCommand, @Price)", connection, transaction);
+                            using (command)
+                            {
+                                command.Parameters.AddWithValue("@Name", newProd.Name);
+                                command.Parameters.AddWithValue("@Description", newProd.Description);
+                                command.Parameters.AddWithValue("@Brand", newProd.Brand);
+                                command.Parameters.AddWithValue("@ImagePath", newProd.ImagePath);
+                                command.Parameters.AddWithValue("@Buy", newProd.Buy);
+                                command.Parameters.AddWithValue("@DeleteCommand", newProd.Delete);
+                                command.Parameters.AddWithValue("@Price", newProd.Price);
+
+                                command.ExecuteNonQuery();
+                            }
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show(ex.Message);
+                        }
+                        
+                    }
+                }
+                Products.Add(newProd);
                 ApplyLocalizationToProducts();
             }
         }
@@ -331,29 +391,68 @@ namespace lab4_5
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
-
-                    var productToRemoveFromJson = tmpProducts.FirstOrDefault(p => p.Name == productToRemove.Name && p.Brand == productToRemove.Brand);
-                    if (productToRemoveFromJson != null)
+                    using (SqlConnection conn = new SqlConnection(ConnectionString))
                     {
-                        tmpProducts.Remove(productToRemoveFromJson);
-                        Products.Remove(productToRemoveFromJson);
+                        conn.Open();
 
-                        _undoStack.Push(new ActionItem("Remove", productToRemoveFromJson));
-                        _redoStack.Clear();
+                        using (SqlTransaction transaction = conn.BeginTransaction())
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Goods WHERE Name = @Name AND Brand = @Brand", conn, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@Name", productToRemove.Name);
+                            cmd.Parameters.AddWithValue("@Brand", productToRemove.Brand);
 
-                        string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
-                        File.WriteAllText(jsonPath, updatedJson);
+                            try
+                            {
+                                int rowsAffected = cmd.ExecuteNonQuery();
+                                transaction.Commit();
 
-                        MessageBox.Show("Товар удален!");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Товар не найден в списке!");
+                                if (rowsAffected > 0)
+                                {
+                                    MessageBox.Show("Товар удален из базы данных!");
+                                    _undoStack.Push(new ActionItem("Remove", productToRemove));
+                                    _redoStack.Clear();
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Товар не найден в базе данных!");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show($"Ошибка при удалении из базы данных: {ex.Message}");
+                            }
+                        }
                     }
                 }
+                Products.Remove(productToRemove);
             }
+            
         }
+
+        //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
+
+        //var productToRemoveFromJson = tmpProducts.FirstOrDefault(p => p.Name == productToRemove.Name && p.Brand == productToRemove.Brand);
+        //if (productToRemoveFromJson != null)
+        //{
+        //    tmpProducts.Remove(productToRemoveFromJson);
+        //    Products.Remove(productToRemoveFromJson);
+
+        //    _undoStack.Push(new ActionItem("Remove", productToRemoveFromJson));
+        //    _redoStack.Clear();
+
+        //    string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
+        //    File.WriteAllText(jsonPath, updatedJson);
+
+        //    MessageBox.Show("Товар удален!");
+        //}
+        //else
+        //{
+        //    MessageBox.Show("Товар не найден в списке!");
+        //}
+        //        }
+        //    }
+        //}
 
 
         public event PropertyChangedEventHandler PropertyChanged;
