@@ -22,25 +22,33 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <DataTemplate x:Key="ProductTemplate">
-            <Border CornerRadius="8" BorderBrush="LightGray" BorderThickness="1" Margin="0,5,5,0">
-                <StackPanel>
-                    <Image Source="{Binding ImagePath}"
+            <Button Command="{Binding DataContext.ShowProductViewCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="0"
+                Margin="0,5,5,0"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch">
+                <Border CornerRadius="8" BorderBrush="LightGray" BorderThickness="1">
+                    <StackPanel>
+                        <Image Source="{Binding ImagePath}"
                            Stretch="Uniform"
                            Height="90"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding Name}"
+                        <TextBlock Text="{Binding Name}"
                                FontWeight="Bold"
                                Margin="10,5,10,0"
                                Height="40"
                                TextAlignment="Right"
                                TextWrapping="Wrap"/>
-                    <TextBlock Text="{Binding Description}"
+                        <TextBlock Text="{Binding Description}"
                                Foreground="Gray"
                                Margin="10,5,10,5"
                                TextAlignment="Right"/>
-                    <controls:IconButton Text="{Binding Buy}"/>
-                    <Button Content="Удалить"
+                        <controls:IconButton Text="{Binding Buy}"/>
+                        <Button Content="Удалить"
                             Margin="5,1,5,5"
                             Background="Red"
                             Foreground="White"
@@ -49,10 +57,12 @@
                             Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
                             Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="{Binding}" />
-                </StackPanel>
-            </Border>
+                    </StackPanel>
+                </Border>
+            </Button>
         </DataTemplate>
     </Window.Resources>
+
 
     <ScrollViewer>
         <Viewbox Stretch="Uniform" StretchDirection="Both">
@@ -104,12 +114,20 @@
                         Content="{DynamicResource ButtonText_AboutUs}"
                         Grid.Column="4" Height="40" Width="150"/>
 
-                <Button Style="{DynamicResource BaseButtonStyle}"
-                        x:Name="AddProduct"
+                <Button x:Name="AddProduct"
                         Content="{DynamicResource ButtonText_Manage}"
+                        Style="{DynamicResource BaseButtonStyle}"
                         Grid.Column="5"
-                        Command="{Binding AddProductCommand}"
-                        Height="40" Width="150"/>
+                        Height="40" Width="150"
+                        Click="AddProduct_Click">
+                    <Button.ContextMenu>
+                        <ContextMenu x:Name="ManageMenu" Placement="Bottom">
+                            <MenuItem Header="{DynamicResource ManageMenu_AddProduct}" Command="{Binding AddProductCommand}" />
+                            <MenuItem Header="{DynamicResource ManageMenu_ShowUsers}" Command="{Binding ShowUsersCommand}" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
+
 
                 <Button Style="{DynamicResource BaseButtonStyle}"
                         x:Name="ProfileButton"

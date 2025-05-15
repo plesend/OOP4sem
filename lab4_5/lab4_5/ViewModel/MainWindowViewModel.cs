@@ -19,8 +19,6 @@ namespace lab4_5
 {
     public class MainWindowViewModel : INotifyPropertyChanged
     {
-
-
         private ObservableCollection<Product> _Products;
         public ObservableCollection<Product> Products { get => _Products;
             set { _Products = value; OnPropertyChanged(); } }
@@ -33,6 +31,25 @@ namespace lab4_5
         public User CurrentUser;
         public bool IsAdmin => CurrentUser?.Role == "Admin";
         public Product productToRemove { get; set; }
+        private Product _selectedProduct;
+        public Product SelectedProduct
+        {
+            get => _selectedProduct;
+            set
+            {
+                if (_selectedProduct != value)
+                {
+                    _selectedProduct = value;
+                    OnPropertyChanged();
+
+                    if (_selectedProduct != null)
+                    {
+                        ShowProductDetails(_selectedProduct);
+                    }
+                }
+            }
+        }
+
 
         private string _FromPrice;
         private string _ToPrice;
@@ -73,12 +90,13 @@ namespace lab4_5
         public ICommand OpenProfileCommand { get; }
         public ICommand ChangeThemeCommand { get; }
         public ICommand AddProductCommand { get; }
+        public ICommand ShowUsersCommand { get; }
         public ICommand AdjustCommand { get; }
         public ICommand ClearCommand { get; }
         public ICommand ChangeLanguageCommand {  get; }
         public ICommand SearchCommand { get; }
         public ICommand RemoveProductCommand => new RelayCommand<Product>(DelProduct);
-
+        public ICommand ShowProductViewCommand { get; }
         public MainWindowViewModel() { }
         public MainWindowViewModel(User user)
         {
@@ -91,6 +109,8 @@ namespace lab4_5
             ClearCommand = new RelayCommand(Clear);
             ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
             SearchCommand = new RelayCommand(Search);
+            ShowUsersCommand = new RelayCommand(ShowUsers);
+            ShowProductViewCommand = new RelayCommand<Product>(ShowProductDetails);
 
             //Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json"));
             LoadProducts();
@@ -198,6 +218,16 @@ namespace lab4_5
                 Product = product;
             }
         }
+        private void ShowProductDetails(Product selectedProduct)
+        {
+            if (selectedProduct == null) return;
+
+            var detailsWindow = new ProductViewWindow();
+            var vm = new ProductViewViewModel();
+            vm.Product = selectedProduct;
+            detailsWindow.DataContext = vm;
+            detailsWindow.ShowDialog();
+        }
         private void OpenProfile()
         { 
             var settingsWindow = new SettingsWindow(CurrentUser);
@@ -266,6 +296,11 @@ namespace lab4_5
             tmpSearchProducts = new ObservableCollection<Product>(sorted);
         }
 
+        public void ShowUsers()
+        {
+            UsersWindow usersWindow = new UsersWindow();
+            usersWindow.ShowDialog();
+        }
         public void AddProduct()
         {
             AddProductWindow window1 = new AddProductWindow();

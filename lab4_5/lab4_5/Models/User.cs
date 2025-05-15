@@ -44,6 +44,14 @@ namespace lab4_5
             get => _pfp;
             set { _pfp = value; OnPropertyChanged(nameof(Pfp)); }
         }
+        public User(string role, string login, string username, string password, string pfp) : this(role, login)
+        {
+            Role = role;
+            Login = login;
+            Username = username;
+            Password = password;
+            Pfp = pfp;
+        }
 
         public User(string login, string password)
         {

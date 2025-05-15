@@ -2,16 +2,17 @@ CREATE DATABASE CosmeticShop;
 
 use CosmeticShop;
 drop table Goods;
-CREATE TABLE "Goods" (
- id int primary key identity(1,1),
-  "Name" text,
-  "Description" text,
-  "Brand" text,
-  "ImagePath" text,
-  "Buy" text,
-  "DeleteCommand" text,
-  "Price" float
+CREATE TABLE Goods (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(MAX),
+    Description NVARCHAR(MAX),
+    Brand NVARCHAR(MAX),
+    ImagePath NVARCHAR(MAX),
+    Buy NVARCHAR(MAX),
+    DeleteCommand NVARCHAR(MAX),
+    Price FLOAT
 );
+
 
 INSERT INTO Goods("Name","Description","Brand","ImagePath","Buy","DeleteCommand","Price")
 VALUES

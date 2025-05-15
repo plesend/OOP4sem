@@ -74,6 +74,14 @@ namespace lab4_5
 
         }
 
+        private void AddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            AddProduct.ContextMenu.PlacementTarget = AddProduct;
+            AddProduct.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            AddProduct.ContextMenu.IsOpen = true;
+        }
+
+
         private void EventButton_IconClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("IconClick (Direct) handled in MainWindow");
