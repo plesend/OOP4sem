@@ -240,7 +240,6 @@ namespace lab4_5
                 Product = product;
             }
         }
-
         public void AddToCart(Product productToAdd)
         {
             if (productToAdd == null)

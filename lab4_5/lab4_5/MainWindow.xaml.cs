@@ -81,7 +81,11 @@ namespace lab4_5
             AddProduct.ContextMenu.IsOpen = true;
         }
 
-
+        public void OpenCartWindow_Click(object sender, RoutedEventArgs e)
+        {
+            CartWindow cw = new CartWindow(currentUser);
+            cw.ShowDialog();
+        }
         private void EventButton_IconClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("IconClick (Direct) handled in MainWindow");

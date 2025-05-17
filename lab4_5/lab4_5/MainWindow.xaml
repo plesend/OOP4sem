@@ -101,7 +101,7 @@
 
                 <Button Style="{DynamicResource SpecialButtonStyle}"
                         Content="{DynamicResource ButtonText_Cart}"
-                        Command="{Binding ChangeThemeCommand}"
+                        Click="OpenCartWindow_Click"
                         Height="40" Width="150"/>
 
                 <Button Style="{DynamicResource BaseButtonStyle}"
