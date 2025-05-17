@@ -17,7 +17,7 @@
         <local:ProductViewViewModel />
     </Window.DataContext>
 
-    <Grid Margin="20">
+    <Grid Margin="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="5*"/>
@@ -28,49 +28,85 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Название товара -->
+        <!-- Product Title -->
         <TextBlock Grid.Column="0" Grid.ColumnSpan="2"
                    Text="{Binding Product.Name}"
-                   FontSize="28" FontWeight="Bold"
+                   FontSize="30" FontWeight="Bold"
                    Foreground="#A578BB"
-                   Margin="0 0 0 10"
+                   Margin="0 0 0 20"
                    TextWrapping="Wrap"/>
 
-        <!-- Изображение -->
-        <Border Grid.Row="1" Grid.Column="0" 
-                BorderBrush="LightGray" BorderThickness="1" CornerRadius="8" 
-                Margin="0,0,20,0" Background="White">
-            <Image Source="{Binding Product.ImagePath}" 
-                   Stretch="Uniform"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   />
+        <!-- Product Image -->
+        <!-- Product Image -->
+        <Border Grid.Row="1" Grid.Column="0"
+        BorderBrush="#DDD" BorderThickness="1" CornerRadius="10"
+        Background="White" Margin="0 0 20 0" Padding="10">
+            <Image Source="{Binding Product.ImagePath}"
+       Stretch="UniformToFill"
+       VerticalAlignment="Center"
+       HorizontalAlignment="Center"/>
         </Border>
 
-        <!-- Описание и детали -->
-        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top">
-            <TextBlock Text="Описание:" FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding Product.Description}" 
-                       TextWrapping="Wrap" 
-                       Foreground="Gray"
-                       Margin="0,0,0,15"/>
 
-            <TextBlock Text="Цена:" FontWeight="Bold" FontSize="16" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding Product.Price, StringFormat=C}" 
-                       FontSize="20" Foreground="#A578BB" Margin="0,0,0,20"/>
+        <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel VerticalAlignment="Top">
 
-            <Button Content="Купить"
-                    Width="120"
-                    Height="40"
-                    Style="{DynamicResource SpecialButtonStyle}"
-                    Command="{Binding BuyCommand}"/>
-        </StackPanel>
+                <StackPanel Margin="0 0 0 15">
+                    <TextBlock Text="Бренд:" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="{Binding Product.Brand}"
+                               TextWrapping="Wrap"
+                               Foreground="Gray"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
 
-        <!-- Кнопка закрытия -->
+                <StackPanel Margin="0 0 0 15">
+                    <TextBlock Text="Описание:" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="{Binding Product.Description}"
+                               TextWrapping="Wrap"
+                               Foreground="Gray"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 15">
+                    <TextBlock Text="Цена:" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="{Binding Product.Price, StringFormat=C}"
+                               FontSize="22" Foreground="#A578BB"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <Button Content="Купить"
+                        Width="140"
+                        Height="45"
+                        Style="{DynamicResource SpecialButtonStyle}"
+                        Command="{Binding BuyCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="0,10,0,20"/>
+
+                <Separator Margin="0,10"/>
+
+                <StackPanel Margin="0 0 0 15">
+                    <TextBlock Text="О бренде:" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="{Binding Product.BrandDescription}"
+                               TextWrapping="Wrap"
+                               Foreground="Gray"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 15">
+                    <TextBlock Text="Состав:" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Text="{Binding Product.Composition}"
+                               TextWrapping="Wrap"
+                               Foreground="Gray"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
         <Button Grid.Row="2" Grid.Column="1" Content="Закрыть"
-                Width="100" Height="30"
-                HorizontalAlignment="Right" Margin="0,20,0,0"
+                Width="100" Height="32"
+                HorizontalAlignment="Right" Margin="0,30,0,0"
                 Style="{DynamicResource BaseButtonStyle}"
-                Command="{Binding CloseCommand}" />
+                Click="CloseWindow_Click" />
     </Grid>
 </Window>

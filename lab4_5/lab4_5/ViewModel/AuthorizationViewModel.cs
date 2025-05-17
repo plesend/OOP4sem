@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
+using System.Data.SqlClient; 
+using System.Configuration;
 
 namespace lab4_5
 {
@@ -26,10 +28,12 @@ namespace lab4_5
         }
 
         public ICommand LoginCommand { get; }
+        public ICommand OpenRegistrationCommand { get; }
 
         public AuthorizationViewModel()
         {
             LoginCommand = new RelayCommand(LogIn);
+            OpenRegistrationCommand = new RelayCommand(OpenRegistration);
         }
 
         private void LogIn(object obj)
@@ -40,18 +44,50 @@ namespace lab4_5
                 return;
             }
 
-            if ((Login == "qwerty" && Password == "1234") ||
-                (Login == "йцукен" && Password == "1234"))
+            string connectionString = @"Data Source=WIN-0RRORC9T71J\SQLEXPRESS;Initial Catalog=CosmeticShop;Integrated Security=True";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                User user = new User(Login, Password);
-                MainWindow main = new MainWindow(user);
-                main.Show();
-                (obj as Window)?.Close();
+                connection.Open();
+
+                string sql = "SELECT * FROM Users WHERE Login = @login AND Password = @password";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@login", Login);
+                    command.Parameters.AddWithValue("@password", Password);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            var user = new User(
+                                id: reader.GetInt32(reader.GetOrdinal("Id")),
+                                role: reader.GetString(reader.GetOrdinal("Role")),
+                                login: reader.GetString(reader.GetOrdinal("Login")),
+                                username: reader.GetString(reader.GetOrdinal("Username")),
+                                password: reader.GetString(reader.GetOrdinal("Password")),
+                                pfp: reader.GetString(reader.GetOrdinal("Pfp"))
+                            );
+
+                            MainWindow main = new MainWindow(user);
+                            main.Show();
+
+                            (obj as Window)?.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Неверный логин или пароль.");
+                        }
+                    }
+                }
             }
-            else
-            {
-                MessageBox.Show("Неверный логин или пароль. Доступ разрешен только для Админа и Клиента.");
-            }
+        }
+
+        public void OpenRegistration()
+        {
+            RegistrationWindow rw = new RegistrationWindow();
+            rw.ShowDialog();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

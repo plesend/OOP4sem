@@ -91,13 +91,9 @@
                         </Button.Triggers>
                     </Button>
 
-                    <!--<Button Content="Нет аккаунта? Зарегистрируйся."
-                            HorizontalAlignment="Center"
-                            Width="220"
-                            Height="28"
-                            FontSize="12"
-                            Padding="0, 4"/>-->
-
+                    <Button Content="Нет аккаунта? Зарегистрируйся."
+                            Style="{DynamicResource LittleButtonStyle}"
+                            Command="{Binding OpenRegistrationCommand}"/>
                 </StackPanel>
             </Border>
         </Grid>

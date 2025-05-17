@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
 using System.Windows;
+using System.Data.SqlClient;
+using System;
 
 namespace lab4_5
 {
@@ -36,22 +38,97 @@ namespace lab4_5
 
         private void Register(object obj)
         {
-            if (string.IsNullOrEmpty(Login) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(ConfirmPassword))
+            // 1. Проверка пустых полей
+            if (string.IsNullOrWhiteSpace(Login))
             {
-                MessageBox.Show("все поля должны быть заполнены");
+                MessageBox.Show("Логин не может быть пустым.");
                 return;
             }
-            if (Password != ConfirmPassword)
+            if (string.IsNullOrWhiteSpace(Password))
             {
-                MessageBox.Show("пароли не совпадают");
+                MessageBox.Show("Пароль не может быть пустым.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(ConfirmPassword))
+            {
+                MessageBox.Show("Подтвердите пароль.");
                 return;
             }
 
-            var user = new User(Login, Password);
-            var main = new MainWindow(user);
-            main.Show();
-            (obj as Window)?.Close(); // Закроет текущее окно
+            // 2. Проверка совпадения паролей
+            if (Password != ConfirmPassword)
+            {
+                MessageBox.Show("Пароли не совпадают.");
+                return;
+            }
+
+            // 3. Проверка длины логина и пароля
+            if (Login.Length < 4)
+            {
+                MessageBox.Show("Логин должен содержать минимум 4 символа.");
+                return;
+            }
+            if (Password.Length < 6)
+            {
+                MessageBox.Show("Пароль должен содержать минимум 6 символов.");
+                return;
+            }
+
+            // 4. Дополнительная проверка на валидность логина (например, только буквы и цифры)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(Login, @"^[a-zA-Z0-9]+$"))
+            {
+                MessageBox.Show("Логин должен содержать только латинские буквы и цифры.");
+                return;
+            }
+
+            // 5. Можно добавить проверку сложности пароля (например, наличие цифр и букв)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(Password, @"^(?=.*[a-zA-Z])(?=.*\d).+$"))
+            {
+                MessageBox.Show("Пароль должен содержать минимум одну букву и одну цифру.");
+                return;
+            }
+
+            string connectionString = @"Data Source=WIN-0RRORC9T71J\SQLEXPRESS;Initial Catalog=CosmeticShop;Integrated Security=True";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Проверка, существует ли уже такой логин в БД
+                using (var checkCommand = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Login = @Login", connection))
+                {
+                    checkCommand.Parameters.AddWithValue("@Login", Login);
+                    int userCount = (int)checkCommand.ExecuteScalar();
+                    if (userCount > 0)
+                    {
+                        MessageBox.Show("Пользователь с таким логином уже существует.");
+                        return;
+                    }
+                }
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        var command = new SqlCommand("INSERT INTO Users (Login, Password) VALUES (@Login, @Password);", connection, transaction);
+                        command.Parameters.AddWithValue("@Login", Login);
+                        command.Parameters.AddWithValue("@Password", Password);
+
+                        command.ExecuteNonQuery();
+                        transaction.Commit();
+
+                        MessageBox.Show("Регистрация прошла успешно!");
+                        (obj as Window)?.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Ошибка при регистрации: {ex.Message}");
+                    }
+                }
+            }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name)

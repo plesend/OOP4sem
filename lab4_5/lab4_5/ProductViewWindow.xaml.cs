@@ -23,5 +23,10 @@ namespace lab4_5
         {
             InitializeComponent();
         }
+
+        public void CloseWindow_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

@@ -9,11 +9,18 @@ namespace lab4_5
 {
     public class User : INotifyPropertyChanged
     {
-        private string _role;
+        private int _id;
+        private string _role = "Client";
         private string _login;
         private string _username = "User";
         private string _password;
-        private string _pfp = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\DefaultPfp.png";
+        private string _pfp = @"D:\лабораторные работы\ооп\lab4_5\lab4_5\Resources\DefaultPfp.png";
+
+        public int Id
+        {
+            get => _id;
+            set { _id = value; OnPropertyChanged(nameof(Id)); }
+        }
 
         public string Role
         {
@@ -44,38 +51,33 @@ namespace lab4_5
             get => _pfp;
             set { _pfp = value; OnPropertyChanged(nameof(Pfp)); }
         }
-        public User(string role, string login, string username, string password, string pfp) : this(role, login)
+
+        // Конструктор для полной инициализации (из базы)
+        public User(int id, string role, string login, string username, string password, string pfp)
         {
+            Id = id;
             Role = role;
-            Login = login;
             Username = username;
-            Password = password;
             Pfp = pfp;
         }
-
-        public User(string login, string password)
+        public User(string login, string username, string password, string pfp, string role) 
         {
-            Login = login;
-            Password = password;
-
-            if (login == "qwerty" && password == "1234")
-            {
-                Role = "Admin";
-            }
-            else if (login == "йцукен" && password == "1234")
-            {
-                Role = "Client";
-            }
-            else
-            {
-                Role = "Client";
-            }
+            Role = role;
+            Username = username;
+            Pfp = pfp;
         }
+        public User(string role, string login, string username, string password)
+        {
+            Role = role;
+            Username = username;
+        }
+
+        // Можно оставить пустой конструктор, если нужно
+        public User() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
+        protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
+
 }

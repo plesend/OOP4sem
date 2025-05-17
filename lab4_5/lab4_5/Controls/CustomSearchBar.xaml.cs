@@ -32,7 +32,6 @@ namespace lab4_5.Controls
             set => SetValue(SearchCommandProperty, value);
         }
 
-        // === Новый Property 1: MaxSearchLength ===
         public static readonly DependencyProperty MaxSearchLengthProperty =
             DependencyProperty.Register("MaxSearchLength", typeof(int), typeof(CustomSearchBar),
                 new FrameworkPropertyMetadata(100, FrameworkPropertyMetadataOptions.None,
@@ -59,7 +58,6 @@ namespace lab4_5.Controls
             return val;
         }
 
-        // === Новый Property 2: SearchPlaceholder ===
         public static readonly DependencyProperty SearchPlaceholderProperty =
             DependencyProperty.Register("SearchPlaceholder", typeof(string), typeof(CustomSearchBar),
                 new FrameworkPropertyMetadata("Поиск...", FrameworkPropertyMetadataOptions.None,
@@ -82,9 +80,7 @@ namespace lab4_5.Controls
             return baseValue ?? string.Empty;
         }
 
-        // === Routed Events ===
 
-        // 1. DIRECT
         public static readonly RoutedEvent SearchInitiatedEvent =
             EventManager.RegisterRoutedEvent("SearchInitiated", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(CustomSearchBar));
 
@@ -97,7 +93,6 @@ namespace lab4_5.Controls
         private void RaiseSearchInitiated() =>
             RaiseEvent(new RoutedEventArgs(SearchInitiatedEvent));
 
-        // 2. TUNNELING (Preview)
         public static readonly RoutedEvent SearchPreviewKeyDownEvent =
             EventManager.RegisterRoutedEvent("SearchPreviewKeyDown", RoutingStrategy.Tunnel, typeof(KeyEventHandler), typeof(CustomSearchBar));
 
@@ -116,7 +111,6 @@ namespace lab4_5.Controls
             });
         }
 
-        // 3. BUBBLING
         public static readonly RoutedEvent SearchTextChangedEvent =
             EventManager.RegisterRoutedEvent("SearchTextChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(CustomSearchBar));
 
@@ -131,6 +125,5 @@ namespace lab4_5.Controls
             RaiseEvent(new RoutedEventArgs(SearchTextChangedEvent));
         }
 
-        // === Подключение к XAML (вызовы в разметке) ===
     }
 }

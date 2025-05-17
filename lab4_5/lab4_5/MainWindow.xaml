@@ -47,13 +47,16 @@
                                Foreground="Gray"
                                Margin="10,5,10,5"
                                TextAlignment="Right"/>
-                        <controls:IconButton Text="{Binding Buy}"/>
+                        <TextBlock Text="{Binding Price, StringFormat=C}"
+                                   Style="{DynamicResource BaseTextBlockStyle}"
+                                   TextAlignment="Right"/>
+                        <Button Content="Купить"
+    Style="{DynamicResource BuyButtonStyle}"
+                                Height="20"
+    Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+    CommandParameter="{Binding}" />
                         <Button Content="Удалить"
-                            Margin="5,1,5,5"
-                            Background="Red"
-                            Foreground="White"
-                            Height="20"
-                            BorderThickness="0"
+                            Style="{DynamicResource DeleteButtonStyle}"
                             Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
                             Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="{Binding}" />
@@ -96,7 +99,6 @@
                 <!-- Баннер -->
                 <controls:Banner Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="7" Loaded="Banner_Loaded" Height="NaN" Margin="0,32,-8,8"/>
 
-                <!-- Кнопки меню -->
                 <Button Style="{DynamicResource SpecialButtonStyle}"
                         Content="{DynamicResource ButtonText_Cart}"
                         Command="{Binding ChangeThemeCommand}"
@@ -237,9 +239,6 @@
                                 Width="120" Height="30"
                                 Margin="0,20,0,0"
                                 Command="{Binding ClearCommand}"/>
-                        <controls:EventButton HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              IconClick="EventButton_IconClick"/>
                     </StackPanel>
                 </Border>
 

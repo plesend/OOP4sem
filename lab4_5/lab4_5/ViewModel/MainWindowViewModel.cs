@@ -26,6 +26,14 @@ namespace lab4_5
         public ObservableCollection<Product> tmpProducts { get; set; }
         public ObservableCollection<Product> tmpSearchProducts { get; set; }
 
+        private ObservableCollection<Product> _Cart = new ObservableCollection<Product>();
+        public ObservableCollection<Product> Cart
+        {
+            get => _Cart;
+            set { _Cart = value; OnPropertyChanged(); }
+        }
+
+
         public string ConnectionString = "Data source = WIN-0RRORC9T71J\\SQLEXPRESS; Initial Catalog = CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
 
         public User CurrentUser;
@@ -85,6 +93,7 @@ namespace lab4_5
         private bool CanUndo() => _undoStack.Count > 0;
         private bool CanRedo() => _redoStack.Count > 0;
 
+        public ICommand AddToCartCommand { get; }
         public ICommand UndoCommand => new RelayCommand(Undo, () => CanUndo());
         public ICommand RedoCommand => new RelayCommand(Redo, () => CanRedo());
         public ICommand OpenProfileCommand { get; }
@@ -111,7 +120,7 @@ namespace lab4_5
             SearchCommand = new RelayCommand(Search);
             ShowUsersCommand = new RelayCommand(ShowUsers);
             ShowProductViewCommand = new RelayCommand<Product>(ShowProductDetails);
-
+            AddToCartCommand = new RelayCommand<Product>(AddToCart);
             //Products = JsonConvert.DeserializeObject<ObservableCollection<Product>>(File.ReadAllText("D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json"));
             LoadProducts();
             tmpProducts = new ObservableCollection<Product>(Products);
@@ -185,28 +194,41 @@ namespace lab4_5
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var command = new SqlCommand("select * from Goods", connection);
+
+                var command = new SqlCommand(@"
+            SELECT g.*, b.BrandDescription 
+            FROM Goods g
+            JOIN Brands b ON g.BrandId = b.BrandId", connection);
+
                 using (var reader = command.ExecuteReader())
                 {
                     var _goods = new ObservableCollection<Product>();
-                    while(reader.Read())
+
+                    while (reader.Read())
                     {
-                        _goods.Add(new Product
-                            (
-                                id: reader.GetInt32(reader.GetOrdinal("id")),
-                                name: reader["Name"].ToString(),
-                                description: reader["Description"].ToString(),
-                                brand: reader["Brand"].ToString(),
-                                imagePath: reader["ImagePath"].ToString(),
-                                buy: reader["Buy"].ToString(),
-                                delete: reader["DeleteCommand"].ToString(),
-                                price: reader.GetDouble(reader.GetOrdinal("Price"))
-                            ));
+                        var product = new Product
+                        (
+                            id: reader.GetInt32(reader.GetOrdinal("Id")),
+                            name: reader["Name"].ToString(),
+                            description: reader["Description"].ToString(),
+                            brand: reader["Brand"].ToString(),
+                            imagePath: reader["ImagePath"].ToString(),
+                            buy: reader["Buy"].ToString(),
+                            delete: reader["DeleteCommand"].ToString(),
+                            price: reader.GetDouble(reader.GetOrdinal("Price")),
+                            composition: reader.IsDBNull(reader.GetOrdinal("Composition")) ? "" : reader.GetString(reader.GetOrdinal("Composition"))
+                        );
+
+                        product.BrandDescription = reader.IsDBNull(reader.GetOrdinal("BrandDescription")) ? "" : reader["BrandDescription"].ToString();
+
+                        _goods.Add(product);
                     }
+
                     Products = _goods;
                 }
             }
         }
+
         public class ActionItem
         {
             public string ActionType { get; set; }
@@ -218,6 +240,108 @@ namespace lab4_5
                 Product = product;
             }
         }
+
+        public void AddToCart(Product productToAdd)
+        {
+            if (productToAdd == null)
+                return;
+
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+
+                using (SqlTransaction transaction = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        int cartId;
+
+                        // 1. Получаем или создаем корзину пользователя
+                        using (SqlCommand getCartCmd = new SqlCommand("SELECT CartId FROM Carts WHERE UserId = @UserId", conn, transaction))
+                        {
+                            getCartCmd.Parameters.AddWithValue("@UserId", CurrentUser.Id);
+                            var result = getCartCmd.ExecuteScalar();
+
+                            if (result != null)
+                                cartId = Convert.ToInt32(result);
+                            else
+                            {
+                                using (SqlCommand createCartCmd = new SqlCommand("INSERT INTO Carts (UserId) OUTPUT INSERTED.CartId VALUES (@UserId)", conn, transaction))
+                                {
+                                    createCartCmd.Parameters.AddWithValue("@UserId", CurrentUser.Id);
+                                    cartId = (int)createCartCmd.ExecuteScalar();
+                                }
+                            }
+                        }
+
+                        // 2. Получаем ID товара из базы по Name и Brand
+                        int productId;
+                        using (SqlCommand getProductCmd = new SqlCommand("SELECT Id FROM Goods WHERE Name = @Name AND Brand = @Brand", conn, transaction))
+                        {
+                            getProductCmd.Parameters.AddWithValue("@Name", productToAdd.Name);
+                            getProductCmd.Parameters.AddWithValue("@Brand", productToAdd.Brand);
+                            object productResult = getProductCmd.ExecuteScalar();
+
+                            if (productResult == null)
+                            {
+                                MessageBox.Show("Товар не найден в базе данных.");
+                                transaction.Rollback();
+                                return;
+                            }
+
+                            productId = Convert.ToInt32(productResult);
+                        }
+
+                        // 3. Проверяем, есть ли этот товар уже в корзине
+                        int existingQuantity = 0;
+                        using (SqlCommand checkItemCmd = new SqlCommand("SELECT Quantity FROM CartItems WHERE CartId = @CartId AND ProductId = @ProductId", conn, transaction))
+                        {
+                            checkItemCmd.Parameters.AddWithValue("@CartId", cartId);
+                            checkItemCmd.Parameters.AddWithValue("@ProductId", productId);
+
+                            object quantityResult = checkItemCmd.ExecuteScalar();
+                            if (quantityResult != null)
+                            {
+                                existingQuantity = Convert.ToInt32(quantityResult);
+                            }
+                        }
+
+                        if (existingQuantity > 0)
+                        {
+                            // 4а. Если товар есть — увеличиваем количество
+                            using (SqlCommand updateQuantityCmd = new SqlCommand(
+                                "UPDATE CartItems SET Quantity = Quantity + 1 WHERE CartId = @CartId AND ProductId = @ProductId", conn, transaction))
+                            {
+                                updateQuantityCmd.Parameters.AddWithValue("@CartId", cartId);
+                                updateQuantityCmd.Parameters.AddWithValue("@ProductId", productId);
+                                updateQuantityCmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            // 4б. Если товара нет — добавляем новую запись
+                            using (SqlCommand insertItemCmd = new SqlCommand(
+                                "INSERT INTO CartItems (CartId, ProductId, Quantity) VALUES (@CartId, @ProductId, 1)", conn, transaction))
+                            {
+                                insertItemCmd.Parameters.AddWithValue("@CartId", cartId);
+                                insertItemCmd.Parameters.AddWithValue("@ProductId", productId);
+                                insertItemCmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                        MessageBox.Show("Товар добавлен в корзину!");
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"Ошибка при добавлении в корзину: {ex.Message}");
+                    }
+                }
+            }
+        }
+
+
         private void ShowProductDetails(Product selectedProduct)
         {
             if (selectedProduct == null) return;
@@ -446,6 +570,8 @@ namespace lab4_5
                                     MessageBox.Show("Товар удален из базы данных!");
                                     _undoStack.Push(new ActionItem("Remove", productToRemove));
                                     _redoStack.Clear();
+
+                                    Products.Remove(productToRemove);
                                 }
                                 else
                                 {
@@ -460,10 +586,9 @@ namespace lab4_5
                         }
                     }
                 }
-                Products.Remove(productToRemove);
             }
-            
         }
+
 
         //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
 

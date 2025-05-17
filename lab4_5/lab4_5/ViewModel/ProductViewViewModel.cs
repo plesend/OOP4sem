@@ -21,7 +21,6 @@ namespace lab4_5
                 {
                     _product = value;
                     OnPropertyChanged();
-                    // Обновляем свойства, которые зависят от Product
                     OnPropertyChanged(nameof(Name));
                     OnPropertyChanged(nameof(Description));
                     OnPropertyChanged(nameof(Brand));
@@ -29,11 +28,12 @@ namespace lab4_5
                     OnPropertyChanged(nameof(Buy));
                     OnPropertyChanged(nameof(Delete));
                     OnPropertyChanged(nameof(Price));
+                    OnPropertyChanged(nameof(Composition));
                 }
             }
         }
+        
 
-        // Можно "пробросить" свойства модели для удобного биндинга в UI:
         public string Name => Product?.Name;
         public string Description => Product?.Description;
         public string Brand => Product?.Brand;
@@ -41,6 +41,7 @@ namespace lab4_5
         public string Buy => Product?.Buy;
         public string Delete => Product?.Delete;
         public double Price => Product?.Price ?? 0;
+        public string Composition => Product?.Composition;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>

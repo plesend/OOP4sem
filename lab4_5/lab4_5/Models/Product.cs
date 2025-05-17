@@ -49,8 +49,11 @@ namespace lab4_5
                 }
             }
         }
+
+        public string BrandDescription { get; set; } = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
+        public string Composition { get; set; } = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
         public double Price { get; set; }
-        public Product(int id, string name, string description, string brand, string imagePath, string buy, string delete, double price)
+        public Product(int id, string name, string description, string brand, string imagePath, string buy, string delete, double price, string composition)
         {
             this.id = id;
             Name = name;
@@ -60,6 +63,7 @@ namespace lab4_5
             Buy = buy;
             Delete = delete;
             Price = price;
+            Composition = composition;
         }
         public Product(string name, string description, string brand, string imagePath, string buy, string delete, double price)
         {

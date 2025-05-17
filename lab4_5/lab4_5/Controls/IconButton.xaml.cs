@@ -23,6 +23,8 @@ namespace lab4_5.Controls
         public IconButton()
         {
             InitializeComponent();
+            // Можно сразу повесить обработчик клика
+            this.MouseLeftButtonUp += IconButton_MouseLeftButtonUp;
         }
 
         public static readonly DependencyProperty TextProperty =
@@ -34,5 +36,21 @@ namespace lab4_5.Controls
             set { SetValue(TextProperty, value); }
         }
 
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.Register("Command", typeof(ICommand), typeof(IconButton), new PropertyMetadata(null));
+
+        public ICommand Command
+        {
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
+
+        private void IconButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Command != null && Command.CanExecute(null))
+            {
+                Command.Execute(null);
+            }
+        }
     }
 }
