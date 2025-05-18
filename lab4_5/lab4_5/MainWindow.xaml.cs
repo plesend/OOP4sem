@@ -86,9 +86,18 @@ namespace lab4_5
             CartWindow cw = new CartWindow(currentUser);
             cw.ShowDialog();
         }
-        private void EventButton_IconClick(object sender, RoutedEventArgs e)
+
+        public void OpenAllOrdersWindow_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("IconClick (Direct) handled in MainWindow");
+            ManageOrdersWindow mow = new ManageOrdersWindow();
+            mow.ShowDialog();
         }
+
+        public void OpenAboutUsWindow_Click(object sender, RoutedEventArgs e)
+        {
+            AboutUsWindow about = new AboutUsWindow();
+            about.ShowDialog();
+        }
+
     }
 }

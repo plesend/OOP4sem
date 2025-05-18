@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -87,29 +89,84 @@ namespace lab4_5
             ChangeProfileImageCommand = new RelayCommand(ChangeProfileImage);
         }
 
+        private string connectionString = "Data Source=WIN-0RRORC9T71J\\SQLEXPRESS;Initial Catalog=CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
+
         private void Save()
         {
-            if (string.IsNullOrEmpty(newUserName) || string.IsNullOrEmpty(newPassword))
+            bool isPasswordChanged = !string.IsNullOrWhiteSpace(newPassword) && newPassword != CurrentUser.Password;
+
+            if (string.IsNullOrWhiteSpace(newUserName))
             {
-                ErrorMessage = "Все поля должны быть заполнены.";
+                ErrorMessage = "Имя пользователя не может быть пустым.";
                 return;
             }
 
-            if (newPassword != CurrentUser.Password)
+            if (isPasswordChanged)
             {
-                ErrorMessage = "Пароль неверный.";
-                return;
+                MessageBoxResult result = MessageBox.Show(
+                    "Вы действительно хотите изменить пароль?",
+                    "Подтверждение изменения пароля",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes)
+                {
+                    ErrorMessage = "Изменение пароля отменено.";
+                    return;
+                }
+
+                string inputPassword = Microsoft.VisualBasic.Interaction.InputBox(
+                    "Введите текущий пароль для подтверждения:",
+                    "Подтверждение пароля",
+                    "");
+
+                if (inputPassword != CurrentUser.Password)
+                {
+                    ErrorMessage = "Неверный текущий пароль.";
+                    return;
+                }
             }
 
-            CurrentUser.Username = newUserName;
-            CurrentUser.Pfp = Pfp;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
 
-            // Тут может быть логика сохранения изменений в БД или другом хранилище.
+                    string updateQuery = @"
+                UPDATE Users
+                SET Username = @Username,
+                    Pfp = @Pfp" +
+                            (isPasswordChanged ? ", Password = @Password" : "") + @"
+                WHERE Id = @Id";
 
-            ErrorMessage = "Данные сохранены!";
-            CloseAction?.Invoke();
+                    SqlCommand cmd = new SqlCommand(updateQuery, conn);
+                    cmd.Parameters.AddWithValue("@Username", newUserName);
+                    cmd.Parameters.AddWithValue("@Pfp", Pfp);
+                    cmd.Parameters.AddWithValue("@Id", CurrentUser.Id);
 
+                    if (isPasswordChanged)
+                        cmd.Parameters.AddWithValue("@Password", newPassword);
+
+                    cmd.ExecuteNonQuery();
+
+                    CurrentUser.Username = newUserName;
+                    CurrentUser.Pfp = Pfp;
+                    if (isPasswordChanged)
+                        CurrentUser.Password = newPassword;
+
+                    ErrorMessage = "Данные успешно обновлены!";
+                    UserChanged?.Invoke(CurrentUser);
+                    CloseAction?.Invoke();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Ошибка при сохранении: {ex.Message}";
+            }
         }
+
+
 
         private void Close()
         {

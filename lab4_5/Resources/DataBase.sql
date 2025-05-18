@@ -2,9 +2,6 @@ CREATE DATABASE CosmeticShop;
 
 use CosmeticShop;
 
-DROP TABLE IF EXISTS Goods;
-DROP TABLE IF EXISTS Brands;
-
 CREATE TABLE Brands (
     BrandId INT PRIMARY KEY,
     BrandName VARCHAR(100),
@@ -104,10 +101,61 @@ CREATE TABLE CartItems (
 );
 
 
+-- Таблица заказов
+CREATE TABLE Orders (
+    OrderId INT PRIMARY KEY IDENTITY(1,1),
+    UserId INT NOT NULL,
+    FullName NVARCHAR(255) NOT NULL,
+    Phone NVARCHAR(50) NOT NULL,
+    DeliveryMethod NVARCHAR(50) NOT NULL, 
+	PaymentMethod NVARCHAR(100) NOT NULL,
+
+    City NVARCHAR(100),
+    Street NVARCHAR(100),
+    Apartment NVARCHAR(50),
+    Building NVARCHAR(50),
+    PickupPoint NVARCHAR(255),
+
+    Comment NVARCHAR(MAX),
+    OrderDate DATETIME DEFAULT GETDATE(),
+    Status NVARCHAR(50) DEFAULT 'Ожидает подтверждения',
+
+    CONSTRAINT FK_Orders_Users FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
+
+-- Таблица товаров в заказе
+CREATE TABLE OrderItems (
+    OrderItemId INT PRIMARY KEY IDENTITY(1,1),
+    OrderId INT NOT NULL,
+    ProductId INT NOT NULL,
+    Quantity INT DEFAULT 1,
+    PriceAtPurchase FLOAT, 
+
+    CONSTRAINT FK_OrderItems_Orders FOREIGN KEY (OrderId) REFERENCES Orders(OrderId),
+    CONSTRAINT FK_OrderItems_Goods FOREIGN KEY (ProductId) REFERENCES Goods(Id)
+);
+
+
+CREATE TABLE Reviews (
+    ReviewId INT PRIMARY KEY IDENTITY(1,1),
+    UserId INT NOT NULL,
+    ProductId INT NOT NULL,
+    Rating INT CHECK (Rating >= 1 AND Rating <= 5),
+    ReviewText NVARCHAR(MAX),
+    ReviewDate DATETIME DEFAULT GETDATE(),
+
+    CONSTRAINT FK_Reviews_Users FOREIGN KEY (UserId) REFERENCES Users(Id),
+    CONSTRAINT FK_Reviews_Goods FOREIGN KEY (ProductId) REFERENCES Goods(Id)
+);
+
+--DROP TABLE IF EXISTS OrderItems;
+--DROP TABLE IF EXISTS Orders;
 
 --DROP TABLE IF EXISTS CartItems;
 --DROP TABLE IF EXISTS Carts;
 
---DROP TABLE IF EXISTS Users;
 --DROP TABLE IF EXISTS Goods;
 --DROP TABLE IF EXISTS Brands;
+
+--DROP TABLE IF EXISTS Users;

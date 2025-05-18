@@ -58,7 +58,6 @@ namespace lab4_5
             }
         }
 
-
         private string _FromPrice;
         private string _ToPrice;
         public int _SelectedBrandIndex;
@@ -78,7 +77,6 @@ namespace lab4_5
                     _searchBox = value;
                     OnPropertyChanged(nameof(SearchBox));
 
-                    // Перезапустить таймер при каждом вводе
                     _searchDebounceTimer.Stop();
                     _searchDebounceTimer.Start();
                 }
@@ -90,12 +88,12 @@ namespace lab4_5
         private Stack<ActionItem> _undoStack = new Stack<ActionItem>();
         private Stack<ActionItem> _redoStack = new Stack<ActionItem>();
 
-        private bool CanUndo() => _undoStack.Count > 0;
-        private bool CanRedo() => _redoStack.Count > 0;
+        //private bool CanUndo() => _undoStack.Count > 0;
+        //private bool CanRedo() => _redoStack.Count > 0;
 
         public ICommand AddToCartCommand { get; }
-        public ICommand UndoCommand => new RelayCommand(Undo, () => CanUndo());
-        public ICommand RedoCommand => new RelayCommand(Redo, () => CanRedo());
+        //public ICommand UndoCommand => new RelayCommand(Undo, () => CanUndo());
+        //public ICommand RedoCommand => new RelayCommand(Redo, () => CanRedo());
         public ICommand OpenProfileCommand { get; }
         public ICommand ChangeThemeCommand { get; }
         public ICommand AddProductCommand { get; }
@@ -110,7 +108,6 @@ namespace lab4_5
         public MainWindowViewModel(User user)
         {
             CurrentUser = user;
-
             OpenProfileCommand = new RelayCommand(OpenProfile);
             ChangeThemeCommand = new RelayCommand(ChangeTheme);
             AddProductCommand = new RelayCommand(AddProduct);
@@ -139,55 +136,55 @@ namespace lab4_5
             };
         }
 
-        public void Undo()
-        {
-            if (_undoStack.Count > 0)
-            {
-                var action = _undoStack.Pop();
+        //public void Undo()
+        //{
+        //    if (_undoStack.Count > 0)
+        //    {
+        //        var action = _undoStack.Pop();
 
-                switch (action.ActionType)
-                {
-                    case "Add":
-                        Products.Remove(action.Product);
-                        _redoStack.Push(new ActionItem("Add", action.Product)); // сохраняем то же действие
-                        break;
+        //        switch (action.ActionType)
+        //        {
+        //            case "Add":
+        //                Products.Remove(action.Product);
+        //                _redoStack.Push(new ActionItem("Add", action.Product)); 
+        //                break;
 
-                    case "Remove":
-                        Products.Add(action.Product);
-                        _redoStack.Push(new ActionItem("Remove", action.Product)); // сохраняем то же действие
-                        break;
-                }
+        //            case "Remove":
+        //                Products.Add(action.Product);
+        //                _redoStack.Push(new ActionItem("Remove", action.Product));
+        //                break;
+        //        }
 
-                (UndoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-                (RedoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-            }
-        }
+        //        (UndoCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        //        (RedoCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        //    }
+        //}
 
-        public void Redo()
-        {
-            if (_redoStack.Count > 0)
-            {
-                var action = _redoStack.Pop();
+        //public void Redo()
+        //{
+        //    if (_redoStack.Count > 0)
+        //    {
+        //        var action = _redoStack.Pop();
 
-                switch (action.ActionType)
-                {
-                    case "Add":
-                        Products.Add(action.Product);
-                        tmpProducts.Add(action.Product);
-                        _undoStack.Push(new ActionItem("Add", action.Product));
-                        break;
+        //        switch (action.ActionType)
+        //        {
+        //            case "Add":
+        //                Products.Add(action.Product);
+        //                tmpProducts.Add(action.Product);
+        //                _undoStack.Push(new ActionItem("Add", action.Product));
+        //                break;
 
-                    case "Remove":
-                        Products.Remove(action.Product);
-                        tmpProducts.Remove(action.Product);
-                        _undoStack.Push(new ActionItem("Remove", action.Product));
-                        break;
-                }
+        //            case "Remove":
+        //                Products.Remove(action.Product);
+        //                tmpProducts.Remove(action.Product);
+        //                _undoStack.Push(new ActionItem("Remove", action.Product));
+        //                break;
+        //        }
 
-                (UndoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-                (RedoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-            }
-        }
+        //        (UndoCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        //        (RedoCommand as RelayCommand)?.RaiseCanExecuteChanged();
+        //    }
+        //}
 
         private void LoadProducts()
         {
@@ -255,7 +252,6 @@ namespace lab4_5
                     {
                         int cartId;
 
-                        // 1. Получаем или создаем корзину пользователя
                         using (SqlCommand getCartCmd = new SqlCommand("SELECT CartId FROM Carts WHERE UserId = @UserId", conn, transaction))
                         {
                             getCartCmd.Parameters.AddWithValue("@UserId", CurrentUser.Id);
@@ -273,7 +269,6 @@ namespace lab4_5
                             }
                         }
 
-                        // 2. Получаем ID товара из базы по Name и Brand
                         int productId;
                         using (SqlCommand getProductCmd = new SqlCommand("SELECT Id FROM Goods WHERE Name = @Name AND Brand = @Brand", conn, transaction))
                         {
@@ -291,7 +286,6 @@ namespace lab4_5
                             productId = Convert.ToInt32(productResult);
                         }
 
-                        // 3. Проверяем, есть ли этот товар уже в корзине
                         int existingQuantity = 0;
                         using (SqlCommand checkItemCmd = new SqlCommand("SELECT Quantity FROM CartItems WHERE CartId = @CartId AND ProductId = @ProductId", conn, transaction))
                         {
@@ -307,7 +301,6 @@ namespace lab4_5
 
                         if (existingQuantity > 0)
                         {
-                            // 4а. Если товар есть — увеличиваем количество
                             using (SqlCommand updateQuantityCmd = new SqlCommand(
                                 "UPDATE CartItems SET Quantity = Quantity + 1 WHERE CartId = @CartId AND ProductId = @ProductId", conn, transaction))
                             {
@@ -318,7 +311,6 @@ namespace lab4_5
                         }
                         else
                         {
-                            // 4б. Если товара нет — добавляем новую запись
                             using (SqlCommand insertItemCmd = new SqlCommand(
                                 "INSERT INTO CartItems (CartId, ProductId, Quantity) VALUES (@CartId, @ProductId, 1)", conn, transaction))
                             {
@@ -345,8 +337,8 @@ namespace lab4_5
         {
             if (selectedProduct == null) return;
 
-            var detailsWindow = new ProductViewWindow();
-            var vm = new ProductViewViewModel();
+            var detailsWindow = new ProductViewWindow(CurrentUser);
+            var vm = new ProductViewViewModel(CurrentUser);
             vm.Product = selectedProduct;
             detailsWindow.DataContext = vm;
             detailsWindow.ShowDialog();
@@ -418,10 +410,9 @@ namespace lab4_5
             Products = new ObservableCollection<Product>(sorted);
             tmpSearchProducts = new ObservableCollection<Product>(sorted);
         }
-
         public void ShowUsers()
         {
-            UsersWindow usersWindow = new UsersWindow();
+            UsersWindow usersWindow = new UsersWindow(CurrentUser.Login);
             usersWindow.ShowDialog();
         }
         public void AddProduct()

@@ -17,17 +17,12 @@ namespace lab4_5
     /// <summary>
     /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class ProductViewWindow : Window
+    public partial class UserOrdersWindow : Window
     {
-        public ProductViewWindow(User user)
+        public UserOrdersWindow(int userId)
         {
             InitializeComponent();
-            DataContext = new ProductViewViewModel(user);
-        }
-
-        public void CloseWindow_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
+            DataContext = new UserOrdersViewModel(userId);
         }
     }
 }

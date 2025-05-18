@@ -19,10 +19,10 @@ namespace lab4_5
     /// </summary>
     public partial class UsersWindow : Window
     {
-        public UsersWindow()
+        public UsersWindow(string currentUserLogin)
         {
             InitializeComponent();
-            DataContext = new UserViewModel();
+            DataContext = new UserViewModel(currentUserLogin);
         }
     }
 }

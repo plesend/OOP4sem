@@ -1,64 +1,152 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using lab4_5;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using System.Windows;
+using System;
 
-namespace lab4_5
+class UserViewModel : INotifyPropertyChanged
 {
-    class UserViewModel : INotifyPropertyChanged
+    public string ConnectionString = "Data source = WIN-0RRORC9T71J\\SQLEXPRESS; Initial Catalog = CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;TrustServerCertificate=True;";
+
+    private ObservableCollection<User> _users;
+    public ObservableCollection<User> Users
     {
-        public string ConnectionString = "Data source = WIN-0RRORC9T71J\\SQLEXPRESS; Initial Catalog = CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
+        get => _users;
+        set { _users = value; OnPropertyChanged(); }
+    }
 
-        private ObservableCollection<User> _users;
-        public ObservableCollection<User> Users {
-            get => _users;
-            set { _users = value; OnPropertyChanged(); }
-        }
-        public UserViewModel()
-        {
-            LoadUsers();
-        }
+    private User _selectedUser;
+    public User SelectedUser
+    {
+        get => _selectedUser;
+        set { _selectedUser = value; OnPropertyChanged(); }
+    }
 
-        public void LoadUsers()
+    private readonly string _currentUserLogin;
+
+    public ICommand AssignAdminCommand { get; }
+    public ICommand RemoveAdminCommand { get; }
+
+    public UserViewModel(string currentUserLogin)
+    {
+        _currentUserLogin = currentUserLogin;
+
+        AssignAdminCommand = new RelayCommand(_ => AssignAdmin(), _ => SelectedUser != null);
+        RemoveAdminCommand = new RelayCommand(_ => RemoveAdmin(), _ => SelectedUser != null);
+
+        LoadUsers();
+    }
+
+    public void LoadUsers()
+    {
+        using (SqlConnection connection = new SqlConnection(ConnectionString))
         {
-            using(SqlConnection connection = new SqlConnection(ConnectionString))
+            connection.Open();
+            var command = new SqlCommand("SELECT * FROM Users", connection);
+            using (var reader = command.ExecuteReader())
             {
-                connection.Open();
-                var command = new SqlCommand("select * from Users", connection);
-                using (var reader = command.ExecuteReader())
+                var users = new ObservableCollection<User>();
+                while (reader.Read())
                 {
-                    var users = new ObservableCollection<User>();
-                    while(reader.Read())
-                    {
-                        users.Add(new User
-                            (
-                                role: reader["Role"].ToString(),
-                                login: reader["Login"].ToString(),
-                                username: reader["Username"].ToString(),
-                                password: reader["Password"].ToString(),
-                                pfp: reader["Pfp"].ToString()
-                            ));
-                    }
-                    Users = users;
+                    users.Add(new User
+                    (
+                        role: reader["Role"].ToString(),
+                        login: reader["Login"].ToString(),
+                        username: reader["Username"].ToString(),
+                        password: reader["Password"].ToString(),
+                        pfp: reader["Pfp"].ToString()
+                    ));
                 }
+                Users = users;
             }
         }
+    }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+    private void AssignAdmin()
+    {
+        if (SelectedUser == null)
         {
-            try
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-
+            MessageBox.Show("Пользователь не выбран.");
+            return;
         }
+
+        if (string.IsNullOrWhiteSpace(SelectedUser.Login))
+        {
+            MessageBox.Show("Логин не указан.");
+            return;
+        }
+
+        using (SqlConnection connection = new SqlConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var command = new SqlCommand("UPDATE Users SET Role = 'Admin' WHERE Login = @Login", connection);
+            command.Parameters.AddWithValue("@Login", SelectedUser.Login);
+
+            int rows = command.ExecuteNonQuery();
+
+            if (rows > 0)
+            {
+                SelectedUser.Role = "Admin";
+                OnPropertyChanged(nameof(Users));
+            }
+            else
+            {
+                MessageBox.Show($"Не удалось обновить роль. Логин: {SelectedUser.Login}");
+            }
+        }
+    }
+
+    private void RemoveAdmin()
+    {
+        if (SelectedUser == null)
+        {
+            MessageBox.Show("Пользователь не выбран.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(SelectedUser.Login))
+        {
+            MessageBox.Show("Логин не указан.");
+            return;
+        }
+
+        if (SelectedUser.Login == _currentUserLogin)
+        {
+            MessageBox.Show("Нельзя снять роль администратора с самого себя.");
+            return;
+        }
+
+        using (SqlConnection connection = new SqlConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var command = new SqlCommand("UPDATE Users SET Role = 'Client' WHERE Login = @Login", connection);
+            command.Parameters.AddWithValue("@Login", SelectedUser.Login);
+
+            int rows = command.ExecuteNonQuery();
+
+            if (rows > 0)
+            {
+                SelectedUser.Role = "Client";
+                OnPropertyChanged(nameof(Users));
+            }
+            else
+            {
+                MessageBox.Show($"Не удалось снять роль администратора. Логин: {SelectedUser.Login}");
+            }
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
+    {
+        try
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        catch (Exception ex) { MessageBox.Show(ex.Message); }
     }
 }

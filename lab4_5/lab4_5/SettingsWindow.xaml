@@ -33,7 +33,7 @@
                     <TextBlock Style="{DynamicResource BaseTextBlockStyle}" HorizontalAlignment="Center" Text="{Binding CurrentUser.Username}"/>
 
                     <Button Content="{DynamicResource EditProfile}" Style="{DynamicResource LittleButtonStyle}" Command="{Binding OpenEditProfileCommand}" />
-                    <Button Content="{DynamicResource MenuItem_ChangeLanguage}" Style="{DynamicResource LittleButtonStyle}" Command="{Binding ChangeLanguageCommand}"/>
+                    <Button Content="Заказы" Style="{DynamicResource LittleButtonStyle}" Command="{Binding OpenOrdersWindowCommand}"/>
                     <Button Content="{DynamicResource MenuItem_ChangeTheme}" Style="{DynamicResource LittleButtonStyle}" Command="{Binding ChangeThemeCommand}"/>
                 </StackPanel>
             </Border>

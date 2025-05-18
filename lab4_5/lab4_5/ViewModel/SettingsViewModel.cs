@@ -22,20 +22,22 @@ namespace lab4_5
                 OnPropertyChanged();
             }
         }
-        private string currentLanguage = "ru";
+        //private string currentLanguage = "ru";
         private int _currentThemeIndex = 0;
 
         public ICommand ChangeThemeCommand { get; }
-        public ICommand ChangeLanguageCommand { get; }
+        //public ICommand ChangeLanguageCommand { get; }
         public ICommand OpenEditProfileCommand { get; }
+        public ICommand OpenOrdersWindowCommand { get; }
 
         public SettingsViewModel(User user)
         {
             try
             {
                 ChangeThemeCommand = new RelayCommand(ChangeTheme);
-                ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+                //ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
                 OpenEditProfileCommand = new RelayCommand(OpenEditProfile);
+                OpenOrdersWindowCommand = new RelayCommand(OpenOrdersWindow);
                 CurrentUser = user;
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
@@ -85,32 +87,38 @@ namespace lab4_5
 
         }
 
-        private void ChangeLanguage()
+        //private void ChangeLanguage()
+        //{
+        //    try
+        //    {
+        //        string newLang = currentLanguage == "ru" ? "eng" : "ru";
+        //        string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\Resources.{newLang}.xaml";
+
+        //        var newDict = new ResourceDictionary
+        //        {
+        //            Source = new Uri(newDictPath, UriKind.Absolute)
+        //        };
+
+        //        var currentLang = Application.Current.Resources.MergedDictionaries
+        //  .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Resources"));
+
+        //        if (currentLang != null)
+        //        {
+        //            Application.Current.Resources.MergedDictionaries.Remove(currentLang);
+        //        }
+
+        //        Application.Current.Resources.MergedDictionaries.Add(newDict);
+
+        //        currentLanguage = newLang;
+        //    }
+        //    catch (Exception ex) { MessageBox.Show(ex.Message); }
+
+        //}
+
+        public void OpenOrdersWindow()
         {
-            try
-            {
-                string newLang = currentLanguage == "ru" ? "eng" : "ru";
-                string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\Resources.{newLang}.xaml";
-
-                var newDict = new ResourceDictionary
-                {
-                    Source = new Uri(newDictPath, UriKind.Absolute)
-                };
-
-                var currentLang = Application.Current.Resources.MergedDictionaries
-          .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Resources"));
-
-                if (currentLang != null)
-                {
-                    Application.Current.Resources.MergedDictionaries.Remove(currentLang);
-                }
-
-                Application.Current.Resources.MergedDictionaries.Add(newDict);
-
-                currentLanguage = newLang;
-            }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
-
+            UserOrdersWindow uow = new UserOrdersWindow(CurrentUser.Id);
+            uow.ShowDialog();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

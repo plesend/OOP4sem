@@ -11,12 +11,13 @@ using System.Windows;
 using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace lab4_5
 {
     public class Product : INotifyPropertyChanged
     {
-        public int id { get; set; }
+        public ObservableCollection<string> Reviews { get; set; } = new ObservableCollection<string>(); public int id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Brand { get; set; }
@@ -49,6 +50,8 @@ namespace lab4_5
                 }
             }
         }
+
+
 
         public string BrandDescription { get; set; } = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
         public string Composition { get; set; } = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";

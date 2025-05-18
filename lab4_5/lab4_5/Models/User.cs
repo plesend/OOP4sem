@@ -52,27 +52,24 @@ namespace lab4_5
             set { _pfp = value; OnPropertyChanged(nameof(Pfp)); }
         }
 
-        // Конструктор для полной инициализации (из базы)
+        public User(string role, string login, string username, string password, string pfp)
+        {
+            Role = role;
+            Login = login;
+            Username = username;
+            Password = password;
+            Pfp = pfp;
+        }
+
         public User(int id, string role, string login, string username, string password, string pfp)
         {
             Id = id;
             Role = role;
+            Login= login;
             Username = username;
             Pfp = pfp;
-        }
-        public User(string login, string username, string password, string pfp, string role) 
-        {
-            Role = role;
-            Username = username;
-            Pfp = pfp;
-        }
-        public User(string role, string login, string username, string password)
-        {
-            Role = role;
-            Username = username;
         }
 
-        // Можно оставить пустой конструктор, если нужно
         public User() { }
 
         public event PropertyChangedEventHandler PropertyChanged;

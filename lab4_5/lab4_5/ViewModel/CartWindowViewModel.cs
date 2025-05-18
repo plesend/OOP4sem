@@ -20,7 +20,7 @@ namespace lab4_5
         public int Quantity { get; set; }
         public string ImagePath { get; set; }
         public int ProductId { get; set; }
-        public int CartId { get; set; }  // если удобно, иначе берем из внешнего контекста
+        public int CartId { get; set; } 
 
 
         public double Total => Price * Quantity;
@@ -39,11 +39,17 @@ namespace lab4_5
 
         public ICommand RemoveProductFromCartCommand { get; }
         public ICommand ClearCartCommand { get; }
+        public ICommand IncreaseQuantityCommand { get; }
+        public ICommand DecreaseQuantityCommand { get; }
+        public ICommand OpenOrderWindowCommand { get; }
         public CartWindowViewModel(User user)
         {
             userId = user.Id;
             RemoveProductFromCartCommand = new RelayCommand<CartItemViewModel>(DelProductFromCart);
             ClearCartCommand = new RelayCommand(ClearCart);
+            OpenOrderWindowCommand = new RelayCommand(OpenOrderWindow);
+            IncreaseQuantityCommand = new RelayCommand<CartItemViewModel>(IncreaseQuantity);
+            DecreaseQuantityCommand = new RelayCommand<CartItemViewModel>(DecreaseQuantity);
             LoadCartItems(user);
         }
 
@@ -131,7 +137,37 @@ WHERE c.UserId = @UserId";
                 }
             }
         }
+        public void IncreaseQuantity(CartItemViewModel item)
+        {
+            if (item == null) return;
 
+            item.Quantity++;
+            UpdateQuantityInDb(item);
+            OnPropertyChanged(nameof(TotalAmount));
+        }
+        public void DecreaseQuantity(CartItemViewModel item)
+        {
+            if (item == null) return;
+
+            item.Quantity--;
+            UpdateQuantityInDb(item);
+            OnPropertyChanged(nameof(TotalAmount));
+        }
+
+        private void UpdateQuantityInDb(CartItemViewModel item)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("UPDATE CartItems SET Quantity = @Quantity WHERE CartId = @CartId AND ProductId = @ProductId", conn))
+                {
+                    cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
+                    cmd.Parameters.AddWithValue("@CartId", item.CartId);
+                    cmd.Parameters.AddWithValue("@ProductId", item.ProductId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
         public void ClearCart()
         {
             var result = MessageBox.Show("Вы точно хотите очистить корзину?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -169,6 +205,14 @@ WHERE c.UserId = @UserId";
             }
         }
 
+        private void OpenOrderWindow()
+        {
+            var orderWindow = new OrderWindow(userId, CartItems);
+
+            orderWindow.ShowDialog();
+
+            LoadCartItems(new User { Id = userId });
+        }
 
 
 

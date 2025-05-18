@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,15 +18,14 @@ namespace lab4_5
     /// <summary>
     /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class ProductViewWindow : Window
+    public partial class OrderWindow : Window
     {
-        public ProductViewWindow(User user)
+        public OrderWindow(int userId, ObservableCollection<CartItemViewModel> cartItems)
         {
             InitializeComponent();
-            DataContext = new ProductViewViewModel(user);
+            DataContext = new OrderViewModel(userId, cartItems);
         }
-
-        public void CloseWindow_Click(object sender, RoutedEventArgs e)
+        public void Decline_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }

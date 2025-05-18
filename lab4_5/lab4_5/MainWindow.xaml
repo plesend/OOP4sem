@@ -90,11 +90,6 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Навигационные кнопки -->
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.Column="1">
-                    <Button Style="{DynamicResource BaseButtonStyle}" Width="60" Content="back" Margin="10" Command="{Binding UndoCommand}" />
-                    <Button Style="{DynamicResource BaseButtonStyle}" Width="60" Content="frwd" Margin="10" Command="{Binding RedoCommand}"/>
-                </StackPanel>
 
                 <!-- Баннер -->
                 <controls:Banner Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="7" Loaded="Banner_Loaded" Height="NaN" Margin="0,32,-8,8"/>
@@ -106,15 +101,12 @@
 
                 <Button Style="{DynamicResource BaseButtonStyle}"
                         Content="{DynamicResource ButtonText_Home}"
-                        Grid.Column="2" Height="40" Width="150"/>
-
-                <Button Style="{DynamicResource BaseButtonStyle}"
-                        Content="{DynamicResource ButtonText_Sales}"
                         Grid.Column="3" Height="40" Width="150"/>
 
                 <Button Style="{DynamicResource BaseButtonStyle}"
                         Content="{DynamicResource ButtonText_AboutUs}"
-                        Grid.Column="4" Height="40" Width="150"/>
+                        Grid.Column="4" Height="40" Width="150"
+                        Click="OpenAboutUsWindow_Click"/>
 
                 <Button x:Name="AddProduct"
                         Content="{DynamicResource ButtonText_Manage}"
@@ -126,6 +118,7 @@
                         <ContextMenu x:Name="ManageMenu" Placement="Bottom">
                             <MenuItem Header="{DynamicResource ManageMenu_AddProduct}" Command="{Binding AddProductCommand}" />
                             <MenuItem Header="{DynamicResource ManageMenu_ShowUsers}" Command="{Binding ShowUsersCommand}" />
+                            <MenuItem Header="Заказы" Click="OpenAllOrdersWindow_Click"/>
                         </ContextMenu>
                     </Button.ContextMenu>
                 </Button>
