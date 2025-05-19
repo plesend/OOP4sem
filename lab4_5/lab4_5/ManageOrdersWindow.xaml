@@ -12,60 +12,53 @@
         Icon="D:\лабораторные работы\ооп\lab4_5\Resources\icon.jpg">
 
     <Grid Margin="20">
-        <TabControl>
-            <TabItem Header="Заказы">
+        <TabControl Style="{DynamicResource OrderTabControlStyle}">
+            <TabItem Header="Заказы" Style="{DynamicResource OrderTabItemHeaderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Margin="10">
+                    <StackPanel Orientation="Horizontal" Style="{DynamicResource SearchPanelStyle}">
                         <Button Content="Удалить заказ"
-                                Command="{Binding DeleteOrderCommand}"
-                                Margin="0,0,10,0"/>
+                                Style="{DynamicResource OrderManagementButtonStyle}"
+                                Command="{Binding DeleteOrderCommand}"/>
                         <Button Content="Подтвердить заказ"
+                                Style="{DynamicResource OrderManagementButtonStyle}"
                                 Command="{Binding ConfirmOrderCommand}"/>
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding Orders}"
                               SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
-                              AutoGenerateColumns="True"
-                              IsReadOnly="True"
-                              Margin="10"
-                              RowHeight="35"
-                              FontSize="14"
+                              Style="{DynamicResource OrderDataGridStyle}"
                               Grid.Row="1"/>
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Товары в заказах">
+            <TabItem Header="Товары в заказах" Style="{DynamicResource OrderTabItemHeaderStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Margin="10">
+                    <StackPanel Orientation="Horizontal" Style="{DynamicResource SearchPanelStyle}">
                         <TextBlock Text="Поиск по OrderID:"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,10,0"/>
+                                   Style="{DynamicResource SearchLabelStyle}"/>
                         <TextBox Text="{Binding SearchOrderId, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="100"
-                                 Margin="0,0,10,0"/>
+                                 Style="{DynamicResource SearchTextBoxStyle}"/>
                         <Button Content="Найти"
+                                Style="{DynamicResource OrderManagementButtonStyle}"
                                 Command="{Binding FilterCommand}"/>
                         <Button Content="Сброс"
+                                Style="{DynamicResource OrderManagementButtonStyle}"
                                 Command="{Binding ResetCommand}"
                                 Margin="10,0,0,0"/>
                     </StackPanel>
 
                     <DataGrid ItemsSource="{Binding OrderItems}"
-                              AutoGenerateColumns="True"
-                              IsReadOnly="True"
-                              Margin="10"
-                              RowHeight="35"
-                              FontSize="14"
+                              Style="{DynamicResource OrderDataGridStyle}"
                               Grid.Row="1"/>
                 </Grid>
             </TabItem>

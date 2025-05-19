@@ -5,40 +5,103 @@ using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
-using System.Globalization;
-using System.Windows.Data;
 using System.Linq;
 
 namespace lab4_5
 {
-    
     public class OrderViewModel : INotifyPropertyChanged
     {
         private string fullName;
-        public string FullName { get => fullName; set { fullName = value; OnPropertyChanged(nameof(FullName)); } }
+        public string FullName
+        {
+            get => fullName;
+            set
+            {
+                fullName = value;
+                OnPropertyChanged(nameof(FullName));
+            }
+        }
 
         private string phone;
-        public string Phone { get => phone; set { phone = value; OnPropertyChanged(nameof(Phone)); } }
+        public string Phone
+        {
+            get => phone;
+            set
+            {
+                phone = value;
+                OnPropertyChanged(nameof(Phone));
+            }
+        }
+
+        private static readonly Regex PhoneRegex = new Regex(@"^\+\d{10,15}$");
 
         private string deliveryMethod = "Доставка";
-        public string DeliveryMethod { get => deliveryMethod; set { deliveryMethod = value; OnPropertyChanged(nameof(DeliveryMethod)); } }
+        public string DeliveryMethod
+        {
+            get => deliveryMethod;
+            set
+            {
+                deliveryMethod = value;
+                OnPropertyChanged(nameof(DeliveryMethod));
+            }
+        }
 
         private string city;
-        public string City { get => city; set { city = value; OnPropertyChanged(nameof(City)); } }
+        public string City
+        {
+            get => city;
+            set
+            {
+                city = value;
+                OnPropertyChanged(nameof(City));
+            }
+        }
 
         private string street;
-        public string Street { get => street; set { street = value; OnPropertyChanged(nameof(Street)); } }
+        public string Street
+        {
+            get => street;
+            set
+            {
+                street = value;
+                OnPropertyChanged(nameof(Street));
+            }
+        }
 
         private string apartment;
-        public string Apartment { get => apartment; set { apartment = value; OnPropertyChanged(nameof(Apartment)); } }
+        public string Apartment
+        {
+            get => apartment;
+            set
+            {
+                apartment = value;
+                OnPropertyChanged(nameof(Apartment));
+            }
+        }
 
         private string building;
-        public string Building { get => building; set { building = value; OnPropertyChanged(nameof(Building)); } }
+        public string Building
+        {
+            get => building;
+            set
+            {
+                building = value;
+                OnPropertyChanged(nameof(Building));
+            }
+        }
 
         private string comment;
-        public string Comment { get => comment; set { comment = value; OnPropertyChanged(nameof(Comment)); } }
+        public string Comment
+        {
+            get => comment;
+            set
+            {
+                comment = value;
+                OnPropertyChanged(nameof(Comment));
+            }
+        }
 
-        private string paymentMethod = "Наличными курьеру"; 
+        private string paymentMethod = "Наличными курьеру";
         public string PaymentMethod
         {
             get => paymentMethod;
@@ -49,10 +112,24 @@ namespace lab4_5
             }
         }
 
-        public ObservableCollection<string> PickupPoints { get; set; } = new ObservableCollection<string> { "Минск, ТЦ Галерея, 2 этаж", "Минск, ТЦ Галилео, 7 этаж", "Лида, ТЦ Лидапарк, 2 этаж", "Гродно, ТЦ TRINITI, 2 этаж" };
+        public ObservableCollection<string> PickupPoints { get; set; } = new ObservableCollection<string>
+        {
+            "Минск, ТЦ Галерея, 2 этаж",
+            "Минск, ТЦ Галилео, 7 этаж",
+            "Лида, ТЦ Лидапарк, 2 этаж",
+            "Гродно, ТЦ TRINITI, 2 этаж"
+        };
 
         private string selectedPickupPoint;
-        public string SelectedPickupPoint { get => selectedPickupPoint; set { selectedPickupPoint = value; OnPropertyChanged(nameof(SelectedPickupPoint)); } }
+        public string SelectedPickupPoint
+        {
+            get => selectedPickupPoint;
+            set
+            {
+                selectedPickupPoint = value;
+                OnPropertyChanged(nameof(SelectedPickupPoint));
+            }
+        }
 
         public ObservableCollection<CartItemViewModel> CartItems { get; set; }
 
@@ -60,7 +137,7 @@ namespace lab4_5
 
         private int userId;
 
-        private string connectionString = "Data source = WIN-0RRORC9T71J\\SQLEXPRESS; Initial Catalog = CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
+        private string connectionString = "Data source=WIN-0RRORC9T71J\\SQLEXPRESS;Initial Catalog=CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
 
         public OrderViewModel(int userId, ObservableCollection<CartItemViewModel> cartItems)
         {
@@ -71,11 +148,19 @@ namespace lab4_5
 
         private bool CanConfirmOrder(object parameter)
         {
-            return !string.IsNullOrWhiteSpace(FullName) && !string.IsNullOrWhiteSpace(Phone) && CartItems.Count > 0;
+            return !string.IsNullOrWhiteSpace(FullName)
+                && !string.IsNullOrWhiteSpace(Phone)
+                && CartItems.Count > 0;
         }
 
         private void ConfirmOrder(object parameter)
         {
+            if (!PhoneRegex.IsMatch(Phone))
+            {
+                MessageBox.Show("Номер телефона должен начинаться с '+' и содержать от 10 до 15 цифр.", "Ошибка формата номера", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -84,14 +169,13 @@ namespace lab4_5
                     try
                     {
                         string insertOrderSql = @"
-    INSERT INTO Orders (
-        UserId, FullName, Phone, DeliveryMethod, PaymentMethod,
-        City, Street, Apartment, Building, PickupPoint, Comment, OrderDate)
-    VALUES (
-        @UserId, @FullName, @Phone, @DeliveryMethod, @PaymentMethod,
-        @City, @Street, @Apartment, @Building, @PickupPoint, @Comment, GETDATE());
-    SELECT SCOPE_IDENTITY();";
-
+                            INSERT INTO Orders (
+                                UserId, FullName, Phone, DeliveryMethod, PaymentMethod,
+                                City, Street, Apartment, Building, PickupPoint, Comment, OrderDate)
+                            VALUES (
+                                @UserId, @FullName, @Phone, @DeliveryMethod, @PaymentMethod,
+                                @City, @Street, @Apartment, @Building, @PickupPoint, @Comment, GETDATE());
+                            SELECT SCOPE_IDENTITY();";
 
                         SqlCommand cmdOrder = new SqlCommand(insertOrderSql, conn, transaction);
                         cmdOrder.Parameters.AddWithValue("@UserId", userId);
@@ -111,8 +195,8 @@ namespace lab4_5
                         foreach (var item in CartItems)
                         {
                             SqlCommand cmdItem = new SqlCommand(
-    "INSERT INTO OrderItems (OrderId, ProductId, Quantity, PriceAtPurchase) VALUES (@OrderId, @ProductId, @Quantity, @Price)",
-    conn, transaction);
+                                "INSERT INTO OrderItems (OrderId, ProductId, Quantity, PriceAtPurchase) VALUES (@OrderId, @ProductId, @Quantity, @Price)",
+                                conn, transaction);
 
                             cmdItem.Parameters.AddWithValue("@OrderId", orderId);
                             cmdItem.Parameters.AddWithValue("@ProductId", item.ProductId);
@@ -134,11 +218,11 @@ namespace lab4_5
                         transaction.Commit();
 
                         MessageBox.Show("Заказ успешно оформлен!");
-                        CartItems.Clear();  // Очистить коллекцию в UI
+                        CartItems.Clear();
                         Application.Current.Windows
-    .OfType<Window>()
-    .FirstOrDefault(w => w.IsActive)
-    ?.Close();
+                            .OfType<Window>()
+                            .FirstOrDefault(w => w.IsActive)
+                            ?.Close();
                     }
                     catch (Exception ex)
                     {
@@ -147,7 +231,6 @@ namespace lab4_5
                     }
                 }
             }
-           
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -155,4 +238,3 @@ namespace lab4_5
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
-

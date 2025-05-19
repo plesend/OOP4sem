@@ -127,7 +127,7 @@ namespace lab4_5
                                      VALUES (@UserId, @ProductId, @Rating, @ReviewText)";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@UserId", _currentUser.Id); // Используем текущего пользователя
+                        command.Parameters.AddWithValue("@UserId", _currentUser.Id); 
                         command.Parameters.AddWithValue("@ProductId", Product.id);
                         command.Parameters.AddWithValue("@Rating", NewReviewRating);
                         command.Parameters.AddWithValue("@ReviewText", NewReviewText);

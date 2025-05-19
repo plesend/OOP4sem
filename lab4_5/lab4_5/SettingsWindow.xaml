@@ -34,7 +34,7 @@
 
                     <Button Content="{DynamicResource EditProfile}" Style="{DynamicResource LittleButtonStyle}" Command="{Binding OpenEditProfileCommand}" />
                     <Button Content="Заказы" Style="{DynamicResource LittleButtonStyle}" Command="{Binding OpenOrdersWindowCommand}"/>
-                    <Button Content="{DynamicResource MenuItem_ChangeTheme}" Style="{DynamicResource LittleButtonStyle}" Command="{Binding ChangeThemeCommand}"/>
+                    <!--<Button Content="{DynamicResource MenuItem_ChangeTheme}" Style="{DynamicResource LittleButtonStyle}" Command="{Binding ChangeThemeCommand}"/>-->
                 </StackPanel>
             </Border>
         </Grid>

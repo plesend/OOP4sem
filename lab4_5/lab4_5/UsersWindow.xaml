@@ -20,14 +20,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Заголовок -->
         <TextBlock Text="{DynamicResource UsersWindow_Users}"
                Style="{DynamicResource BaseTextBlockStyle}"
                FontSize="28"
                FontWeight="Bold"
                Margin="0 0 0 20"/>
 
-        <!-- Таблица пользователей -->
         <DataGrid Grid.Row="1"
               x:Name="UsersDataGrid"
               ItemsSource="{Binding Users}"

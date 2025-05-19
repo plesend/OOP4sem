@@ -38,7 +38,6 @@ namespace lab4_5
 
         private void Register(object obj)
         {
-            // 1. Проверка пустых полей
             if (string.IsNullOrWhiteSpace(Login))
             {
                 MessageBox.Show("Логин не может быть пустым.");
@@ -55,14 +54,12 @@ namespace lab4_5
                 return;
             }
 
-            // 2. Проверка совпадения паролей
             if (Password != ConfirmPassword)
             {
                 MessageBox.Show("Пароли не совпадают.");
                 return;
             }
 
-            // 3. Проверка длины логина и пароля
             if (Login.Length < 4)
             {
                 MessageBox.Show("Логин должен содержать минимум 4 символа.");
@@ -74,14 +71,12 @@ namespace lab4_5
                 return;
             }
 
-            // 4. Дополнительная проверка на валидность логина (например, только буквы и цифры)
             if (!System.Text.RegularExpressions.Regex.IsMatch(Login, @"^[a-zA-Z0-9]+$"))
             {
                 MessageBox.Show("Логин должен содержать только латинские буквы и цифры.");
                 return;
             }
 
-            // 5. Можно добавить проверку сложности пароля (например, наличие цифр и букв)
             if (!System.Text.RegularExpressions.Regex.IsMatch(Password, @"^(?=.*[a-zA-Z])(?=.*\d).+$"))
             {
                 MessageBox.Show("Пароль должен содержать минимум одну букву и одну цифру.");
@@ -94,7 +89,6 @@ namespace lab4_5
             {
                 connection.Open();
 
-                // Проверка, существует ли уже такой логин в БД
                 using (var checkCommand = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Login = @Login", connection))
                 {
                     checkCommand.Parameters.AddWithValue("@Login", Login);

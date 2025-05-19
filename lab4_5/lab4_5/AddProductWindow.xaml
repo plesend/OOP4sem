@@ -1,4 +1,5 @@
-﻿<Window x:Class="lab4_5.AddProductWindow" Style="{DynamicResource WindowStyle}"
+﻿<Window x:Class="lab4_5.AddProductWindow" 
+        Style="{DynamicResource WindowStyle}"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,42 +17,35 @@
             <Border Style="{DynamicResource MainBorderStyle}">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock Text="Добавление товара"
-                               Style="{StaticResource BaseTextBlockStyle}"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,10" />
+                               Style="{DynamicResource AddProductWindowTitleStyle}"/>
 
-                    <Separator Style="{StaticResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
+                    <Separator Style="{DynamicResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
 
-                    <TextBlock Text="Название" Style="{StaticResource BaseTextBlockStyle}"/>
-                    <TextBox x:Name="ProdName" Width="220" Text="{Binding Name}" Style="{StaticResource BaseTextBoxStyle}"/>
+                    <TextBlock Text="Название" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox x:Name="ProdName" Text="{Binding Name}" Style="{DynamicResource FormTextBoxStyle}"/>
 
-                    <TextBlock Text="Тип товара" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox x:Name="ProdType" Width="220" Text="{Binding Type}" Style="{StaticResource BaseTextBoxStyle}"/>
+                    <TextBlock Text="Тип товара" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox x:Name="ProdType" Text="{Binding Type}" Style="{DynamicResource FormTextBoxStyle}"/>
 
-                    <TextBlock Text="Бренд" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox x:Name="ProdBrand" Width="220" Text="{Binding Brand}" Style="{StaticResource BaseTextBoxStyle}"/>
+                    <TextBlock Text="Бренд" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox x:Name="ProdBrand" Text="{Binding Brand}" Style="{DynamicResource FormTextBoxStyle}"/>
 
-                    <TextBlock Text="Состав" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox x:Name="ProdComposition" Width="220" Text="{Binding Composition}" Style="{StaticResource BaseTextBoxStyle}" AcceptsReturn="True" Height="60" TextWrapping="Wrap"/>
+                    <TextBlock Text="Состав" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox x:Name="ProdComposition" Text="{Binding Composition}" Style="{DynamicResource MultilineTextBoxStyle}"/>
 
-                    <TextBlock Text="Цена" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox x:Name="ProdPrice" Width="220" Text="{Binding PriceText}" Style="{StaticResource BaseTextBoxStyle}"/>
+                    <TextBlock Text="Цена" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox x:Name="ProdPrice" Text="{Binding PriceText}" Style="{DynamicResource FormTextBoxStyle}"/>
 
-                    <TextBlock Text="Путь к изображению" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
+                    <TextBlock Text="Путь к изображению" Style="{DynamicResource FormLabelTextBlockStyle}"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                        <TextBox x:Name="ProdPhotoPath" Width="150" Text="{Binding ImagePath}" Margin="0,0,10,0" Style="{StaticResource BaseTextBoxStyle}"/>
+                        <TextBox x:Name="ProdPhotoPath" Width="150" Text="{Binding ImagePath}" Margin="0,0,10,0" Style="{DynamicResource FormTextBoxStyle}"/>
                         <Button Content="Обзор"
-                                Width="70"
-                                Style="{StaticResource SpecialButtonStyle}"
-                                Command="{Binding BrowseImageCommand}" Height="30"/>
+                                Style="{DynamicResource BrowseButtonStyle}"
+                                Command="{Binding BrowseImageCommand}"/>
                     </StackPanel>
 
                     <Button Content="Добавить"
-                            Width="150"
-                            Height="40"
-                            Style="{StaticResource SpecialButtonStyle}"
+                            Style="{DynamicResource SubmitButtonStyle}"
                             Command="{Binding AddProductCommand}"/>
                 </StackPanel>
             </Border>

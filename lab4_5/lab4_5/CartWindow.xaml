@@ -4,7 +4,7 @@
         Title="Корзина"
         Width="900" Height="600"
         MinWidth="700" MinHeight="400"
-        Background="White"
+        Style="{DynamicResource WindowStyle}"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanResize"
         Icon="D:\лабораторные работы\ооп\lab4_5\Resources\icon.jpg">
@@ -16,67 +16,48 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <TextBlock Text="Корзина покупок"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   Foreground="#A578BB"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,20"/>
+        <TextBlock Text="Корзина покупок" Style="{DynamicResource CartHeaderTextStyle}"/>
 
-        <!-- Items Panel with Pictures -->
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" Style="{DynamicResource CartScrollViewerStyle}">
             <ItemsControl Name="CartItemsControl" ItemsSource="{Binding CartItems}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <!-- Меняем WrapPanel на StackPanel -->
                         <StackPanel Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="White" BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Margin="10" Padding="10">
+                        <Border Style="{DynamicResource CartItemBorderStyle}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- для кнопки -->
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Product Image -->
-                                <Image Grid.Column="0" Width="60" Height="60" Source="{Binding ImagePath}" Stretch="Uniform" Margin="0,0,10,0" />
+                                <Image Grid.Column="0" Style="{DynamicResource CartItemImageStyle}" Source="{Binding ImagePath}"/>
 
-                                <!-- Product Info -->
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding ProductName}" FontWeight="Bold" Foreground="#333" FontSize="14" TextWrapping="Wrap"/>
-                                    <TextBlock Text="{Binding Price, StringFormat=Цена: {0} BYN}" FontSize="13" Foreground="#555" Margin="0,5,0,0"/>
-                                    <TextBlock Text="{Binding Quantity, StringFormat=Кол-во: {0}}" FontSize="13" Foreground="#555"/>
-                                    <TextBlock Text="{Binding Total, StringFormat=Сумма: {0} BYN}" FontSize="13" Foreground="#A578BB" FontWeight="Bold" Margin="0,5,0,0"/>
+                                    <TextBlock Text="{Binding ProductName}" Style="{DynamicResource ProductNameTextStyle}"/>
+                                    <TextBlock Text="{Binding Price, StringFormat=Цена: {0} BYN}" Style="{DynamicResource PriceTextStyle}"/>
+                                    <TextBlock Text="{Binding Quantity, StringFormat=Кол-во: {0}}" Style="{DynamicResource PriceTextStyle}"/>
+                                    <TextBlock Text="{Binding Total, StringFormat=Сумма: {0} BYN}" Style="{DynamicResource TotalPriceTextStyle}"/>
                                 </StackPanel>
 
-                                <!-- Delete Button -->
                                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                                    <Button Content="-1" Width="30" Height="24"
-            Style="{DynamicResource LittleButtonStyle}"
-            Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-            CommandParameter="{Binding}"
-            Margin="0,0,5,0"/>
+                                    <Button Content="-1" Style="{DynamicResource QuantityButtonStyle}"
+                                            Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"/>
 
-                                    <Button Content="+1" Width="30" Height="24"
-            Style="{DynamicResource LittleButtonStyle}"
-            Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-            CommandParameter="{Binding}"
-            Margin="0,0,5,0"/>
+                                    <Button Content="+1" Style="{DynamicResource QuantityButtonStyle}"
+                                            Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"/>
 
-                                    <Button Content="Удалить из списка"
-            Style="{DynamicResource LittleButtonStyle}"
-            Command="{Binding DataContext.RemoveProductFromCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-            CommandParameter="{Binding}"/>
+                                    <Button Content="Удалить" Style="{DynamicResource RemoveButtonStyle}"
+                                            Command="{Binding DataContext.RemoveProductFromCartCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"/>
                                 </StackPanel>
-
-
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -84,7 +65,6 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <!-- Footer: Total + Buttons -->
         <Grid Grid.Row="2" Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -92,45 +72,16 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Total -->
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Итого: "
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           Foreground="Black"/>
-                <TextBlock x:Name="TotalAmountTextBlock"
-                           FontSize="20"
-                           FontWeight="Bold"
-                           Foreground="#A578BB"
-                           Margin="10,0,0,0"
+                <TextBlock Text="Итого: " Style="{DynamicResource CartTotalTextStyle}"/>
+                <TextBlock x:Name="TotalAmountTextBlock" Style="{DynamicResource CartTotalAmountStyle}"
                            Text="{Binding TotalAmount, StringFormat={}{0:F2} BYN}"/>
             </StackPanel>
 
-            <!-- Clear Button -->
-            <Button Grid.Column="1"
-                    Content="Очистить"
-                    Width="120"
-                    Height="36"
-                    Margin="10,0"
-                    Background="White"
-                    Foreground="#A578BB"
-                    BorderBrush="#A578BB"
-                    BorderThickness="2"
-                    FontWeight="SemiBold"
-                    Cursor="Hand"
+            <Button Grid.Column="1" Content="Очистить" Style="{DynamicResource ClearCartButtonStyle}"
                     Command="{Binding ClearCartCommand}"/>
 
-            <!-- Checkout Button -->
-            <Button Grid.Column="2"
-                    Content="Оформить заказ"
-                    Width="150"
-                    Height="36"
-                    Background="#A578BB"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    BorderBrush="#A578BB"
-                    BorderThickness="2"
-                    Cursor="Hand"
+            <Button Grid.Column="2" Content="Оформить заказ" Style="{DynamicResource CheckoutButtonStyle}"
                     Command="{Binding OpenOrderWindowCommand}"/>
         </Grid>
     </Grid>

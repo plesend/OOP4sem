@@ -50,7 +50,10 @@ namespace lab4_5
             {
                 connection.Open();
 
-                string sql = "SELECT * FROM Users WHERE Login = @login AND Password = @password";
+                string sql = @"
+            SELECT * FROM Users 
+            WHERE Login COLLATE Latin1_General_BIN = @login 
+              AND Password COLLATE Latin1_General_BIN = @password";
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -83,6 +86,7 @@ namespace lab4_5
                 }
             }
         }
+
 
         public void OpenRegistration()
         {

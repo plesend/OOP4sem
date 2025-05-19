@@ -1,4 +1,5 @@
-﻿<Window x:Name="Settings" x:Class="lab4_5.EditProfileWindow" Style="{DynamicResource WindowStyle}"
+﻿<Window x:Name="Settings" x:Class="lab4_5.EditProfileWindow" 
+        Style="{DynamicResource WindowStyle}"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,66 +14,58 @@
         ResizeMode="CanResize">
 
     <Viewbox Stretch="Uniform" StretchDirection="Both">
-        <Grid >
+        <Grid>
             <Border Style="{DynamicResource MainBorderStyle}">
-                <StackPanel HorizontalAlignment="Center">
+                <StackPanel HorizontalAlignment="Center" Style="{DynamicResource ProfileFormContainerStyle}">
 
                     <TextBlock Text="{DynamicResource Editting}"
-                               Style="{DynamicResource BaseTextBlockStyle}"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,10" />
+                               Style="{DynamicResource EditWindowTitleStyle}"/>
 
                     <Separator Style="{DynamicResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
 
                     <Image x:Name="ProfileImage"
                            Source="{Binding Pfp}"
-                           Width="100"
-                           Height="100"
-                           Stretch="UniformToFill"
-                           Margin="0,0,0,20"
+                           Style="{DynamicResource ProfileImageStyle}"
                            ToolTip="Нажмите для изменения изображения">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
-                                <i:InvokeCommandAction Command="{Binding ChangeProfileImageCommand}" />
+                                <i:InvokeCommandAction Command="{Binding ChangeProfileImageCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                     </Image>
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
-                               HorizontalAlignment="Center"
-                               Text="{Binding CurrentUser.Username}" />
+                    <TextBlock Text="{Binding CurrentUser.Username}" 
+                               Style="{DynamicResource ProfileUsernameStyle}"/>
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
-                               Text="{DynamicResource EditName}" />
-                    <TextBox Text="{Binding newUserName}"
-                             Style="{DynamicResource BaseTextBoxStyle}" />
+                    <TextBlock Text="{DynamicResource EditName}"
+                               Style="{DynamicResource PasswordLabelStyle}"/>
+                    <TextBox Text="{Binding newUserName}" MaxLength="25"
+                             Style="{DynamicResource FixedWidthTextBoxStyle}"/>
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
-           Text="Новый пароль" />
+                    <TextBlock Text="Новый пароль"
+                               Style="{DynamicResource PasswordLabelStyle}"/>
                     <TextBox Text="{Binding newPassword}"
-         Style="{DynamicResource BaseTextBoxStyle}" />
+                             Style="{DynamicResource FixedWidthTextBoxStyle}"/>
 
-                    
-
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
-           Text="Подтвердите новый пароль" />
+                    <TextBlock Text="Подтвердите новый пароль"
+                               Style="{DynamicResource PasswordLabelStyle}"/>
                     <TextBox Text="{Binding ConfirmPassword}"
-         Style="{DynamicResource BaseTextBoxStyle}" />
+                             Style="{DynamicResource FixedWidthTextBoxStyle}"/>
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
-  Text="Старый пароль" />
+                    <TextBlock Text="Старый пароль"
+                               Style="{DynamicResource PasswordLabelStyle}"/>
                     <TextBox Text="{Binding OldPassword}"
-Style="{DynamicResource BaseTextBoxStyle}" />
+                             Style="{DynamicResource FixedWidthTextBoxStyle}"/>
 
+                    <StackPanel Style="{DynamicResource ProfileButtonPanelStyle}">
+                        <Button Content="{DynamicResource Adjust}"
+                                Style="{DynamicResource ProfileActionButtonStyle}"
+                                Command="{Binding SaveCommand}"/>
 
-                    <Button Content="{DynamicResource Adjust}"
-                            Style="{DynamicResource SpecialButtonStyle}"
-                            Command="{Binding SaveCommand}" />
-
-                    <Button Content="{DynamicResource Cancel}"
-                            Style="{DynamicResource SpecialButtonStyle}"
-                            Command="{Binding CloseCommand}" />
+                        <Button Content="{DynamicResource Cancel}"
+                                Style="{DynamicResource ProfileActionButtonStyle}"
+                                Command="{Binding CloseCommand}"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
         </Grid>

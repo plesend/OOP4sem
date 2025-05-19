@@ -14,7 +14,7 @@
         <Rectangle Fill="#AA000000" />
 
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Welcome to Our App!"
+            <TextBlock Text="Shirasagi"
                        Foreground="White"
                        FontSize="36"
                        FontWeight="Bold"
@@ -22,21 +22,12 @@
                        TextAlignment="Center"
                        Margin="0,0,0,10" />
 
-            <TextBlock Text="Start your journey with us today."
+            <TextBlock Text="В каждой детали — ты"
                        Foreground="White"
                        FontSize="18"
                        HorizontalAlignment="Center"
                        TextAlignment="Center"
                        Margin="0,0,0,20" />
-
-            <Button Content="Get Started"
-                    Padding="15,8"
-                    FontSize="16"
-                    Background="#A578BB"
-                    Foreground="White"
-                    Width="160"
-                    HorizontalAlignment="Center"
-                    Cursor="Hand" />
         </StackPanel>
     </Grid>
 </UserControl>

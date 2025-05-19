@@ -23,14 +23,12 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Заголовок -->
         <TextBlock Text="Список заказов"
                    Style="{DynamicResource BaseTextBlockStyle}"
                    FontSize="28"
                    FontWeight="Bold"
                    Margin="0 0 0 20"/>
 
-        <!-- Таблица заказов -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Orders}"
                   AutoGenerateColumns="False"

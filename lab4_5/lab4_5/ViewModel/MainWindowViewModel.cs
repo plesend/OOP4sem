@@ -87,13 +87,7 @@ namespace lab4_5
 
         private Stack<ActionItem> _undoStack = new Stack<ActionItem>();
         private Stack<ActionItem> _redoStack = new Stack<ActionItem>();
-
-        //private bool CanUndo() => _undoStack.Count > 0;
-        //private bool CanRedo() => _redoStack.Count > 0;
-
         public ICommand AddToCartCommand { get; }
-        //public ICommand UndoCommand => new RelayCommand(Undo, () => CanUndo());
-        //public ICommand RedoCommand => new RelayCommand(Redo, () => CanRedo());
         public ICommand OpenProfileCommand { get; }
         public ICommand ChangeThemeCommand { get; }
         public ICommand AddProductCommand { get; }
@@ -138,56 +132,6 @@ namespace lab4_5
                 SearchProduct();
             };
         }
-
-        //public void Undo()
-        //{
-        //    if (_undoStack.Count > 0)
-        //    {
-        //        var action = _undoStack.Pop();
-
-        //        switch (action.ActionType)
-        //        {
-        //            case "Add":
-        //                Products.Remove(action.Product);
-        //                _redoStack.Push(new ActionItem("Add", action.Product)); 
-        //                break;
-
-        //            case "Remove":
-        //                Products.Add(action.Product);
-        //                _redoStack.Push(new ActionItem("Remove", action.Product));
-        //                break;
-        //        }
-
-        //        (UndoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-        //        (RedoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-        //    }
-        //}
-
-        //public void Redo()
-        //{
-        //    if (_redoStack.Count > 0)
-        //    {
-        //        var action = _redoStack.Pop();
-
-        //        switch (action.ActionType)
-        //        {
-        //            case "Add":
-        //                Products.Add(action.Product);
-        //                tmpProducts.Add(action.Product);
-        //                _undoStack.Push(new ActionItem("Add", action.Product));
-        //                break;
-
-        //            case "Remove":
-        //                Products.Remove(action.Product);
-        //                tmpProducts.Remove(action.Product);
-        //                _undoStack.Push(new ActionItem("Remove", action.Product));
-        //                break;
-        //        }
-
-        //        (UndoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-        //        (RedoCommand as RelayCommand)?.RaiseCanExecuteChanged();
-        //    }
-        //}
 
         private void LoadProducts()
         {
@@ -445,7 +389,6 @@ namespace lab4_5
                     {
                         try
                         {
-                            // Шаг 1: Получить или добавить бренд, получить его BrandId
                             int brandId;
 
                             using (var checkBrandCmd = new SqlCommand("SELECT BrandId FROM Brands WHERE BrandName = @BrandName", connection, transaction))
@@ -467,7 +410,6 @@ namespace lab4_5
                                 }
                             }
 
-                            // Шаг 2: Вставка нового товара
                             var command = new SqlCommand(@"
                         INSERT INTO Goods 
                         (Name, Description, Brand, ImagePath, Buy, DeleteCommand, Price, BrandId, Composition) 
@@ -616,33 +558,6 @@ namespace lab4_5
                 }
             }
         }
-
-
-        //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
-
-        //var productToRemoveFromJson = tmpProducts.FirstOrDefault(p => p.Name == productToRemove.Name && p.Brand == productToRemove.Brand);
-        //if (productToRemoveFromJson != null)
-        //{
-        //    tmpProducts.Remove(productToRemoveFromJson);
-        //    Products.Remove(productToRemoveFromJson);
-
-        //    _undoStack.Push(new ActionItem("Remove", productToRemoveFromJson));
-        //    _redoStack.Clear();
-
-        //    string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
-        //    File.WriteAllText(jsonPath, updatedJson);
-
-        //    MessageBox.Show("Товар удален!");
-        //}
-        //else
-        //{
-        //    MessageBox.Show("Товар не найден в списке!");
-        //}
-        //        }
-        //    }
-        //}
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {

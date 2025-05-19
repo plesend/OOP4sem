@@ -17,50 +17,36 @@
             <Border Style="{DynamicResource MainBorderStyle}">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock Text="Редактирование пользователя"
-                               Style="{StaticResource BaseTextBlockStyle}"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,10" />
+                               Style="{DynamicResource AddProductWindowTitleStyle}" />
 
-                    <Separator Style="{StaticResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
+                    <Separator Style="{DynamicResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
 
-                    <!-- Username -->
-                    <TextBlock Text="Имя пользователя" Style="{StaticResource BaseTextBlockStyle}" />
-                    <TextBox Width="220"
-                             Text="{Binding User.Username, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource BaseTextBoxStyle}" />
+                    <!-- Username Field -->
+                    <TextBlock Text="Имя пользователя" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox Text="{Binding User.Username, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource FormTextBoxStyle}" />
 
-                    <!-- Login -->
-                    <TextBlock Text="Логин" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2" />
-                    <TextBox Width="220"
-                             Text="{Binding User.Login, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource BaseTextBoxStyle}" />
+                    <TextBlock Text="Логин" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox Text="{Binding User.Login, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource FormTextBoxStyle}" />
 
-                    <!-- Password -->
-                    <TextBlock Text="Пароль" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2" />
-                    <TextBox Width="220"
-                             Text="{Binding User.Password, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource BaseTextBoxStyle}" />
+                    <TextBlock Text="Пароль" Style="{DynamicResource FormLabelTextBlockStyle}"/>
+                    <TextBox Text="{Binding User.Password, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{DynamicResource FormTextBoxStyle}" />
 
-                    <!-- Pfp -->
-                    <TextBlock Text="Путь к изображению" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
+                    <TextBlock Text="Путь к изображению" Style="{DynamicResource FormLabelTextBlockStyle}"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                        <TextBox Width="150"
-                                 Text="{Binding User.Pfp, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding User.Pfp, UpdateSourceTrigger=PropertyChanged}"
+                                 Width="150"
                                  Margin="0,0,10,0"
-                                 Style="{StaticResource BaseTextBoxStyle}" />
+                                 Style="{DynamicResource FormTextBoxStyle}" />
                         <Button Content="Обзор"
-                                Width="70"
-                                Style="{StaticResource SpecialButtonStyle}"
-                                Command="{Binding BrowseImageCommand}" Height="30" />
+                                Style="{DynamicResource BrowseButtonStyle}"
+                                Command="{Binding BrowseImageCommand}" />
                     </StackPanel>
 
-                    <!-- Save Button -->
                     <Button Content="Сохранить"
-                            Width="150"
-                            Height="40"
-                            Style="{StaticResource SpecialButtonStyle}"
+                            Style="{DynamicResource SubmitButtonStyle}"
                             Command="{Binding SaveUserCommand}" />
                 </StackPanel>
             </Border>

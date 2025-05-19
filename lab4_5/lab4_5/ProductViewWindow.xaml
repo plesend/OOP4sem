@@ -17,7 +17,6 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
 
-
     <Grid Margin="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -31,79 +30,55 @@
 
         <TextBlock Grid.Column="0" Grid.ColumnSpan="2"
                    Text="{Binding Product.Name}"
-                   FontSize="30" FontWeight="Bold"
-                   Foreground="#A578BB"
-                   Margin="0 0 0 20"
-                   TextWrapping="Wrap" />
+                   Style="{DynamicResource ProductTitleStyle}" />
 
         <Border Grid.Row="1" Grid.Column="0"
-                BorderBrush="#DDD" BorderThickness="1" CornerRadius="10"
-                Background="White" Margin="0 0 20 0" Padding="10">
+                Style="{DynamicResource ProductImageBorderStyle}">
             <Image Source="{Binding Product.ImagePath}"
-                   Stretch="UniformToFill"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center" />
+                   Style="{DynamicResource ProductImageStyle}" />
         </Border>
 
         <ScrollViewer Grid.Row="1" Grid.Column="1" VerticalScrollBarVisibility="Auto">
             <StackPanel VerticalAlignment="Top">
-
-                <StackPanel Margin="0 0 0 15">
-                    <TextBlock Text="Бренд:" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="{Binding Product.Brand}"
-                               TextWrapping="Wrap"
-                               Foreground="Gray"
-                               Margin="0,4,0,0" />
+                <StackPanel Style="{DynamicResource ProductDetailSectionStyle}">
+                    <TextBlock Text="Бренд:" Style="{DynamicResource ProductDetailLabelStyle}" />
+                    <TextBlock Text="{Binding Product.Brand}" Style="{DynamicResource ProductDetailValueStyle}" />
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 15">
-                    <TextBlock Text="Описание:" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="{Binding Product.Description}"
-                               TextWrapping="Wrap"
-                               Foreground="Gray"
-                               Margin="0,4,0,0" />
+                <StackPanel Style="{DynamicResource ProductDetailSectionStyle}">
+                    <TextBlock Text="Описание:" Style="{DynamicResource ProductDetailLabelStyle}" />
+                    <TextBlock Text="{Binding Product.Description}" Style="{DynamicResource ProductDetailValueStyle}" />
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 15">
-                    <TextBlock Text="Цена:" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="{Binding Product.Price, StringFormat=C}"
-                               FontSize="22" Foreground="#A578BB"
-                               Margin="0,4,0,0" />
+                <StackPanel Style="{DynamicResource ProductDetailSectionStyle}">
+                    <TextBlock Text="Цена:" Style="{DynamicResource ProductDetailLabelStyle}" />
+                    <TextBlock Text="{Binding Product.Price, StringFormat=C}" Style="{DynamicResource ProductPriceStyle}" />
                 </StackPanel>
 
                 <Button Content="Купить"
-        Width="140" Height="45"
-        Style="{DynamicResource SpecialButtonStyle}"
-        Command="{Binding BuyCommand}"
-        CommandParameter="{Binding Product}"
-        HorizontalAlignment="Left"
-        Margin="0,10,0,20" />
+                        Style="{DynamicResource ProductBuyButtonStyle}"
+                        Command="{Binding BuyCommand}"
+                        CommandParameter="{Binding Product}" />
 
-                <Separator Margin="0,10" />
+                <Separator Style="{DynamicResource BaseSeparatorStyle}" />
 
-                <StackPanel Margin="0 0 0 15">
-                    <TextBlock Text="О бренде:" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="{Binding Product.BrandDescription}"
-                               TextWrapping="Wrap"
-                               Foreground="Gray"
-                               Margin="0,4,0,0" />
+                <StackPanel Style="{DynamicResource ProductDetailSectionStyle}">
+                    <TextBlock Text="О бренде:" Style="{DynamicResource ProductDetailLabelStyle}" />
+                    <TextBlock Text="{Binding Product.BrandDescription}" Style="{DynamicResource ProductDetailValueStyle}" />
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 15">
-                    <TextBlock Text="Состав:" FontWeight="Bold" FontSize="16" />
-                    <TextBlock Text="{Binding Product.Composition}"
-                               TextWrapping="Wrap"
-                               Foreground="Gray"
-                               Margin="0,4,0,0" />
+                <StackPanel Style="{DynamicResource ProductDetailSectionStyle}">
+                    <TextBlock Text="Состав:" Style="{DynamicResource ProductDetailLabelStyle}" />
+                    <TextBlock Text="{Binding Product.Composition}" Style="{DynamicResource ProductDetailValueStyle}" />
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 15">
-                    <TextBlock Text="Отзывы:" FontWeight="Bold" FontSize="16" />
+                <StackPanel Style="{DynamicResource ProductDetailSectionStyle}">
+                    <TextBlock Text="Отзывы:" Style="{DynamicResource ProductDetailLabelStyle}" />
                     <ItemsControl ItemsSource="{Binding Reviews}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border BorderThickness="0 0 0 1" BorderBrush="#DDD" Padding="4" Margin="0,2">
-                                    <TextBlock Text="{Binding}" TextWrapping="Wrap" Foreground="DarkSlateGray" />
+                                <Border Style="{DynamicResource ReviewItemBorderStyle}">
+                                    <TextBlock Text="{Binding}" Style="{DynamicResource ReviewItemTextStyle}" />
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -111,12 +86,12 @@
                 </StackPanel>
 
                 <StackPanel Margin="0 20 0 0">
-                    <TextBlock Text="Оставить отзыв:" FontWeight="Bold" FontSize="16" Margin="0 0 0 10" />
+                    <TextBlock Text="Оставить отзыв:" Style="{DynamicResource ProductDetailLabelStyle}" Margin="0 0 0 10" />
 
                     <TextBlock Text="Оценка (1-5):" FontWeight="SemiBold" />
                     <ComboBox SelectedValue="{Binding NewReviewRating, Mode=TwoWay}"
                               SelectedValuePath="Content"
-                              Width="60">
+                              Style="{DynamicResource ReviewComboBoxStyle}">
                         <ComboBoxItem Content="1" />
                         <ComboBoxItem Content="2" />
                         <ComboBoxItem Content="3" />
@@ -126,24 +101,18 @@
 
                     <TextBlock Text="Ваш отзыв:" Margin="0 10 0 4" />
                     <TextBox Text="{Binding NewReviewText, UpdateSourceTrigger=PropertyChanged}"
-                             AcceptsReturn="True" Height="80" TextWrapping="Wrap" />
+                             Style="{DynamicResource ReviewTextBoxStyle}" />
 
                     <Button Content="Оставить отзыв"
-                            Margin="0 10 0 0"
-                            Width="140" Height="40"
-                            Command="{Binding SubmitReviewCommand}"
-                            Style="{DynamicResource SpecialButtonStyle}" />
+                            Style="{DynamicResource SubmitReviewButtonStyle}"
+                            Command="{Binding SubmitReviewCommand}" />
                 </StackPanel>
-
             </StackPanel>
         </ScrollViewer>
 
         <Button Grid.Row="2" Grid.Column="1"
                 Content="Закрыть"
-                Width="100" Height="32"
-                HorizontalAlignment="Right"
-                Margin="0,30,0,0"
-                Style="{DynamicResource BaseButtonStyle}"
+                Style="{DynamicResource ProductCloseButtonStyle}"
                 Click="CloseWindow_Click" />
     </Grid>
 </Window>

@@ -23,7 +23,6 @@ namespace lab4_5.Controls
         public IconButton()
         {
             InitializeComponent();
-            // Можно сразу повесить обработчик клика
             this.MouseLeftButtonUp += IconButton_MouseLeftButtonUp;
         }
 

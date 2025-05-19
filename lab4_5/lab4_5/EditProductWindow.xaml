@@ -17,42 +17,53 @@
             <Border Style="{DynamicResource MainBorderStyle}">
                 <StackPanel HorizontalAlignment="Center">
                     <TextBlock Text="Редактирование товара"
-                               Style="{StaticResource BaseTextBlockStyle}"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,10" />
+                               Style="{DynamicResource EditWindowTitleStyle}"/>
 
-                    <Separator Style="{StaticResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
+                    <Separator Style="{DynamicResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
 
-                    <TextBlock Text="Название" Style="{StaticResource BaseTextBlockStyle}"/>
-                    <TextBox Width="220" Text="{Binding Product.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseTextBoxStyle}"/>
-
-                    <TextBlock Text="Тип товара" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox Width="220" Text="{Binding Product.Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseTextBoxStyle}"/>
-
-                    <TextBlock Text="Бренд" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox Width="220" Text="{Binding Product.Brand, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseTextBoxStyle}"/>
-
-                    <TextBlock Text="Состав" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox Width="220" Text="{Binding Product.Composition, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Height="60" TextWrapping="Wrap" Style="{StaticResource BaseTextBoxStyle}"/>
-
-                    <TextBlock Text="Цена" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <TextBox Width="220" Text="{Binding PriceText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseTextBoxStyle}"/>
-
-                    <TextBlock Text="Путь к изображению" Style="{StaticResource BaseTextBlockStyle}" Margin="0,10,0,2"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,5">
-                        <TextBox Width="150" Text="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Style="{StaticResource BaseTextBoxStyle}"/>
-                        <Button Content="Обзор"
-                                Width="70"
-                                Style="{StaticResource SpecialButtonStyle}"
-                                Command="{Binding BrowseImageCommand}" Height="30"/>
+                    <StackPanel Style="{DynamicResource FormFieldContainerStyle}">
+                        <TextBlock Text="Название" Style="{DynamicResource BaseTextBlockStyle}"/>
+                        <TextBox Text="{Binding Product.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource FixedWidthTextBoxStyle}"/>
                     </StackPanel>
 
-                    <Button Content="Сохранить"
-                            Width="150"
-                            Height="40"
-                            Style="{StaticResource SpecialButtonStyle}"
+                    <StackPanel Style="{DynamicResource FormFieldContainerStyle}">
+                        <TextBlock Text="Тип товара" Style="{DynamicResource BaseTextBlockStyle}"/>
+                        <TextBox Text="{Binding Product.Description, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource FixedWidthTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{DynamicResource FormFieldContainerStyle}">
+                        <TextBlock Text="Бренд" Style="{DynamicResource BaseTextBlockStyle}"/>
+                        <TextBox Text="{Binding Product.Brand, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource FixedWidthTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{DynamicResource FormFieldContainerStyle}">
+                        <TextBlock Text="Состав" Style="{DynamicResource BaseTextBlockStyle}"/>
+                        <TextBox Text="{Binding Product.Composition, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource EditMultilineTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{DynamicResource FormFieldContainerStyle}">
+                        <TextBlock Text="Цена" Style="{DynamicResource BaseTextBlockStyle}"/>
+                        <TextBox Text="{Binding PriceText, UpdateSourceTrigger=PropertyChanged}" 
+                                 Style="{DynamicResource FixedWidthTextBoxStyle}"/>
+                    </StackPanel>
+
+                    <StackPanel Style="{DynamicResource FormFieldContainerStyle}">
+                        <TextBlock Text="Путь к изображению" Style="{DynamicResource BaseTextBlockStyle}"/>
+                        <StackPanel Style="{DynamicResource BrowseImagePanelStyle}">
+                            <TextBox Text="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{DynamicResource FixedWidthTextBoxStyle}"
+                                     Width="150" Margin="0,0,10,0"/>
+                            <Button Content="Обзор"
+                                    Style="{DynamicResource CompactButtonStyle}"
+                                    Command="{Binding BrowseImageCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Button Style="{DynamicResource SaveButtonStyle}"
                             Command="{Binding SaveProductCommand}"/>
                 </StackPanel>
             </Border>

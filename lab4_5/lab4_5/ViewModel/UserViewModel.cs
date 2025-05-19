@@ -48,7 +48,6 @@ class UserViewModel : INotifyPropertyChanged
             return;
         }
 
-        // Создаём копию пользователя, чтобы изменения не применялись сразу
         var userCopy = new User
         {
             Username = SelectedUser.Username,
@@ -65,7 +64,6 @@ class UserViewModel : INotifyPropertyChanged
 
         if (editWindow.ShowDialog() == true)
         {
-            // Сохраняем изменения в базу
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();

@@ -38,20 +38,18 @@ namespace lab4_5
             if (openFileDialog.ShowDialog() == true)
             {
                 User.Pfp = openFileDialog.FileName;
-                OnPropertyChanged(nameof(User)); // Обновим User целиком
+                OnPropertyChanged(nameof(User)); 
             }
         }
 
         private void SaveUser()
         {
-            // Валидация (опционально)
             if (string.IsNullOrWhiteSpace(User.Login))
             {
                 MessageBox.Show("Логин не может быть пустым.");
                 return;
             }
 
-            // Закрытие окна с результатом true
             Window window = Application.Current.Windows
                 .OfType<Window>()
                 .FirstOrDefault(w => w.DataContext == this);

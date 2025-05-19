@@ -47,9 +47,10 @@
                                Foreground="Gray"
                                Margin="10,5,10,5"
                                TextAlignment="Right"/>
-                        <TextBlock Text="{Binding Price, StringFormat=C}"
-                                   Style="{DynamicResource BaseTextBlockStyle}"
-                                   TextAlignment="Right"/>
+                        <TextBlock Text="{Binding Price, StringFormat={}{0:F2} BYN}"
+           Style="{DynamicResource BaseTextBlockStyle}"
+           TextAlignment="Right"/>
+
                         <Button Content="Купить"
     Style="{DynamicResource BuyButtonStyle}"
                                 Height="20"
@@ -96,8 +97,6 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-
-                <!-- Баннер -->
                 <controls:Banner Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="7" Loaded="Banner_Loaded" Height="NaN" Margin="0,32,-8,8"/>
 
                 <Button Style="{DynamicResource SpecialButtonStyle}"
@@ -136,26 +135,6 @@
                         Grid.Column="6"
                         Command="{Binding OpenProfileCommand}"
                         Height="40" Width="150"/>
-
-                <!-- Поисковая строка -->
-                <!--<StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Height="30" Margin="116,0,0,0" Width="700">
-                    <TextBox Text="{Binding SearchBox, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{DynamicResource BaseTextBoxStyle}"
-                             Width="650" Height="30" Margin="0,0,10,0" />
-                    <Button Style="{DynamicResource BaseButtonStyle}"
-                            Content="🔍"
-                            Width="40" Height="30"
-                            Command="{Binding SearchCommand}" />
-                </StackPanel>-->
-
-                <!--<controls:CustomSearchBar Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6"
-                          Margin="116,0,0,0"
-                          SearchBox="{Binding SearchBox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          SearchCommand="{Binding SearchCommand}" />-->
 
                 <controls:CustomSearchBar Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6"
                           Margin="116,0,0,0"
@@ -204,12 +183,12 @@
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,5" HorizontalAlignment="Center">
                             <TextBox Text="{Binding FromPrice}"
                                      Style="{DynamicResource BaseTextBoxStyle}"
-                                     Width="60" Height="25"
+                                     Width="60" Height="30"
                                      Margin="0,0,10,0"
                                      MaxLength="5"/>
                             <TextBox Text="{Binding ToPrice}"
                                      Style="{DynamicResource BaseTextBoxStyle}"
-                                     Width="60" Height="25"
+                                     Width="60" Height="30"
                                      MaxLength="5"/>
                         </StackPanel>
                         <TextBlock Style="{DynamicResource BaseTextBlockStyle}"

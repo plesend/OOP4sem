@@ -112,6 +112,12 @@ namespace lab4_5
                 return;
             }
 
+            if (newUserName.Length > 25)
+            {
+                MessageBox.Show("Имя пользователя не должно превышать 25 символов.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             bool isPasswordChanged = !string.IsNullOrWhiteSpace(newPassword) && newPassword != CurrentUser.Password;
 
             if (isPasswordChanged)

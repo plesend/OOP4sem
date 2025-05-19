@@ -85,7 +85,6 @@ namespace lab4_5
                 return;
             }
 
-            // Валидация обязательных полей
             if (string.IsNullOrWhiteSpace(Product.Name) ||
                 string.IsNullOrWhiteSpace(Product.Brand) ||
                 string.IsNullOrWhiteSpace(Product.ImagePath))
@@ -108,7 +107,6 @@ namespace lab4_5
 
                 try
                 {
-                    // Проверка или добавление бренда
                     int brandId;
                     using (var checkBrandCmd = new SqlCommand("SELECT BrandId FROM Brands WHERE BrandName = @BrandName", conn, transaction))
                     {
@@ -156,7 +154,6 @@ namespace lab4_5
 
                     MessageBox.Show("Товар успешно обновлён.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Закрываем окно с положительным результатом
                     if (Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive) is Window currentWindow)
                     {
                         currentWindow.DialogResult = true;

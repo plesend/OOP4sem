@@ -9,7 +9,7 @@ namespace lab4_5
     {
         public ObservableCollection<string> Reviews { get; set; } = new ObservableCollection<string>();
 
-        public int id { get; set; } // Обычно ID не изменяется, поэтому можно оставить автосвойство.
+        public int id { get; set; } 
 
         private string _name;
         public string Name
