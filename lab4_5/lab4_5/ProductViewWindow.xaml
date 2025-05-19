@@ -13,6 +13,11 @@
         ResizeMode="CanResize"
         Icon="D:\лабораторные работы\ооп\lab4_5\Resources\icon.jpg">
 
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+
     <Grid Margin="30">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -73,7 +78,6 @@
         CommandParameter="{Binding Product}"
         HorizontalAlignment="Left"
         Margin="0,10,0,20" />
-
 
                 <Separator Margin="0,10" />
 

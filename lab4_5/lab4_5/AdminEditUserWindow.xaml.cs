@@ -17,12 +17,11 @@ namespace lab4_5
     /// <summary>
     /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class UsersWindow : Window
+    public partial class AdminEditUserWindow : Window
     {
-        public UsersWindow(User currentUser)
+        public AdminEditUserWindow()
         {
             InitializeComponent();
-            DataContext = new UserViewModel(currentUser);
         }
     }
 }

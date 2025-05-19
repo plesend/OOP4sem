@@ -28,17 +28,67 @@ class UserViewModel : INotifyPropertyChanged
 
     public ICommand AssignAdminCommand { get; }
     public ICommand RemoveAdminCommand { get; }
+    public ICommand OpenAdminEditUserCommand { get; }
 
-    public UserViewModel(string currentUserLogin)
+    public UserViewModel(User currentUser)
     {
-        _currentUserLogin = currentUserLogin;
+        _currentUserLogin = currentUser.Login;
 
+        OpenAdminEditUserCommand = new RelayCommand(_ => OpenAdminEditUser(), _ => SelectedUser != null);
         AssignAdminCommand = new RelayCommand(_ => AssignAdmin(), _ => SelectedUser != null);
         RemoveAdminCommand = new RelayCommand(_ => RemoveAdmin(), _ => SelectedUser != null);
 
         LoadUsers();
     }
+    public void OpenAdminEditUser()
+    {
+        if (SelectedUser == null)
+        {
+            MessageBox.Show("Пользователь не выбран.");
+            return;
+        }
 
+        // Создаём копию пользователя, чтобы изменения не применялись сразу
+        var userCopy = new User
+        {
+            Username = SelectedUser.Username,
+            Login = SelectedUser.Login,
+            Password = SelectedUser.Password,
+            Pfp = SelectedUser.Pfp,
+            Role = SelectedUser.Role
+        };
+
+        var editWindow = new AdminEditUserWindow
+        {
+            DataContext = new AdminEditUserViewModel(userCopy)
+        };
+
+        if (editWindow.ShowDialog() == true)
+        {
+            // Сохраняем изменения в базу
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(
+                    "UPDATE Users SET Username = @Username, Password = @Password, Pfp = @Pfp WHERE Login = @Login",
+                    connection);
+
+                command.Parameters.AddWithValue("@Username", userCopy.Username ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Password", userCopy.Password ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Pfp", userCopy.Pfp ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Login", userCopy.Login);
+
+                command.ExecuteNonQuery();
+            }
+
+            // Обновляем оригинальный объект
+            SelectedUser.Username = userCopy.Username;
+            SelectedUser.Password = userCopy.Password;
+            SelectedUser.Pfp = userCopy.Pfp;
+
+            OnPropertyChanged(nameof(Users));
+        }
+    }
     public void LoadUsers()
     {
         using (SqlConnection connection = new SqlConnection(ConnectionString))

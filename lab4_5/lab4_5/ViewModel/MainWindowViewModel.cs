@@ -104,11 +104,14 @@ namespace lab4_5
         public ICommand SearchCommand { get; }
         public ICommand RemoveProductCommand => new RelayCommand<Product>(DelProduct);
         public ICommand ShowProductViewCommand { get; }
+        public ICommand OpenEditWindowCommand { get; }
+
         public MainWindowViewModel() { }
         public MainWindowViewModel(User user)
         {
             CurrentUser = user;
             OpenProfileCommand = new RelayCommand(OpenProfile);
+            OpenEditWindowCommand = new RelayCommand<Product>(OpenEditWindow);
             ChangeThemeCommand = new RelayCommand(ChangeTheme);
             AddProductCommand = new RelayCommand(AddProduct);
             AdjustCommand = new RelayCommand(Adjust);
@@ -237,6 +240,14 @@ namespace lab4_5
                 Product = product;
             }
         }
+        public void OpenEditWindow(Product selectedProduct)
+        {
+            if (selectedProduct == null) return;
+
+            EditProductWindow epw = new EditProductWindow(selectedProduct);
+            epw.ShowDialog();
+
+        }
         public void AddToCart(Product productToAdd)
         {
             if (productToAdd == null)
@@ -331,8 +342,7 @@ namespace lab4_5
                 }
             }
         }
-
-
+        
         private void ShowProductDetails(Product selectedProduct)
         {
             if (selectedProduct == null) return;
@@ -412,7 +422,7 @@ namespace lab4_5
         }
         public void ShowUsers()
         {
-            UsersWindow usersWindow = new UsersWindow(CurrentUser.Login);
+            UsersWindow usersWindow = new UsersWindow(CurrentUser);
             usersWindow.ShowDialog();
         }
         public void AddProduct()
@@ -428,43 +438,71 @@ namespace lab4_5
                 _undoStack.Push(new ActionItem("Add", newProd));
                 _redoStack.Clear();
 
-                //string jsonPath = "D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\products.json";
-                //string updatedJson = JsonConvert.SerializeObject(tmpProducts, Formatting.Indented);
-                //File.WriteAllText(jsonPath, updatedJson);
-                using(var connection = new SqlConnection(ConnectionString))
+                using (var connection = new SqlConnection(ConnectionString))
                 {
                     connection.Open();
                     using (var transaction = connection.BeginTransaction())
                     {
                         try
                         {
-                            var command = new SqlCommand("insert into Goods (Name, Description, Brand, ImagePath, Buy, DeleteCommand, Price) values (@Name, @Description, @Brand, @ImagePath, @Buy, @DeleteCommand, @Price)", connection, transaction);
-                            using (command)
-                            {
-                                command.Parameters.AddWithValue("@Name", newProd.Name);
-                                command.Parameters.AddWithValue("@Description", newProd.Description);
-                                command.Parameters.AddWithValue("@Brand", newProd.Brand);
-                                command.Parameters.AddWithValue("@ImagePath", newProd.ImagePath);
-                                command.Parameters.AddWithValue("@Buy", newProd.Buy);
-                                command.Parameters.AddWithValue("@DeleteCommand", newProd.Delete);
-                                command.Parameters.AddWithValue("@Price", newProd.Price);
+                            // Шаг 1: Получить или добавить бренд, получить его BrandId
+                            int brandId;
 
-                                command.ExecuteNonQuery();
+                            using (var checkBrandCmd = new SqlCommand("SELECT BrandId FROM Brands WHERE BrandName = @BrandName", connection, transaction))
+                            {
+                                checkBrandCmd.Parameters.AddWithValue("@BrandName", newProd.Brand);
+                                var result = checkBrandCmd.ExecuteScalar();
+
+                                if (result != null)
+                                {
+                                    brandId = Convert.ToInt32(result);
+                                }
+                                else
+                                {
+                                    using (var insertBrandCmd = new SqlCommand("INSERT INTO Brands (BrandName) OUTPUT INSERTED.BrandId VALUES (@BrandName)", connection, transaction))
+                                    {
+                                        insertBrandCmd.Parameters.AddWithValue("@BrandName", newProd.Brand);
+                                        brandId = (int)insertBrandCmd.ExecuteScalar();
+                                    }
+                                }
                             }
+
+                            // Шаг 2: Вставка нового товара
+                            var command = new SqlCommand(@"
+                        INSERT INTO Goods 
+                        (Name, Description, Brand, ImagePath, Buy, DeleteCommand, Price, BrandId, Composition) 
+                        VALUES 
+                        (@Name, @Description, @Brand, @ImagePath, @Buy, @DeleteCommand, @Price, @BrandId, @Composition)", connection, transaction);
+
+                            command.Parameters.AddWithValue("@Name", newProd.Name);
+                            command.Parameters.AddWithValue("@Description", newProd.Description);
+                            command.Parameters.AddWithValue("@Brand", newProd.Brand);
+                            command.Parameters.AddWithValue("@ImagePath", newProd.ImagePath);
+                            command.Parameters.AddWithValue("@Buy", newProd.Buy);
+                            command.Parameters.AddWithValue("@DeleteCommand", newProd.Delete);
+                            command.Parameters.AddWithValue("@Price", newProd.Price);
+                            command.Parameters.AddWithValue("@BrandId", brandId);
+                            command.Parameters.AddWithValue("@Composition", newProd.Composition ?? (object)DBNull.Value);
+
+                            command.ExecuteNonQuery();
+
                             transaction.Commit();
                         }
                         catch (Exception ex)
                         {
                             transaction.Rollback();
-                            MessageBox.Show(ex.Message);
+                            MessageBox.Show($"Ошибка при добавлении товара: {ex.Message}");
                         }
-                        
                     }
                 }
+
                 Products.Add(newProd);
+                tmpProducts = new ObservableCollection<Product>(Products);
+                tmpSearchProducts = new ObservableCollection<Product>(Products);
                 ApplyLocalizationToProducts();
             }
         }
+
 
         private void Clear()
         {

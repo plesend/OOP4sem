@@ -60,6 +60,12 @@
                             Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
                             Command="{Binding DataContext.RemoveProductCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="{Binding}" />
+                        <Button Content="Редактировать"
+        Style="{DynamicResource BuyButtonStyle}"
+        Height="20"
+        Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}"
+        Command="{Binding DataContext.OpenEditWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+        CommandParameter="{Binding}" />
                     </StackPanel>
                 </Border>
             </Button>
@@ -171,7 +177,6 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemContainerStyle>
                             <Style TargetType="ContentPresenter">
-                                <Setter Property="Height" Value="250" />
                                 <Setter Property="Width" Value="150" />
                                 <Setter Property="Margin" Value="10" />
                             </Style>

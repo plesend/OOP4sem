@@ -13,18 +13,25 @@
         ResizeMode="CanResize">
 
     <Viewbox Stretch="Uniform" StretchDirection="Both">
-        <Grid Margin="20">
+        <Grid >
             <Border Style="{DynamicResource MainBorderStyle}">
                 <StackPanel HorizontalAlignment="Center">
+
                     <TextBlock Text="{DynamicResource Editting}"
-                           Style="{DynamicResource BaseTextBlockStyle}"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,10" />
+                               Style="{DynamicResource BaseTextBlockStyle}"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,10" />
 
                     <Separator Style="{DynamicResource BaseSeparatorStyle}" Margin="0,0,0,10"/>
 
-                    <Image x:Name="ProfileImage" Source="{Binding Pfp}" Width="100" Height="100" Stretch="UniformToFill" Margin="0,0,0,20" ToolTip="Нажмите для изменения изображения">
+                    <Image x:Name="ProfileImage"
+                           Source="{Binding Pfp}"
+                           Width="100"
+                           Height="100"
+                           Stretch="UniformToFill"
+                           Margin="0,0,0,20"
+                           ToolTip="Нажмите для изменения изображения">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseLeftButtonDown">
                                 <i:InvokeCommandAction Command="{Binding ChangeProfileImageCommand}" />
@@ -32,17 +39,40 @@
                         </i:Interaction.Triggers>
                     </Image>
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}" HorizontalAlignment="Center" Text="{Binding CurrentUser.Username}"/>
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                               HorizontalAlignment="Center"
+                               Text="{Binding CurrentUser.Username}" />
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}" Text="{DynamicResource EditName}" />
-                    <TextBox Text="{Binding newUserName}" Style="{DynamicResource BaseTextBoxStyle}" />
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+                               Text="{DynamicResource EditName}" />
+                    <TextBox Text="{Binding newUserName}"
+                             Style="{DynamicResource BaseTextBoxStyle}" />
 
-                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}" Text="{DynamicResource EditPassword}" />
-                    <TextBox Text="{Binding newPassword}" Style="{DynamicResource BaseTextBoxStyle}"/>
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+           Text="Новый пароль" />
+                    <TextBox Text="{Binding newPassword}"
+         Style="{DynamicResource BaseTextBoxStyle}" />
 
-                    <Button Content="{DynamicResource Adjust}" Style="{DynamicResource SpecialButtonStyle}" Command="{Binding SaveCommand}"/>
+                    
 
-                    <Button Content="{DynamicResource Cancel}" Style="{DynamicResource SpecialButtonStyle}" Command="{Binding CloseCommand}"/>
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+           Text="Подтвердите новый пароль" />
+                    <TextBox Text="{Binding ConfirmPassword}"
+         Style="{DynamicResource BaseTextBoxStyle}" />
+
+                    <TextBlock Style="{DynamicResource BaseTextBlockStyle}"
+  Text="Старый пароль" />
+                    <TextBox Text="{Binding OldPassword}"
+Style="{DynamicResource BaseTextBoxStyle}" />
+
+
+                    <Button Content="{DynamicResource Adjust}"
+                            Style="{DynamicResource SpecialButtonStyle}"
+                            Command="{Binding SaveCommand}" />
+
+                    <Button Content="{DynamicResource Cancel}"
+                            Style="{DynamicResource SpecialButtonStyle}"
+                            Command="{Binding CloseCommand}" />
                 </StackPanel>
             </Border>
         </Grid>

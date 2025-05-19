@@ -1,61 +1,79 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Collections.ObjectModel;
 
 namespace lab4_5
 {
     public class Product : INotifyPropertyChanged
     {
-        public ObservableCollection<string> Reviews { get; set; } = new ObservableCollection<string>(); public int id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Brand { get; set; }
-        public string ImagePath { get; set; }
+        public ObservableCollection<string> Reviews { get; set; } = new ObservableCollection<string>();
+
+        public int id { get; set; } // Обычно ID не изменяется, поэтому можно оставить автосвойство.
+
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set { if (_name != value) { _name = value; OnPropertyChanged(); } }
+        }
+
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set { if (_description != value) { _description = value; OnPropertyChanged(); } }
+        }
+
+        private string _brand;
+        public string Brand
+        {
+            get => _brand;
+            set { if (_brand != value) { _brand = value; OnPropertyChanged(); } }
+        }
+
+        private string _imagePath;
+        public string ImagePath
+        {
+            get => _imagePath;
+            set { if (_imagePath != value) { _imagePath = value; OnPropertyChanged(); } }
+        }
 
         private string _buy;
         public string Buy
         {
-            get { return _buy; }
-            set
-            {
-                if (_buy != value)
-                {
-                    _buy = value;
-                    OnPropertyChanged();
-                }
-            }
+            get => _buy;
+            set { if (_buy != value) { _buy = value; OnPropertyChanged(); } }
         }
 
         private string _delete;
         public string Delete
         {
-            get { return _delete; }
-            set
-            {
-                if (_delete != value)
-                {
-                    _delete = value;
-                    OnPropertyChanged();
-                }
-            }
+            get => _delete;
+            set { if (_delete != value) { _delete = value; OnPropertyChanged(); } }
         }
 
+        private string _brandDescription = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
+        public string BrandDescription
+        {
+            get => _brandDescription;
+            set { if (_brandDescription != value) { _brandDescription = value; OnPropertyChanged(); } }
+        }
 
+        private string _composition = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
+        public string Composition
+        {
+            get => _composition;
+            set { if (_composition != value) { _composition = value; OnPropertyChanged(); } }
+        }
 
-        public string BrandDescription { get; set; } = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
-        public string Composition { get; set; } = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
-        public double Price { get; set; }
+        private double _price;
+        public double Price
+        {
+            get => _price;
+            set { if (_price != value) { _price = value; OnPropertyChanged(); } }
+        }
+
         public Product(int id, string name, string description, string brand, string imagePath, string buy, string delete, double price, string composition)
         {
             this.id = id;
@@ -68,7 +86,8 @@ namespace lab4_5
             Price = price;
             Composition = composition;
         }
-        public Product(string name, string description, string brand, string imagePath, string buy, string delete, double price)
+
+        public Product(string name, string description, string brand, string imagePath, string buy, string delete, double price, string composition)
         {
             Name = name;
             Description = description;
@@ -77,14 +96,13 @@ namespace lab4_5
             Buy = buy;
             Delete = delete;
             Price = price;
+            Composition = composition;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

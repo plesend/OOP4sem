@@ -1,27 +1,25 @@
 ﻿using lab4_5;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel;
 using System.Windows;
-using System;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
 
 public class AddProductViewModel : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 
-    private readonly MainWindow mainWindow;
-
     public string Name { get; set; }
     public string Type { get; set; }
     public string Brand { get; set; }
+    public string Composition { get; set; }
     public string PriceText { get; set; }
     public string ImagePath { get; set; }
+
     public Product newProductReturned { get; set; }
 
     public Action CloseAction { get; set; }
+
     public RelayCommand AddProductCommand { get; }
     public RelayCommand BrowseImageCommand { get; }
 
@@ -36,6 +34,7 @@ public class AddProductViewModel : INotifyPropertyChanged
         if (string.IsNullOrWhiteSpace(Name) ||
             string.IsNullOrWhiteSpace(Type) ||
             string.IsNullOrWhiteSpace(Brand) ||
+            string.IsNullOrWhiteSpace(Composition) ||
             string.IsNullOrWhiteSpace(PriceText) ||
             string.IsNullOrWhiteSpace(ImagePath))
         {
@@ -49,14 +48,7 @@ public class AddProductViewModel : INotifyPropertyChanged
             return;
         }
 
-        Product newProduct = new Product(Name, Type, Brand, ImagePath, "Купить", "Удалить", price);
-        //({
-        //    Name = Name,
-        //    Description = Type,
-        //    Brand = Brand,
-        //    ImagePath = ImagePath,
-        //    Price = price
-        //});
+        Product newProduct = new Product(Name, Type, Brand, ImagePath, "Купить", "Удалить", price, Composition);
 
         newProductReturned = newProduct;
         CloseAction?.Invoke();
@@ -77,8 +69,8 @@ public class AddProductViewModel : INotifyPropertyChanged
         }
     }
 
-    private void OnPropertyChanged(string name)
+    private void OnPropertyChanged(string propertyName)
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

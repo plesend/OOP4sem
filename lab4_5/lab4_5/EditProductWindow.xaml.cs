@@ -17,12 +17,12 @@ namespace lab4_5
     /// <summary>
     /// Логика взаимодействия для Window1.xaml
     /// </summary>
-    public partial class UsersWindow : Window
+    public partial class EditProductWindow : Window
     {
-        public UsersWindow(User currentUser)
+        public EditProductWindow(Product productToEdit)
         {
             InitializeComponent();
-            DataContext = new UserViewModel(currentUser);
+            DataContext = new EditProductViewModel(productToEdit);
         }
     }
 }

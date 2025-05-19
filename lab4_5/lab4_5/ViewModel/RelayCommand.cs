@@ -23,7 +23,6 @@ namespace lab4_5
             _canExecuteWithoutParam = canExecute;
         }
 
-        // Конструктор для методов с параметром object
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
             _executeWithParam = execute ?? throw new ArgumentNullException(nameof(execute));

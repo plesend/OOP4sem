@@ -64,15 +64,28 @@ namespace lab4_5
             }
         }
 
-        public string ErrorMessage
+        private string _oldPassword;
+        public string OldPassword
         {
-            get => _errorMessage;
+            get => _oldPassword;
             set
             {
-                _errorMessage = value;
+                _oldPassword = value;
                 OnPropertyChanged();
             }
         }
+
+        private string _confirmPassword;
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                _confirmPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         public ICommand SaveCommand { get; }
         public ICommand CloseCommand { get; }
@@ -93,80 +106,110 @@ namespace lab4_5
 
         private void Save()
         {
-            bool isPasswordChanged = !string.IsNullOrWhiteSpace(newPassword) && newPassword != CurrentUser.Password;
-
             if (string.IsNullOrWhiteSpace(newUserName))
             {
-                ErrorMessage = "Имя пользователя не может быть пустым.";
+                MessageBox.Show("Имя пользователя не может быть пустым.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
+            bool isPasswordChanged = !string.IsNullOrWhiteSpace(newPassword) && newPassword != CurrentUser.Password;
+
             if (isPasswordChanged)
             {
-                MessageBoxResult result = MessageBox.Show(
-                    "Вы действительно хотите изменить пароль?",
-                    "Подтверждение изменения пароля",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
-                if (result != MessageBoxResult.Yes)
+                if (string.IsNullOrWhiteSpace(OldPassword))
                 {
-                    ErrorMessage = "Изменение пароля отменено.";
+                    MessageBox.Show("Для изменения пароля необходимо указать текущий пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                string inputPassword = Microsoft.VisualBasic.Interaction.InputBox(
-                    "Введите текущий пароль для подтверждения:",
-                    "Подтверждение пароля",
-                    "");
-
-                if (inputPassword != CurrentUser.Password)
+                if (newPassword != ConfirmPassword)
                 {
-                    ErrorMessage = "Неверный текущий пароль.";
+                    MessageBox.Show("Новый пароль и подтверждение не совпадают.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-            }
 
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                try
                 {
-                    conn.Open();
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
 
-                    string updateQuery = @"
-                UPDATE Users
-                SET Username = @Username,
-                    Pfp = @Pfp" +
-                            (isPasswordChanged ? ", Password = @Password" : "") + @"
-                WHERE Id = @Id";
+                        string checkPassQuery = "SELECT Password FROM Users WHERE Id = @Id";
+                        SqlCommand checkCmd = new SqlCommand(checkPassQuery, conn);
+                        checkCmd.Parameters.AddWithValue("@Id", CurrentUser.Id);
+                        var dbPasswordObj = checkCmd.ExecuteScalar();
+                        string dbPassword = dbPasswordObj != null ? dbPasswordObj.ToString() : null;
 
-                    SqlCommand cmd = new SqlCommand(updateQuery, conn);
-                    cmd.Parameters.AddWithValue("@Username", newUserName);
-                    cmd.Parameters.AddWithValue("@Pfp", Pfp);
-                    cmd.Parameters.AddWithValue("@Id", CurrentUser.Id);
+                        if (dbPassword == null || dbPassword != OldPassword)
+                        {
+                            MessageBox.Show("Неверный текущий пароль.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
 
-                    if (isPasswordChanged)
-                        cmd.Parameters.AddWithValue("@Password", newPassword);
+                        string updateQuery = @"
+                    UPDATE Users
+                    SET Username = @Username,
+                        Pfp = @Pfp,
+                        Password = @Password
+                    WHERE Id = @Id";
 
-                    cmd.ExecuteNonQuery();
+                        SqlCommand updateCmd = new SqlCommand(updateQuery, conn);
+                        updateCmd.Parameters.AddWithValue("@Username", newUserName);
+                        updateCmd.Parameters.AddWithValue("@Pfp", Pfp);
+                        updateCmd.Parameters.AddWithValue("@Password", newPassword);
+                        updateCmd.Parameters.AddWithValue("@Id", CurrentUser.Id);
 
-                    CurrentUser.Username = newUserName;
-                    CurrentUser.Pfp = Pfp;
-                    if (isPasswordChanged)
+                        updateCmd.ExecuteNonQuery();
+
+                        CurrentUser.Username = newUserName;
+                        CurrentUser.Pfp = Pfp;
                         CurrentUser.Password = newPassword;
 
-                    ErrorMessage = "Данные успешно обновлены!";
-                    UserChanged?.Invoke(CurrentUser);
-                    CloseAction?.Invoke();
+                        MessageBox.Show("Данные успешно обновлены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        UserChanged?.Invoke(CurrentUser);
+                        CloseAction?.Invoke();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                ErrorMessage = $"Ошибка при сохранении: {ex.Message}";
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+
+                        string updateQuery = @"
+                    UPDATE Users
+                    SET Username = @Username,
+                        Pfp = @Pfp
+                    WHERE Id = @Id";
+
+                        SqlCommand cmd = new SqlCommand(updateQuery, conn);
+                        cmd.Parameters.AddWithValue("@Username", newUserName);
+                        cmd.Parameters.AddWithValue("@Pfp", Pfp);
+                        cmd.Parameters.AddWithValue("@Id", CurrentUser.Id);
+
+                        cmd.ExecuteNonQuery();
+
+                        CurrentUser.Username = newUserName;
+                        CurrentUser.Pfp = Pfp;
+
+                        MessageBox.Show("Данные успешно обновлены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                        UserChanged?.Invoke(CurrentUser);
+                        CloseAction?.Invoke();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
-
-
 
         private void Close()
         {

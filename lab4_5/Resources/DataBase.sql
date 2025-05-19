@@ -1,4 +1,4 @@
-CREATE DATABASE CosmeticShop;
+--CREATE DATABASE CosmeticShop;
 
 use CosmeticShop;
 
@@ -58,8 +58,6 @@ VALUES
 ('Maybelline SuperStay Matte Ink', 'Жидкая матовая помада', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline SuperStay Matte Ink.jpg', 'Купить', 'Удалить', 199, 2, 'Dimethicone, Isododecane, Trimethylsiloxysilicate, Silica Silylate, Disteardimonium Hectorite'),
 ('Essence Lash Princess Mascara', 'Тушь для ресниц', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg', 'Купить', 'Удалить', 145, 1, 'Aqua, Cera Alba, Acacia Senegal Gum, Stearic Acid, Palmitic Acid, Aminomethyl Propanol, Phenoxyethanol');
 
---drop table Users;
-
 CREATE TABLE Users (
     Id INT PRIMARY KEY IDENTITY(1,1),
     Role NVARCHAR(50) default 'Client',
@@ -68,13 +66,6 @@ CREATE TABLE Users (
     Password NVARCHAR(100),
     Pfp NVARCHAR(255) DEFAULT 'D:\лабораторные работы\ооп\lab4_5\lab4_5\Resources\DefaultPfp.png'
 );
-
---DELETE FROM Users
---WHERE Id IN (
---    SELECT TOP 1 Id
---    FROM Users
---    ORDER BY Id DESC
---);
 
 
 INSERT INTO Users (Role, Username, Login, Password, Pfp)
@@ -150,12 +141,12 @@ CREATE TABLE Reviews (
 );
 
 --DROP TABLE IF EXISTS OrderItems;
---DROP TABLE IF EXISTS Orders;
-
+--DROP TABLE IF EXISTS Reviews;
 --DROP TABLE IF EXISTS CartItems;
+--DROP TABLE IF EXISTS Orders;
 --DROP TABLE IF EXISTS Carts;
 
 --DROP TABLE IF EXISTS Goods;
+--DROP TABLE IF EXISTS Users;
 --DROP TABLE IF EXISTS Brands;
 
---DROP TABLE IF EXISTS Users;

@@ -14,9 +14,9 @@ namespace lab4_5
         private User _currentUser; 
         private string _newReviewText;
         private int _newReviewRating = 5;
+        public bool IsAdmin => _currentUser?.Role == "Admin";
 
         public ICommand SubmitReviewCommand { get; }
-
         public ICommand BuyCommand { get; }
         public ProductViewViewModel(User user)
         {
@@ -146,7 +146,6 @@ namespace lab4_5
                 MessageBox.Show("Ошибка при добавлении отзыва: " + ex.Message);
             }
         }
-
         public void AddToCart(Product productToAdd)
         {
             if (productToAdd == null) return;
