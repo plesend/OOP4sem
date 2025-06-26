@@ -79,7 +79,6 @@ class UserViewModel : INotifyPropertyChanged
                 command.ExecuteNonQuery();
             }
 
-            // Обновляем оригинальный объект
             SelectedUser.Username = userCopy.Username;
             SelectedUser.Password = userCopy.Password;
             SelectedUser.Pfp = userCopy.Pfp;

@@ -9,45 +9,14 @@ using static lab4_5.MainWindowViewModel;
 
 namespace lab4_5
 {
-    public class CartItemViewModel : INotifyPropertyChanged
-    {
-        public string ProductName { get; set; }
-        public string Brand { get; set; }
-        public double Price { get; set; }
-
-        private int _quantity;
-        public int Quantity
-        {
-            get => _quantity;
-            set
-            {
-                if (_quantity != value)
-                {
-                    _quantity = value;
-                    OnPropertyChanged(nameof(Quantity));
-                    OnPropertyChanged(nameof(Total));
-                }
-            }
-        }
-
-        public string ImagePath { get; set; }
-        public int ProductId { get; set; }
-        public int CartId { get; set; }
-
-        public double Total => Price * Quantity;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
     public class CartWindowViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<CartItemViewModel> CartItems { get; set; } = new();
+        public ObservableCollection<CartItem> CartItems { get; set; } = new();
         public double TotalAmount => CartItems.Sum(item => item.Total);
 
         public string connectionString = "Data source=WIN-0RRORC9T71J\\SQLEXPRESS;Initial Catalog=CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
         private int userId;
+        public bool CanCheckout => CartItems.Any();
 
         public ICommand RemoveProductFromCartCommand { get; }
         public ICommand ClearCartCommand { get; }
@@ -59,11 +28,11 @@ namespace lab4_5
         {
             userId = user.Id;
 
-            RemoveProductFromCartCommand = new RelayCommand<CartItemViewModel>(DelProductFromCart);
+            RemoveProductFromCartCommand = new RelayCommand<CartItem>(DelProductFromCart);
             ClearCartCommand = new RelayCommand(ClearCart);
             OpenOrderWindowCommand = new RelayCommand(OpenOrderWindow);
-            IncreaseQuantityCommand = new RelayCommand<CartItemViewModel>(IncreaseQuantity);
-            DecreaseQuantityCommand = new RelayCommand<CartItemViewModel>(DecreaseQuantity);
+            IncreaseQuantityCommand = new RelayCommand<CartItem>(IncreaseQuantity);
+            DecreaseQuantityCommand = new RelayCommand<CartItem>(DecreaseQuantity);
 
             LoadCartItems(user);
         }
@@ -91,7 +60,7 @@ namespace lab4_5
                     {
                         while (reader.Read())
                         {
-                            var item = new CartItemViewModel
+                            var item = new CartItem
                             {
                                 ProductId = Convert.ToInt32(reader["ProductId"]),
                                 CartId = Convert.ToInt32(reader["CartId"]),
@@ -110,18 +79,19 @@ namespace lab4_5
             }
 
             OnPropertyChanged(nameof(TotalAmount));
+            OnPropertyChanged(nameof(CanCheckout));
         }
 
         private void CartItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CartItemViewModel.Quantity) ||
-                e.PropertyName == nameof(CartItemViewModel.Total))
+            if (e.PropertyName == nameof(CartItem.Quantity) ||
+                e.PropertyName == nameof(CartItem.Total))
             {
                 OnPropertyChanged(nameof(TotalAmount));
             }
         }
 
-        public void IncreaseQuantity(CartItemViewModel item)
+        public void IncreaseQuantity(CartItem item)
         {
             if (item == null) return;
 
@@ -129,7 +99,7 @@ namespace lab4_5
             UpdateQuantityInDb(item);
         }
 
-        public void DecreaseQuantity(CartItemViewModel item)
+        public void DecreaseQuantity(CartItem item)
         {
             if (item == null || item.Quantity <= 1) return;
 
@@ -137,7 +107,7 @@ namespace lab4_5
             UpdateQuantityInDb(item);
         }
 
-        private void UpdateQuantityInDb(CartItemViewModel item)
+        private void UpdateQuantityInDb(CartItem item)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -152,7 +122,7 @@ namespace lab4_5
             }
         }
 
-        public void DelProductFromCart(CartItemViewModel itemToRemove)
+        public void DelProductFromCart(CartItem itemToRemove)
         {
             if (itemToRemove == null) return;
 
@@ -179,6 +149,7 @@ namespace lab4_5
                             itemToRemove.PropertyChanged -= CartItem_PropertyChanged;
                             CartItems.Remove(itemToRemove);
                             OnPropertyChanged(nameof(TotalAmount));
+                            OnPropertyChanged(nameof(CanCheckout));
                         }
                         else
                         {
@@ -227,6 +198,7 @@ namespace lab4_5
                         CartItems.Clear();
                         MessageBox.Show("Корзина очищена");
                         OnPropertyChanged(nameof(TotalAmount));
+                        OnPropertyChanged(nameof(CanCheckout));
                     }
                     catch (Exception ex)
                     {

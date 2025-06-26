@@ -5,11 +5,16 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Configuration;
 
 namespace lab4_5
 {
     class ProductViewViewModel : INotifyPropertyChanged
     {
+        string connectionStringEF = ConfigurationManager.ConnectionStrings["CosmeticShopConnection"].ConnectionString;
+
         private Product _product;
         private User _currentUser; 
         private string _newReviewText;
@@ -38,8 +43,6 @@ namespace lab4_5
                     OnPropertyChanged(nameof(Description));
                     OnPropertyChanged(nameof(Brand));
                     OnPropertyChanged(nameof(ImagePath));
-                    OnPropertyChanged(nameof(Buy));
-                    OnPropertyChanged(nameof(Delete));
                     OnPropertyChanged(nameof(Price));
                     OnPropertyChanged(nameof(Composition));
 
@@ -54,8 +57,6 @@ namespace lab4_5
         public string Description => Product?.Description;
         public string Brand => Product?.Brand;
         public string ImagePath => Product?.ImagePath;
-        public string Buy => Product?.Buy;
-        public string Delete => Product?.Delete;
         public double Price => Product?.Price ?? 0;
         public string Composition => Product?.Composition;
 
@@ -91,23 +92,19 @@ namespace lab4_5
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    string query = @"SELECT Rating, ReviewText FROM Reviews WHERE ProductId = @ProductId ORDER BY ReviewDate DESC";
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@ProductId", Product.id);
-                        connection.Open();
+                var optionsBuilder = new DbContextOptionsBuilder<CosmeticShopReviewsContext>();
+                optionsBuilder.UseSqlServer(connectionStringEF);
 
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                int rating = reader.GetInt32(0);
-                                string text = reader.GetString(1);
-                                Product.Reviews.Add($"{rating}★: {text}");
-                            }
-                        }
+                using (var context = new CosmeticShopReviewsContext(optionsBuilder.Options))
+                {
+                    var reviews = context.Reviews
+                        .Where(r => r.ProductId == Product.id)
+                        .OrderByDescending(r => r.ReviewDate)
+                        .ToList();
+
+                    foreach (var review in reviews)
+                    {
+                        Product.Reviews.Add($"{review.Rating}★: {review.ReviewText}");
                     }
                 }
             }
@@ -117,24 +114,27 @@ namespace lab4_5
             }
         }
 
+
         private void SubmitReview()
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    string query = @"INSERT INTO Reviews (UserId, ProductId, Rating, ReviewText)
-                                     VALUES (@UserId, @ProductId, @Rating, @ReviewText)";
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        command.Parameters.AddWithValue("@UserId", _currentUser.Id); 
-                        command.Parameters.AddWithValue("@ProductId", Product.id);
-                        command.Parameters.AddWithValue("@Rating", NewReviewRating);
-                        command.Parameters.AddWithValue("@ReviewText", NewReviewText);
+                var optionsBuilder = new DbContextOptionsBuilder<CosmeticShopReviewsContext>();
+                optionsBuilder.UseSqlServer(connectionStringEF);
 
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                    }
+                using (var context = new CosmeticShopReviewsContext(optionsBuilder.Options))
+                {
+                    var review = new Review
+                    {
+                        UserId = _currentUser.Id,
+                        ProductId = Product.id,
+                        Rating = NewReviewRating,
+                        ReviewText = NewReviewText,
+                        ReviewDate = DateTime.Now 
+                    };
+
+                    context.Reviews.Add(review);
+                    context.SaveChanges();
                 }
 
                 Product.Reviews.Add($"{NewReviewRating}★: {NewReviewText}");
@@ -146,6 +146,7 @@ namespace lab4_5
                 MessageBox.Show("Ошибка при добавлении отзыва: " + ex.Message);
             }
         }
+
         public void AddToCart(Product productToAdd)
         {
             if (productToAdd == null) return;

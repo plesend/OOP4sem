@@ -42,13 +42,20 @@ public class AddProductViewModel : INotifyPropertyChanged
             return;
         }
 
+        string[] allowedBrands = { "Essence", "NYX", "Revolution", "Maybelline", "L'OREAL" };
+        if (Array.IndexOf(allowedBrands, Brand.Trim()) == -1)
+        {
+            MessageBox.Show("Допустимые бренды: Essence, NYX, Revolution, Maybelline, L'OREAL.");
+            return;
+        }
+
         if (!double.TryParse(PriceText, out double price))
         {
             MessageBox.Show("Цена должна быть числом.");
             return;
         }
 
-        Product newProduct = new Product(Name, Type, Brand, ImagePath, "Купить", "Удалить", price, Composition);
+        Product newProduct = new Product(Name, Type, Brand, ImagePath, price, Composition);
 
         newProductReturned = newProduct;
         CloseAction?.Invoke();

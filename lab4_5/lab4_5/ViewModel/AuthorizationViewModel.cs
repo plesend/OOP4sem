@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Data.SqlClient; 
-using System.Configuration;
+using System.Windows.Input;
+using System.Data.SqlClient;
 
 namespace lab4_5
 {
@@ -51,9 +45,9 @@ namespace lab4_5
                 connection.Open();
 
                 string sql = @"
-            SELECT * FROM Users 
-            WHERE Login COLLATE Latin1_General_BIN = @login 
-              AND Password COLLATE Latin1_General_BIN = @password";
+                    SELECT * FROM Users 
+                    WHERE Login COLLATE Latin1_General_BIN = @login 
+                      AND Password COLLATE Latin1_General_BIN = @password";
 
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -87,8 +81,7 @@ namespace lab4_5
             }
         }
 
-
-        public void OpenRegistration()
+        private void OpenRegistration(object obj)
         {
             RegistrationWindow rw = new RegistrationWindow();
             rw.ShowDialog();

@@ -39,20 +39,6 @@ namespace lab4_5
             set { if (_imagePath != value) { _imagePath = value; OnPropertyChanged(); } }
         }
 
-        private string _buy;
-        public string Buy
-        {
-            get => _buy;
-            set { if (_buy != value) { _buy = value; OnPropertyChanged(); } }
-        }
-
-        private string _delete;
-        public string Delete
-        {
-            get => _delete;
-            set { if (_delete != value) { _delete = value; OnPropertyChanged(); } }
-        }
-
         private string _brandDescription = "Lorem ipsum dolor sit amet. Aut molestiae incidunt ea eius possimus At laboriosam rerum At fugit veritatis. Hic debitis veritatis et galisum nobis vel dolorum numquam ut provident ipsum et exercitationem vero eos temporibus dolore. ";
         public string BrandDescription
         {
@@ -74,30 +60,28 @@ namespace lab4_5
             set { if (_price != value) { _price = value; OnPropertyChanged(); } }
         }
 
-        public Product(int id, string name, string description, string brand, string imagePath, string buy, string delete, double price, string composition)
+        public Product(int id, string name, string description, string brand, string imagePath, double price, string composition)
         {
             this.id = id;
             Name = name;
             Description = description;
             Brand = brand;
             ImagePath = imagePath;
-            Buy = buy;
-            Delete = delete;
             Price = price;
             Composition = composition;
         }
 
-        public Product(string name, string description, string brand, string imagePath, string buy, string delete, double price, string composition)
+        public Product(string name, string description, string brand, string imagePath, double price, string composition)
         {
             Name = name;
             Description = description;
             Brand = brand;
             ImagePath = imagePath;
-            Buy = buy;
-            Delete = delete;
             Price = price;
             Composition = composition;
         }
+
+        public Product() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -70,6 +70,20 @@
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
     </Style>
 
+    <Style x:Key="BasePasswordBoxStyle" TargetType="PasswordBox">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+
+
+
     <!-- Стиль для ComboBox -->
     <Style x:Key="BaseComboBoxStyle" TargetType="ComboBox">
         <Setter Property="FontSize" Value="14"/>

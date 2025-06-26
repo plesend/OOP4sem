@@ -11,55 +11,30 @@ namespace lab4_5
 {
     public class EditProductViewModel : INotifyPropertyChanged
     {
-        private Product _product;
+        private readonly string connectionString =
+            "Data Source=WIN-0RRORC9T71J\\SQLEXPRESS;Initial Catalog=CosmeticShop;Integrated Security=True;TrustServerCertificate=True;";
+
+        private Product _originalProduct;
         public Product UpdatedProduct { get; set; }
-        public Product Product
-        {
-            get => _product;
-            set { _product = value; OnPropertyChanged(); }
-        }
-
-        public string PriceText
-        {
-            get => Product?.Price.ToString("F2");
-            set
-            {
-                if (double.TryParse(value, out double price))
-                {
-                    if (Product.Price != price)
-                    {
-                        Product.Price = price;
-                        OnPropertyChanged();
-                    }
-                }
-                else if (!string.IsNullOrEmpty(value))
-                {
-                    MessageBox.Show("Цена должна быть числом.", "Ошибка ввода", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
-        }
-
-        public string ImagePath
-        {
-            get => Product?.ImagePath;
-            set
-            {
-                if (Product != null && Product.ImagePath != value)
-                {
-                    Product.ImagePath = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         public ICommand BrowseImageCommand { get; }
         public ICommand SaveProductCommand { get; }
 
-        private readonly string connectionString = "Data Source=WIN-0RRORC9T71J\\SQLEXPRESS;Initial Catalog=CosmeticShop;Integrated Security=True;TrustServerCertificate=True;";
-
         public EditProductViewModel(Product product)
         {
-            Product = product ?? throw new ArgumentNullException(nameof(product));
+            _originalProduct = product ?? throw new ArgumentNullException(nameof(product));
+
+            UpdatedProduct = new Product
+            {
+                id = product.id,
+                Name = product.Name,
+                Description = product.Description,
+                Brand = product.Brand,
+                Composition = product.Composition,
+                ImagePath = product.ImagePath,
+                Price = product.Price
+            };
+
             BrowseImageCommand = new RelayCommand(_ => BrowseImage());
             SaveProductCommand = new RelayCommand(_ => SaveProduct());
         }
@@ -73,29 +48,32 @@ namespace lab4_5
 
             if (dlg.ShowDialog() == true)
             {
-                ImagePath = dlg.FileName;
+                UpdatedProduct.ImagePath = dlg.FileName;
+                OnPropertyChanged(nameof(UpdatedProduct));
             }
         }
 
         private void SaveProduct()
         {
-            if (Product == null || Product.id == 0)
+            if (string.IsNullOrWhiteSpace(UpdatedProduct.Name) ||
+                string.IsNullOrWhiteSpace(UpdatedProduct.Brand) ||
+                string.IsNullOrWhiteSpace(UpdatedProduct.ImagePath))
             {
-                MessageBox.Show("Ошибка: Товар не выбран.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Пожалуйста, заполните обязательные поля: название, бренд и путь к изображению.",
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(Product.Name) ||
-                string.IsNullOrWhiteSpace(Product.Brand) ||
-                string.IsNullOrWhiteSpace(Product.ImagePath))
+            if (UpdatedProduct.Price <= 0)
             {
-                MessageBox.Show("Пожалуйста, заполните обязательные поля: название, бренд и путь к изображению.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Цена должна быть положительным числом.",
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            if (Product.Price <= 0)
+            string[] allowedBrands = { "Essence", "NYX", "Revolution", "Maybelline", "L'OREAL" };
+            if (Array.IndexOf(allowedBrands, UpdatedProduct.Brand.Trim()) == -1)
             {
-                MessageBox.Show("Цена должна быть положительным числом.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Допустимые бренды: Essence, NYX, Revolution, Maybelline, L'OREAL.");
                 return;
             }
 
@@ -110,7 +88,7 @@ namespace lab4_5
                     int brandId;
                     using (var checkBrandCmd = new SqlCommand("SELECT BrandId FROM Brands WHERE BrandName = @BrandName", conn, transaction))
                     {
-                        checkBrandCmd.Parameters.AddWithValue("@BrandName", Product.Brand);
+                        checkBrandCmd.Parameters.AddWithValue("@BrandName", UpdatedProduct.Brand);
                         var result = checkBrandCmd.ExecuteScalar();
 
                         if (result != null)
@@ -121,36 +99,43 @@ namespace lab4_5
                         {
                             using var insertBrandCmd = new SqlCommand(
                                 "INSERT INTO Brands (BrandName) OUTPUT INSERTED.BrandId VALUES (@BrandName)", conn, transaction);
-                            insertBrandCmd.Parameters.AddWithValue("@BrandName", Product.Brand);
+                            insertBrandCmd.Parameters.AddWithValue("@BrandName", UpdatedProduct.Brand);
                             brandId = (int)insertBrandCmd.ExecuteScalar();
                         }
                     }
 
-                    // Обновление товара
                     const string updateQuery = @"
-                UPDATE Goods
-                SET Name = @Name,
-                    Description = @Description,
-                    Brand = @Brand,
-                    ImagePath = @ImagePath,
-                    Price = @Price,
-                    Composition = @Composition,
-                    BrandId = @BrandId
-                WHERE Id = @Id";
+                        UPDATE Goods
+                        SET Name = @Name,
+                            Description = @Description,
+                            Brand = @Brand,
+                            ImagePath = @ImagePath,
+                            Price = @Price,
+                            Composition = @Composition,
+                            BrandId = @BrandId
+                        WHERE Id = @Id";
 
                     using var cmd = new SqlCommand(updateQuery, conn, transaction);
-                    cmd.Parameters.AddWithValue("@Id", Product.id);
-                    cmd.Parameters.AddWithValue("@Name", Product.Name);
-                    cmd.Parameters.AddWithValue("@Description", (object?)Product.Description ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Brand", (object?)Product.Brand ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@ImagePath", (object?)Product.ImagePath ?? DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Price", Product.Price);
-                    cmd.Parameters.AddWithValue("@Composition", (object?)Product.Composition ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Id", UpdatedProduct.id);
+                    cmd.Parameters.AddWithValue("@Name", UpdatedProduct.Name);
+                    cmd.Parameters.AddWithValue("@Description", (object?)UpdatedProduct.Description ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Brand", UpdatedProduct.Brand);
+                    cmd.Parameters.AddWithValue("@ImagePath", UpdatedProduct.ImagePath);
+                    cmd.Parameters.AddWithValue("@Price", UpdatedProduct.Price);
+                    cmd.Parameters.AddWithValue("@Composition", (object?)UpdatedProduct.Composition ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@BrandId", brandId);
 
                     cmd.ExecuteNonQuery();
 
                     transaction.Commit();
+
+                    // Сохраняем в оригинальный объект
+                    _originalProduct.Name = UpdatedProduct.Name;
+                    _originalProduct.Description = UpdatedProduct.Description;
+                    _originalProduct.Brand = UpdatedProduct.Brand;
+                    _originalProduct.ImagePath = UpdatedProduct.ImagePath;
+                    _originalProduct.Price = UpdatedProduct.Price;
+                    _originalProduct.Composition = UpdatedProduct.Composition;
 
                     MessageBox.Show("Товар успешно обновлён.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -171,8 +156,6 @@ namespace lab4_5
                 MessageBox.Show("Ошибка при подключении к базе данных: " + ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string prop = null)

@@ -20,11 +20,45 @@ namespace lab4_5
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<Product> _Products;
-        public ObservableCollection<Product> Products { get => _Products;
-            set { _Products = value; OnPropertyChanged(); } }
+        public ObservableCollection<Product> Products
+        {
+            get => _Products;
+            set
+            {
+                if (_Products != value)
+                {
+                    _Products = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public ObservableCollection<Product> tmpProducts { get; set; }
-        public ObservableCollection<Product> tmpSearchProducts { get; set; }
+        private ObservableCollection<Product> _tmpProducts;
+        public ObservableCollection<Product> tmpProducts
+        {
+            get => _tmpProducts;
+            set
+            {
+                if (_tmpProducts != value)
+                {
+                    _tmpProducts = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private ObservableCollection<Product> _tmpSearchProducts;
+        public ObservableCollection<Product> tmpSearchProducts
+        {
+            get => _tmpSearchProducts;
+            set
+            {
+                if (_tmpSearchProducts != value)
+                {
+                    _tmpSearchProducts = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         private ObservableCollection<Product> _Cart = new ObservableCollection<Product>();
         public ObservableCollection<Product> Cart
@@ -40,6 +74,7 @@ namespace lab4_5
         public bool IsAdmin => CurrentUser?.Role == "Admin";
         public Product productToRemove { get; set; }
         private Product _selectedProduct;
+
         public Product SelectedProduct
         {
             get => _selectedProduct;
@@ -110,7 +145,7 @@ namespace lab4_5
             AddProductCommand = new RelayCommand(AddProduct);
             AdjustCommand = new RelayCommand(Adjust);
             ClearCommand = new RelayCommand(Clear);
-            ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
+            //ChangeLanguageCommand = new RelayCommand(ChangeLanguage);
             SearchCommand = new RelayCommand(Search);
             ShowUsersCommand = new RelayCommand(ShowUsers);
             ShowProductViewCommand = new RelayCommand<Product>(ShowProductDetails);
@@ -119,8 +154,6 @@ namespace lab4_5
             LoadProducts();
             tmpProducts = new ObservableCollection<Product>(Products);
             tmpSearchProducts = new ObservableCollection<Product>(Products);
-
-            ApplyLocalizationToProducts();
 
             _searchDebounceTimer = new DispatcherTimer
             {
@@ -157,8 +190,6 @@ namespace lab4_5
                             description: reader["Description"].ToString(),
                             brand: reader["Brand"].ToString(),
                             imagePath: reader["ImagePath"].ToString(),
-                            buy: reader["Buy"].ToString(),
-                            delete: reader["DeleteCommand"].ToString(),
                             price: reader.GetDouble(reader.GetOrdinal("Price")),
                             composition: reader.IsDBNull(reader.GetOrdinal("Composition")) ? "" : reader.GetString(reader.GetOrdinal("Composition"))
                         );
@@ -313,16 +344,6 @@ namespace lab4_5
         };
 
         
-        private void ApplyLocalizationToProducts()
-        {
-            string localizedBuy = (string)Application.Current.Resources["Buy"];
-            string localizedDelete = (string)Application.Current.Resources["Delete"];
-            foreach (var product in Products)
-            {
-                product.Buy = localizedBuy;
-                product.Delete = localizedDelete;
-            }
-        }
         private void ChangeTheme()
         {
             string themePath = _themes[_currentThemeIndex];
@@ -356,12 +377,12 @@ namespace lab4_5
             int priceTo = int.TryParse(ToPrice, out int result1) ? result1 : 9999;
             string BrandSort = Brand;
 
-
             var sorted = tmpProducts
                 .Where(p => (string.IsNullOrEmpty(BrandSort) || BrandSort == "Все" || p.Brand == BrandSort) &&
                     p.Price >= priceFrom && p.Price <= priceTo)
                 .ToList();
             Products = new ObservableCollection<Product>(sorted);
+            tmpProducts = new ObservableCollection<Product>(sorted);
             tmpSearchProducts = new ObservableCollection<Product>(sorted);
         }
         public void ShowUsers()
@@ -412,16 +433,14 @@ namespace lab4_5
 
                             var command = new SqlCommand(@"
                         INSERT INTO Goods 
-                        (Name, Description, Brand, ImagePath, Buy, DeleteCommand, Price, BrandId, Composition) 
+                        (Name, Description, Brand, ImagePath, Price, BrandId, Composition) 
                         VALUES 
-                        (@Name, @Description, @Brand, @ImagePath, @Buy, @DeleteCommand, @Price, @BrandId, @Composition)", connection, transaction);
+                        (@Name, @Description, @Brand, @ImagePath, @Price, @BrandId, @Composition)", connection, transaction);
 
                             command.Parameters.AddWithValue("@Name", newProd.Name);
                             command.Parameters.AddWithValue("@Description", newProd.Description);
                             command.Parameters.AddWithValue("@Brand", newProd.Brand);
                             command.Parameters.AddWithValue("@ImagePath", newProd.ImagePath);
-                            command.Parameters.AddWithValue("@Buy", newProd.Buy);
-                            command.Parameters.AddWithValue("@DeleteCommand", newProd.Delete);
                             command.Parameters.AddWithValue("@Price", newProd.Price);
                             command.Parameters.AddWithValue("@BrandId", brandId);
                             command.Parameters.AddWithValue("@Composition", newProd.Composition ?? (object)DBNull.Value);
@@ -441,17 +460,21 @@ namespace lab4_5
                 Products.Add(newProd);
                 tmpProducts = new ObservableCollection<Product>(Products);
                 tmpSearchProducts = new ObservableCollection<Product>(Products);
-                ApplyLocalizationToProducts();
             }
         }
 
 
         private void Clear()
         {
-            Products = tmpProducts;
             FromPrice = string.Empty;
             ToPrice = string.Empty;
             SelectedBrandIndex = 0;
+            Brand = null;
+            SearchBox = string.Empty;
+
+            Products = new ObservableCollection<Product>(tmpProducts);
+
+            tmpSearchProducts = new ObservableCollection<Product>(tmpProducts);
         }
 
         public void SearchProduct()
@@ -480,36 +503,6 @@ namespace lab4_5
         public void Search()
         {
             SearchProduct();
-        }
-
-        private string currentLanguage = "ru";
-        private void ChangeLanguage()
-        {
-            string newLang = currentLanguage == "ru" ? "eng" : "ru";
-            string newDictPath = $"D:\\лабораторные работы\\ооп\\lab4_5\\lab4_5\\Resources\\Resources.{newLang}.xaml";
-
-            var newDict = new ResourceDictionary
-            {
-                Source = new Uri(newDictPath, UriKind.Absolute)
-            };
-
-            var currentLang = Application.Current.Resources.MergedDictionaries
-      .FirstOrDefault(d => d.Source != null && d.Source.ToString().Contains("Resources"));
-
-            if (currentLang != null)
-            {
-                Application.Current.Resources.MergedDictionaries.Remove(currentLang);
-            }
-
-            Application.Current.Resources.MergedDictionaries.Add(newDict);
-
-            string localizedBuy = (string)Application.Current.Resources["Buy"];
-            foreach (var product in Products)
-            {
-                product.Buy = localizedBuy; 
-            }
-
-            currentLanguage = newLang;
         }
 
         public void DelProduct(Product productToRemove)
@@ -555,9 +548,20 @@ namespace lab4_5
                             }
                         }
                     }
+                    UpdateTmpCollections();
                 }
             }
+            
         }
+
+        private void UpdateTmpCollections()
+        {
+            tmpProducts = new ObservableCollection<Product>(Products);
+            tmpSearchProducts = new ObservableCollection<Product>(Products);
+            OnPropertyChanged(nameof(tmpProducts));
+            OnPropertyChanged(nameof(tmpSearchProducts));
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {

@@ -27,8 +27,6 @@ CREATE TABLE Goods (
     Description NVARCHAR(MAX),
     Brand NVARCHAR(MAX),
     ImagePath NVARCHAR(MAX),
-    Buy NVARCHAR(MAX),
-    DeleteCommand NVARCHAR(MAX),
     Price FLOAT,
     BrandId INT,
     Composition NVARCHAR(MAX),
@@ -43,20 +41,20 @@ CREATE TABLE Goods (
 --);
 
 
-INSERT INTO Goods(Name, Description, Brand, ImagePath, Buy, DeleteCommand, Price, BrandId, Composition)
+INSERT INTO Goods(Name, Description, Brand, ImagePath, Price, BrandId, Composition)
 VALUES
-('Essence gelly-grip primer', 'Праймер', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/essence-primer-jelly-grip.jpg', 'Купить', 'Удалить', 123, 1, 'Aqua, Glycerin, Propylene Glycol, Carbomer, Panthenol, Sodium Hydroxide, Phenoxyethanol'),
-('L''OREAL PARIS panorama', 'Тушь для ресниц', 'L''OREAL', 'D:/лабораторные работы/ооп/lab4_5/pics/L''OREAL-PARIS-panorama.jpg', 'Купить', 'Удалить', 245, 4, 'Water, Paraffin, Cera Alba, Stearic Acid, Acacia Senegal Gum, Triethanolamine, Phenoxyethanol'),
-('Maybelline Fit Me Matte', 'Праймер', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline-Fit-Me-Matte.jpg', 'Купить', 'Удалить', 189, 2, 'Dimethicone, Isododecane, Cyclopentasiloxane, Silica, Disteardimonium Hectorite, Propylene Carbonate'),
-('NYX HD Studio Photogenic', 'Консилер', 'NYX', 'D:/лабораторные работы/ооп/lab4_5/pics/NYX HD Studio Photogenic.jpg', 'Купить', 'Удалить', 210, 3, 'Water, Cyclopentasiloxane, Glycerin, Dimethicone, Talc, Sodium Chloride, Tocopheryl Acetate'),
-('Revolution Banana Powder', 'Пудра', 'Revolution', 'D:/лабораторные работы/ооп/lab4_5/pics/Revolution Banana Powder.jpg', 'Купить', 'Удалить', 275, 5, 'Talc, Mica, Silica, Kaolin, Magnesium Stearate, Dimethicone, Ethylhexylglycerin'),
-('L''OREAL PARIS Infallible 24H', 'Тональный крем', 'L''OREAL', 'D:/лабораторные работы/ооп/lab4_5/pics/L''OREAL PARIS Infallible 24H Fresh Wear Foundation.jpg', 'Купить', 'Удалить', 390, 4, 'Cyclopentasiloxane, Aqua, Alcohol Denat, PEG-10 Dimethicone, Nylon-12, Butylene Glycol, Tocopherol'),
-('Maybelline Lash Sensational Sky High', 'Тушь для ресниц', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline Lash Sensational Sky High.jpg', 'Купить', 'Удалить', 198, 2, 'Aqua, Synthetic Beeswax, Styrene/Acrylates Copolymer, Paraffin, Glycerin, Polyvinyl Alcohol, Panthenol'),
-('Essence Stay All Day 16h Foundation', 'Тональный крем', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/Essence Stay All Day 16h Foundation.jpg', 'Купить', 'Удалить', 165, 1, 'Aqua, Cyclopentasiloxane, Talc, Glycerin, PEG-10 Dimethicone, Disteardimonium Hectorite, Phenoxyethanol'),
-('NYX Can''t Stop Won''t Stop Setting Powder', 'Фиксирующая пудра', 'NYX', 'D:/лабораторные работы/ооп/lab4_5/pics/NYX Can''t Stop Won''t Stop Setting Powder.jpg', 'Купить', 'Удалить', 223, 3, 'Silica, Talc, Dimethicone, Caprylyl Glycol, Hexylene Glycol, Tocopheryl Acetate'),
-('Revolution Conceal & Define Concealer', 'Консилер', 'Revolution', 'D:/лабораторные работы/ооп/lab4_5/pics/Revolution Conceal & Define Concealer.jpg', 'Купить', 'Удалить', 155, 5, 'Aqua, Cyclopentasiloxane, Propylene Glycol, Talc, PEG-10 Dimethicone, Phenoxyethanol'),
-('Maybelline SuperStay Matte Ink', 'Жидкая матовая помада', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline SuperStay Matte Ink.jpg', 'Купить', 'Удалить', 199, 2, 'Dimethicone, Isododecane, Trimethylsiloxysilicate, Silica Silylate, Disteardimonium Hectorite'),
-('Essence Lash Princess Mascara', 'Тушь для ресниц', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg', 'Купить', 'Удалить', 145, 1, 'Aqua, Cera Alba, Acacia Senegal Gum, Stearic Acid, Palmitic Acid, Aminomethyl Propanol, Phenoxyethanol');
+('Essence gelly-grip primer', 'Праймер', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/essence-primer-jelly-grip.jpg', 123, 1, 'Aqua, Glycerin, Propylene Glycol, Carbomer, Panthenol, Sodium Hydroxide, Phenoxyethanol'),
+('L''OREAL PARIS panorama', 'Тушь для ресниц', 'L''OREAL', 'D:/лабораторные работы/ооп/lab4_5/pics/L''OREAL-PARIS-panorama.jpg', 245, 4, 'Water, Paraffin, Cera Alba, Stearic Acid, Acacia Senegal Gum, Triethanolamine, Phenoxyethanol'),
+('Maybelline Fit Me Matte', 'Праймер', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline-Fit-Me-Matte.jpg', 189, 2, 'Dimethicone, Isododecane, Cyclopentasiloxane, Silica, Disteardimonium Hectorite, Propylene Carbonate'),
+('NYX HD Studio Photogenic', 'Консилер', 'NYX', 'D:/лабораторные работы/ооп/lab4_5/pics/NYX HD Studio Photogenic.jpg', 210, 3, 'Water, Cyclopentasiloxane, Glycerin, Dimethicone, Talc, Sodium Chloride, Tocopheryl Acetate'),
+('Revolution Banana Powder', 'Пудра', 'Revolution', 'D:/лабораторные работы/ооп/lab4_5/pics/Revolution Banana Powder.jpg', 275, 5, 'Talc, Mica, Silica, Kaolin, Magnesium Stearate, Dimethicone, Ethylhexylglycerin'),
+('L''OREAL PARIS Infallible 24H', 'Тональный крем', 'L''OREAL', 'D:/лабораторные работы/ооп/lab4_5/pics/L''OREAL PARIS Infallible 24H Fresh Wear Foundation.jpg', 390, 4, 'Cyclopentasiloxane, Aqua, Alcohol Denat, PEG-10 Dimethicone, Nylon-12, Butylene Glycol, Tocopherol'),
+('Maybelline Lash Sensational Sky High', 'Тушь для ресниц', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline Lash Sensational Sky High.jpg', 198, 2, 'Aqua, Synthetic Beeswax, Styrene/Acrylates Copolymer, Paraffin, Glycerin, Polyvinyl Alcohol, Panthenol'),
+('Essence Stay All Day 16h Foundation', 'Тональный крем', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/Essence Stay All Day 16h Foundation.jpg', 165, 1, 'Aqua, Cyclopentasiloxane, Talc, Glycerin, PEG-10 Dimethicone, Disteardimonium Hectorite, Phenoxyethanol'),
+('NYX Can''t Stop Won''t Stop Setting Powder', 'Фиксирующая пудра', 'NYX', 'D:/лабораторные работы/ооп/lab4_5/pics/NYX Can''t Stop Won''t Stop Setting Powder.jpg', 223, 3, 'Silica, Talc, Dimethicone, Caprylyl Glycol, Hexylene Glycol, Tocopheryl Acetate'),
+('Revolution Conceal & Define Concealer', 'Консилер', 'Revolution', 'D:/лабораторные работы/ооп/lab4_5/pics/Revolution Conceal & Define Concealer.jpg', 155, 5, 'Aqua, Cyclopentasiloxane, Propylene Glycol, Talc, PEG-10 Dimethicone, Phenoxyethanol'),
+('Maybelline SuperStay Matte Ink', 'Жидкая матовая помада', 'Maybelline', 'D:/лабораторные работы/ооп/lab4_5/pics/Maybelline SuperStay Matte Ink.jpg', 199, 2, 'Dimethicone, Isododecane, Trimethylsiloxysilicate, Silica Silylate, Disteardimonium Hectorite'),
+('Essence Lash Princess Mascara', 'Тушь для ресниц', 'Essence', 'D:/лабораторные работы/ооп/lab4_5/pics/Essence Lash Princess False Lash Effect Mascara.jpg', 145, 1, 'Aqua, Cera Alba, Acacia Senegal Gum, Stearic Acid, Palmitic Acid, Aminomethyl Propanol, Phenoxyethanol');
 
 CREATE TABLE Users (
     Id INT PRIMARY KEY IDENTITY(1,1),

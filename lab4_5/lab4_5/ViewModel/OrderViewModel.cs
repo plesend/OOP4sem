@@ -131,7 +131,7 @@ namespace lab4_5
             }
         }
 
-        public ObservableCollection<CartItemViewModel> CartItems { get; set; }
+        public ObservableCollection<CartItem> CartItems { get; set; }
 
         public ICommand ConfirmOrderCommand { get; }
 
@@ -139,7 +139,7 @@ namespace lab4_5
 
         private string connectionString = "Data source=WIN-0RRORC9T71J\\SQLEXPRESS;Initial Catalog=CosmeticShop;TrustServerCertificate=Yes;Integrated Security=True;";
 
-        public OrderViewModel(int userId, ObservableCollection<CartItemViewModel> cartItems)
+        public OrderViewModel(int userId, ObservableCollection<CartItem> cartItems)
         {
             this.userId = userId;
             CartItems = cartItems;
@@ -160,6 +160,16 @@ namespace lab4_5
                 MessageBox.Show("Номер телефона должен начинаться с '+' и содержать от 10 до 15 цифр.", "Ошибка формата номера", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
+            bool hasAddress = !string.IsNullOrWhiteSpace(City) && !string.IsNullOrWhiteSpace(Street);
+            bool hasPickupPoint = !string.IsNullOrWhiteSpace(SelectedPickupPoint);
+
+            if (!hasAddress && !hasPickupPoint)
+            {
+                MessageBox.Show("Пожалуйста, укажите либо адрес доставки, либо выберите пункт самовывоза.", "Недостаточно информации", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -183,12 +193,24 @@ namespace lab4_5
                         cmdOrder.Parameters.AddWithValue("@Phone", Phone);
                         cmdOrder.Parameters.AddWithValue("@PaymentMethod", PaymentMethod);
                         cmdOrder.Parameters.AddWithValue("@DeliveryMethod", DeliveryMethod);
-                        cmdOrder.Parameters.AddWithValue("@City", (object)City ?? DBNull.Value);
-                        cmdOrder.Parameters.AddWithValue("@Street", (object)Street ?? DBNull.Value);
-                        cmdOrder.Parameters.AddWithValue("@Apartment", (object)Apartment ?? DBNull.Value);
-                        cmdOrder.Parameters.AddWithValue("@Building", (object)Building ?? DBNull.Value);
-                        cmdOrder.Parameters.AddWithValue("@PickupPoint", (object)SelectedPickupPoint ?? DBNull.Value);
                         cmdOrder.Parameters.AddWithValue("@Comment", (object)Comment ?? DBNull.Value);
+
+                        if (DeliveryMethod == "Самовывоз")
+                        {
+                            cmdOrder.Parameters.AddWithValue("@City", DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@Street", DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@Apartment", DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@Building", DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@PickupPoint", (object)SelectedPickupPoint ?? DBNull.Value);
+                        }
+                        else 
+                        {
+                            cmdOrder.Parameters.AddWithValue("@City", (object)City ?? DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@Street", (object)Street ?? DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@Apartment", (object)Apartment ?? DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@Building", (object)Building ?? DBNull.Value);
+                            cmdOrder.Parameters.AddWithValue("@PickupPoint", DBNull.Value);
+                        }
 
                         int orderId = Convert.ToInt32(cmdOrder.ExecuteScalar());
 
